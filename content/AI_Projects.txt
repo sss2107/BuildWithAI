@@ -18,7 +18,6 @@ Singapore Airlines | 2022 - Present
 Designed and developed Curie, an employee-facing HR chatbot for answering HR policy-related questions using a router-based agentic framework. The system intelligently analyzes user queries and routes them to the appropriate policy domain (Finance, Leave, Appraisal, IT, Code of Conduct, Medical Reimbursement, Payroll, etc.), then employs a retrieval system to identify relevant page numbers and provide context-aware responses.
 
 [PROJECT_1_ACHIEVEMENTS]
-Intelligent policy routing across 7+ HR domains
 Reduced HR query response time by 80%
 24/7 automated policy assistance for employees
 High accuracy context retrieval system
