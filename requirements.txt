@@ -1,0 +1,943 @@
+# Python Requirements for BuildWithAI Portfolio Website================================================================================================
+
+# CAREER WEBSITE REQUIREMENTS DOCUMENT
+
+# This website is a static HTML/CSS/JavaScript site and does NOT requireProject Name: BuildWithAI - Sahil Sharma's Portfolio Website
+
+# any Python packages for deployment on GitHub Pages.Domain: buildwithai.com
+
+#================================================================================================
+
+# GitHub Pages will automatically serve your HTML/CSS/JS files.
+
+# No backend or Python installation needed.PROJECT OVERVIEW
+
+#================================================================================================
+
+# For local development only (optional):Build a modern, professional career portfolio website for Sahil Sharma, a Senior Data Scientist 
+
+# Python 3.x is built-in on macOS - use the command below to start a local server:specializing in AI, Machine Learning, and GenAI applications. The website should showcase his 
+
+# python3 -m http.server 8001professional journey, projects, and expertise in an engaging and visually appealing manner.
+
+#
+
+# No pip packages required!DESIGN SPECIFICATIONS
+
+================================================================================================
+
+COLOR SCHEME:
+- Primary Theme: Dark Reddish (suggestions: #1a0000 to #2d0a0a for backgrounds)
+- Accent Color: Crimson Red (#dc143c, #c41e3a, or similar)
+- Text Color: Off-white/Light gray (#e0e0e0, #f5f5f5)
+- Secondary Text: Muted gray (#a0a0a0)
+- Hover Effects: Brighter red (#ff4444, #ff6b6b)
+- Background: Deep dark red with subtle gradients
+
+DESIGN STYLE:
+- Modern, clean, and professional
+- Dark theme with high contrast for readability
+- Smooth transitions and hover effects
+- Responsive design (mobile, tablet, desktop)
+- Minimal and elegant typography
+- Professional spacing and layout
+
+NAVIGATION STRUCTURE
+================================================================================================
+
+HEADER/NAVIGATION BAR (Fixed at top):
+- Logo/Name: "Sahil Sharma" or "BuildWithAI"
+- Navigation Tabs (horizontal):
+  1. Introduction
+  2. AI Projects and Applied Research
+  3. Education
+  4. Experience
+  5. Skills
+  6. Extra Curriculars
+
+- Contact Icons (right side of header):
+  - Email: sahil21@u.nus.edu
+  - LinkedIn: https://www.linkedin.com/in/sahil-sharma-13540375/
+  - GitHub: https://github.com/sss2107
+  - Twitter: https://x.com/sahilsharma_12
+
+WEBSITE SECTIONS - DETAILED CONTENT
+================================================================================================
+
+1. INTRODUCTION (Landing Section)
+================================================================================================
+
+LAYOUT:
+- Split screen design (50-50 or 60-40)
+- Left side: Professional photo
+- Right side: Introduction text and key highlights
+
+PROFILE IMAGE:
+- Location: /Users/sahil_sharma/Downloads/atsg2.jpeg
+- Display: Professional, circular or rectangular with subtle border
+- Size: Responsive, approximately 300-400px on desktop
+- Effects: Subtle shadow, slight hover effect
+
+INTRODUCTION TEXT:
+"""
+Hi, I'm Sahil Sharma
+
+AI & GenAI Specialist 
+
+I'm a Senior Data Scientist, AI & Data at Singapore Airlines, specializing in designing and deploying 
+cutting-edge AI solutions. With a Master's in Business Analytics from the National University of 
+Singapore and undergrad in Computer Science from PEC, Chandigarh, India and extensive experience across AI, Machine Learning, and GenAI applications, 
+I build intelligent systems that solve real-world problems.
+
+My expertise spans from developing agentic and advanced RAG chatbots processing millions of pages, 
+to creating AI-powered flight defect recommender, to building confidential GenAI applications 
+for C-suite executives. I'm passionate about pushing the boundaries of what's possible 
+with AI while mentoring the next generation of data scientists.
+
+Based in Singapore | Open to collaboration and consulting opportunities
+"""
+
+KEY HIGHLIGHTS (Below introduction):
+- 🎓 Master's in Business Analytics (NUS)
+- 💼 Senior Data Scientist, AI & Data @ Singapore Airlines
+- 🤖 Specialization: GenAI, Agents, RAG, MLOps, Deep Learning
+- 🏆 CEO Award Winner | Best Research Paper Award
+- 📱 Contact: sahil21@u.nus.edu | +65 93952564
+
+
+2. AI PROJECTS AND APPLIED RESEARCH
+================================================================================================
+
+SECTION LAYOUT:
+- Grid or card-based layout
+- Each project as a distinct card with hover effects
+- Include project title, description, technologies used, and impact
+
+PROJECT 1: AI Flight Recommender (Agent Framework)
+---------------------------------------------------
+Organization: Singapore Airlines
+Duration: 2022 - Present
+Role: Lead Designer & Developer
+
+Description:
+Designed and developed an AI-powered flight defect recommender using an agent framework to 
+facilitate natural language search. The system seamlessly integrates with external APIs 
+for real-time defect rectification.
+
+Key Achievements:
+- Expert level recommendation using historical data
+- Connected to real time data
+- Automated recommendation system
+- Improved maintenance workflow efficiency
+
+Technologies: Langgraph, AWS, Python, FastAPI
+
+PROJECT 2: Advanced RAG Chatbot for Aircraft Manuals
+---------------------------------------------------
+Organization: Singapore Airlines
+Duration: 2022 - Present
+Role: Lead Designer & Developer
+
+Description:
+Designed and developed an advanced RAG (Retrieval-Augmented Generation) chatbot that 
+indexes over 10 million pages of all Airbus and Boeing aircraft manuals. Implemented 
+efficient query retrieval, processing, and caching mechanisms.
+
+Key Achievements:
+- Indexed 10M+ pages of technical documentation
+- Achieved significant improvements in accuracy and latency
+- Efficient query retrieval and caching system
+
+Technologies: RAG, Langchain, LlamaIndex, AWS OpenSearch, FAISS, AWS Textract, 
+Transformers, Python
+
+
+
+PROJECT 4: Confidential GenAI Application for CEO Meetings
+---------------------------------------------------
+Organization: Singapore Airlines
+Duration: 2023 - Present
+Role: Lead Developer
+
+Description:
+Developed a highly confidential GenAI application for CEO meetings with end-to-end 
+security. Ensured complete data privacy through a zero-logging policy, preventing 
+any response or log data transmission to external LLM providers or cloud services.
+
+Key Achievements:
+- Zero-logging policy implementation
+- Complete data privacy and security
+- Secure on-premise deployment
+
+Technologies: GenAI, Private LLMs, Secure Infrastructure, AWS, Encryption
+
+PROJECT 5: ICD-10 Medical Code Classification
+---------------------------------------------------
+Organization: Munich Reinsurance (via NUS)
+Duration: May 2022 - Oct 2022
+Role: Data Scientist (Capstone Project)
+Advisor: Dr. James Pang
+
+Description:
+Solved multi-class and multi-output ICD-10 code classification problem on free medical 
+text including doctor diagnoses and prescriptions using Transformer models.
+
+Key Achievements:
+- Won Best Research Paper Award at NUS
+- Successfully classified complex medical codes
+- Applied state-of-the-art Transformer models
+
+Technologies: BERT, Transformers, NLP, PyTorch, TensorFlow, Python
+
+PROJECT 6: X0PA Room - AI Video Interview Platform
+---------------------------------------------------
+Organization: X0PA AI
+Duration: Nov 2021 - April 2022
+Role: NLP Engineer (Internship)
+
+Description:
+Built "X0PA Room", an AI-powered video interview platform that rates candidates using 
+AI scoring metrics based on video analytics, audio text transcripts, and topic analysis.
+
+Key Achievements:
+- Multi-modal analysis (video, audio, text)
+- Feature extraction from semi-structured data
+- Resume and LinkedIn profile analysis
+
+Technologies: NLP, Computer Vision, Audio Processing, Python, Deep Learning
+
+PROJECT 7: Bitcoin Price Prediction System
+---------------------------------------------------
+Organization: NUS Academic Project
+Duration: Jul 2021 - April 2022
+Role: Student Researcher
+
+Description:
+Developed LSTM-based model to predict bitcoin prices using multiple data sources. 
+Achieved 2% MAPE (Mean Absolute Percentage Error).
+
+Key Achievements:
+- Shortlisted to present to Blockchain CEO consortium
+- 2% MAPE accuracy
+- Multi-source data integration
+
+Technologies: LSTM, Time Series, Deep Learning, Python, TensorFlow
+
+PROJECT 8: COVID-19 Question Answering System
+---------------------------------------------------
+Organization: NUS Academic Project
+Duration: 2021 - 2022
+Role: Student Researcher
+
+Description:
+Developed a Question Answering (QA) system to answer queries about COVID-19 and 
+reduce misinformation using Transformer (BERT) models.
+
+Key Achievements:
+- Combat COVID-19 misinformation
+- Accurate question answering system
+- Real-time information retrieval
+
+Technologies: BERT, Transformers, NLP, Python, Information Retrieval
+
+PROJECT 9: Research Paper Recommendation SaaS
+---------------------------------------------------
+Organization: NUS Academic Project
+Duration: 2021 - 2022
+Role: Developer
+
+Description:
+Developed a SaaS application on AWS to recommend research papers based on similarity 
+search, keyword-based search, author metadata, and collaborative filtering.
+
+Key Achievements:
+- Full-stack SaaS application
+- Multiple recommendation algorithms
+- Cloud deployment on AWS
+
+Technologies: AWS, Recommendation Systems, NLP, Python, Collaborative Filtering
+
+PROJECT 10: Homomorphic Encryption for ML
+---------------------------------------------------
+Organization: NUS Academic Project
+Duration: 2021 - 2022
+Role: Researcher
+
+Description:
+Applied machine learning algorithms with homomorphic encryption to maintain data 
+privacy during model training.
+
+Key Achievements:
+- Privacy-preserving machine learning
+- Homomorphic encryption implementation
+- Secure model training
+
+Technologies: Homomorphic Encryption, Machine Learning, Python, Cryptography
+
+TECHNICAL SHARING & CONFERENCE TALKS
+---------------------------------------------------
+1. AWS User Group: "Finetune Hugging Face transformers (speech + text) with AWS 
+   Sagemaker using HUBERT transformer and OpenAI Whisper API"
+
+2. Asia Tech x Singapore Summit: "Develop fully open sourced web research assistant 
+   using Ollama, Langgraph, Tavily, DuckDuckgo"
+
+3. Conversational AI & Customer Experience Summit: Panel discussion on "Conversational 
+   AI strategies in Asia"
+
+4. Google Developer Expert: "Develop 'talk with resumes' app using Google Gemini 
+   Multimodal API"
+
+5. NTU Career Talk: "Regular day in life of a Data Scientist"
+
+
+3. EDUCATION
+================================================================================================
+
+LAYOUT:
+- Timeline or card-based layout
+- Most recent education first
+- Include institution logo (if available), degree, duration, key skills, and achievements
+
+EDUCATION 1: Master of Science
+---------------------------------------------------
+Institution: National University of Singapore (NUS)
+Location: Singapore
+Degree: Master of Science in Analytics (Data Science)
+Specialization: Deep Learning
+Graduation: September 2022
+
+Key Skills Acquired:
+- MLOps
+- Information Retrieval
+- Neural Networks
+- Machine Learning
+- Data Warehousing
+
+Thesis:
+"ICD 10 Medical Code Classification Using Deep Learning"
+- Won Best Research Paper Award in cohort of 150+ candidates
+- Applied Transformer models to medical text classification
+
+Notable Achievements:
+- Best Research Paper Award winner
+- Ranked amongst top 3% in intra NUS Kaggle competition on spam email classification
+- Shortlisted to present to Blockchain CEO consortium
+- Multiple successful academic projects with real-world applications
+
+EDUCATION 2: Bachelor of Engineering
+---------------------------------------------------
+Institution: PEC University of Technology
+Location: Chandigarh, India
+Degree: Computer Science Engineering
+Graduation: June 2016
+
+Programming Languages:
+- Java, C, C++, Python, JavaScript, SQL
+
+Leadership Role:
+Head, Application Development
+- Developed college festival's first-ever Android application and website
+- Recorded 10,000+ transactions in 4 days
+- Led development team for major campus event
+
+Notable Achievement:
+Successfully delivered large-scale application under time constraints with significant 
+user adoption and transaction volume.
+
+
+4. EXPERIENCE
+================================================================================================
+
+LAYOUT:
+- Timeline format (vertical or horizontal)
+- Each role as a distinct section
+- Include company, role, duration, advisors/team, key responsibilities, and achievements
+
+EXPERIENCE 1: Senior Data Scientist
+---------------------------------------------------
+Organization: Singapore Airlines
+Department: AI & Data
+Location: Singapore
+Duration: November 2022 - Present
+Advisors: Dr. Casey Chang, Dr. Raj Venkatesan, Dr. Zhibo Xiao
+
+Key Responsibilities & Achievements:
+
+GenAI & LLM Applications:
+• Designed and developed AI flight recommender with agent framework for natural 
+  language search
+• Built advanced RAG chatbot indexing 10M+ pages of aircraft manuals
+• Developed confidential GenAI app for CEO meetings with zero-logging policy
+• Contributed to Singapore Airlines' GenAI Framework and implementation roadmap
+
+MLOps & Deployment:
+• Extensive deployment experience on in-house infrastructure
+• Utilized AWS Lambda, EC2, Sagemaker pipelines, DynamoDB
+• Implemented secure, scalable production systems
+
+Predictive Analytics:
+• Built "Engineer Assist" for aircraft defect prediction and recommendations
+• Improved maintenance efficiency and safety protocols
+
+Leadership & Mentorship:
+• Mentored team of 5 data scientists and engineers
+• Defined AI adoption roadmap aligned with business objectives
+
+Technologies & Tools:
+PyTorch, TensorFlow, AWS Sagemaker, Langchain, LlamaIndex, OpenAI, Hugging Face, 
+Claude, Mistral, FastAI, AzureML, Keras, Vertex AI, Docker, MLFlow, DVC, 
+AWS OpenSearch, FAISS, AWS Textract, PySpark, Django, Flask, Streamlit
+
+Awards:
+• CEO (Singapore Airlines) award for building Data Science pipeline with fast turnaround
+
+EXPERIENCE 2: Data Scientist (Capstone Project)
+---------------------------------------------------
+Organization: Munich Reinsurance
+Department: Healthcare Vertical
+Location: Singapore
+Duration: May 2022 - October 2022
+Program: NUS Capstone Project
+Advisor: Dr. James Pang
+
+Key Responsibilities & Achievements:
+• Solved ICD-10 code classification (multi-class and multi-output) problem
+• Processed free medical text including doctor diagnoses and prescriptions
+• Applied Transformer models (BERT) for medical code classification
+• Won Best Research Paper Award at NUS
+
+Technologies:
+Transformers, BERT, NLP, PyTorch, TensorFlow, Medical Text Processing
+
+EXPERIENCE 3: NLP Engineer (Internship)
+---------------------------------------------------
+Organization: X0PA AI
+Department: People Analytics
+Location: Singapore
+Duration: November 2021 - April 2022
+
+Key Responsibilities & Achievements:
+• Built "X0PA Room", an AI video interview platform
+• Developed AI scoring metrics based on video analytics, audio transcripts, and topics
+• Extracted features from semi-structured data (resumes, cover letters, LinkedIn)
+• Multi-modal analysis combining video, audio, and text
+
+Technologies:
+NLP, Computer Vision, Audio Processing, Feature Engineering, Python
+
+EXPERIENCE 4: Student Projects & Research
+---------------------------------------------------
+Organization: National University of Singapore (NUS)
+Location: Singapore
+Duration: July 2021 - April 2022
+
+Key Projects:
+• Bitcoin price prediction using LSTM (2% MAPE)
+• COVID-19 Question Answering system using BERT
+• Research paper recommendation SaaS on AWS
+• Privacy-preserving ML with homomorphic encryption
+
+Technologies:
+LSTM, BERT, AWS, Recommendation Systems, Cryptography, Deep Learning
+
+EXPERIENCE 5: Management Consultant
+---------------------------------------------------
+Organization: EY (Ernst & Young)
+Department: Business Consulting
+Region: Africa, India, and Middle East
+Duration: January 2019 - July 2021
+Employment Type: Full-time
+
+Key Responsibilities & Achievements:
+
+Digital Transformation:
+• Recommended digital transformation and cost optimization initiatives
+• Built market-entry plan for consulting services in Kuwait
+• Generated additional revenue of USD 50K
+
+Business Development:
+• Developed proposals for 50+ clients across India, Middle East, and Africa
+• Service offerings: IT Governance and Digital Asset Management
+
+Risk Management & Security:
+• Transformed access architecture of key applications (Oracle ORS, PMS, Micros)
+• Identified 100+ fraud risk scenarios for leading luxury hotel group
+
+Process Improvement:
+• Reduced client attrition by improving organizational process maturity
+• Outlined 57 business process improvements for technology company
+• Identified key organizational risks and mitigation strategies
+
+Impact:
+Cross-functional consulting, client relationship management, strategic planning
+
+EXPERIENCE 6: Associate Consultant
+---------------------------------------------------
+Organization: KPMG India
+Department: Business Consulting
+Location: India
+Duration: September 2017 - December 2018
+Employment Type: Full-time
+
+Key Responsibilities & Achievements:
+
+Investment Strategy:
+• Developed investment strategy for UK Government
+• Investment amount: USD 10 Million in India
+• Strategic analysis and market research
+
+Financial Modeling:
+• Built financial model for Government sector policy
+• Policy value: USD 70 Million
+• Coverage: 11 Indian cities
+• Developed sustainability framework
+
+Impact:
+Government advisory, financial modeling, policy development
+
+EXPERIENCE 7: Software Engineer
+---------------------------------------------------
+Organization: PayU (Naspers Group)
+Department: Engineering
+Location: India
+Duration: August 2016 - September 2017
+Employment Type: Full-time
+
+Key Responsibilities & Achievements:
+
+Data Engineering:
+• Designed data pipelines for transaction analysis
+• Collaborated with Engineering and Product teams
+• Developed data-driven strategies to increase revenue
+
+Analytics & Tools:
+• Introduced Big Data query tools (Elasticsearch)
+• Enabled Marketing team to analyze transaction trends efficiently
+• Improved conversion rate of transactions
+
+Technologies:
+Big Data, Elasticsearch, Data Pipelines, SQL, Analytics
+
+Impact:
+Revenue optimization, data-driven decision making, tool implementation
+
+
+5. SKILLS
+================================================================================================
+
+LAYOUT:
+- Organized by categories
+- Visual representation (progress bars, icons, or skill clouds)
+- Group related technologies together
+
+ARTIFICIAL INTELLIGENCE & MACHINE LEARNING
+---------------------------------------------------
+Core ML & Deep Learning:
+• Machine Learning (Supervised, Unsupervised, Reinforcement Learning)
+• Deep Learning (Neural Networks, CNNs, RNNs, LSTMs, Transformers)
+• Natural Language Processing (NLP)
+• Computer Vision
+• Information Retrieval
+• Recommendation Systems
+• Time Series Analysis
+• Predictive Analytics
+
+GenAI & LLMs:
+• Large Language Models (LLMs)
+• Retrieval-Augmented Generation (RAG)
+• Agent Frameworks
+• Prompt Engineering
+• Fine-tuning & Transfer Learning
+• Multimodal AI
+
+FRAMEWORKS & LIBRARIES
+---------------------------------------------------
+Deep Learning Frameworks:
+• PyTorch ⭐⭐⭐⭐⭐
+• TensorFlow ⭐⭐⭐⭐⭐
+• Keras ⭐⭐⭐⭐
+• FastAI ⭐⭐⭐⭐
+
+GenAI & LLM Tools:
+• Langchain ⭐⭐⭐⭐⭐
+• LlamaIndex ⭐⭐⭐⭐⭐
+• Hugging Face Transformers ⭐⭐⭐⭐⭐
+• OpenAI API ⭐⭐⭐⭐⭐
+• Claude API ⭐⭐⭐⭐
+• Mistral AI ⭐⭐⭐⭐
+• Ollama ⭐⭐⭐⭐
+
+Vector Databases & Search:
+• FAISS ⭐⭐⭐⭐
+• AWS OpenSearch ⭐⭐⭐⭐
+• Elasticsearch ⭐⭐⭐⭐
+
+MLOPS & DEPLOYMENT
+---------------------------------------------------
+Cloud Platforms:
+• AWS (Sagemaker, Lambda, EC2, DynamoDB, Textract) ⭐⭐⭐⭐⭐
+• Azure ML ⭐⭐⭐
+• Google Cloud (Vertex AI) ⭐⭐⭐
+
+MLOps Tools:
+• Docker ⭐⭐⭐⭐⭐
+• MLFlow ⭐⭐⭐⭐
+• DVC (Data Version Control) ⭐⭐⭐⭐
+• AWS Sagemaker Pipelines ⭐⭐⭐⭐
+
+PROGRAMMING LANGUAGES
+---------------------------------------------------
+• Python ⭐⭐⭐⭐⭐ (Expert)
+• SQL ⭐⭐⭐⭐⭐ (Expert)
+• JavaScript ⭐⭐⭐⭐
+• Java ⭐⭐⭐⭐
+• C++ ⭐⭐⭐
+• C ⭐⭐⭐
+
+DATA ENGINEERING & BIG DATA
+---------------------------------------------------
+• PySpark ⭐⭐⭐⭐
+• Data Warehousing ⭐⭐⭐⭐
+• ETL Pipelines ⭐⭐⭐⭐
+• Data Pipelines ⭐⭐⭐⭐
+• Big Data Analytics ⭐⭐⭐⭐
+
+WEB DEVELOPMENT & APIs
+---------------------------------------------------
+Backend:
+• Django ⭐⭐⭐⭐
+• Flask ⭐⭐⭐⭐
+• FastAPI ⭐⭐⭐⭐
+• RESTful APIs ⭐⭐⭐⭐
+
+Frontend:
+• Streamlit ⭐⭐⭐⭐
+• JavaScript ⭐⭐⭐⭐
+• HTML/CSS ⭐⭐⭐
+
+SPECIALIZED SKILLS
+---------------------------------------------------
+Security & Privacy:
+• Homomorphic Encryption
+• Zero-logging Systems
+• Data Privacy & Security
+• Secure AI Applications
+
+Research & Development:
+• Research Paper Writing
+• Technical Presentations
+• Conference Speaking
+• Mentorship & Team Leadership
+
+Business & Consulting:
+• Digital Transformation
+• Strategic Planning
+• Financial Modeling
+• Business Process Improvement
+• Client Relationship Management
+• Proposal Development
+
+SOFT SKILLS
+---------------------------------------------------
+• Leadership & Team Management
+• Mentorship (5+ team members)
+• Technical Presentation & Public Speaking
+• Cross-functional Collaboration
+• Problem Solving & Critical Thinking
+• Project Management
+• Stakeholder Management
+• Agile Development
+
+
+6. EXTRA CURRICULARS
+================================================================================================
+
+LAYOUT:
+- Clean card or list format
+- Include honors, awards, and leadership roles
+- Showcase personality and interests beyond work
+
+HONORS & AWARDS
+
+
+---------------------------------------------------
+🏆 Hackathon winner - Singapore Airlines
+Award: Agentic platform to automate production support/AMS work for all applications
+Year: 2024-2025
+Significance: Recognized by CEO as best idea to increase productivity within organisation
+
+
+🏆 CEO Award - Singapore Airlines
+Award: Building Data Science pipeline with fast turnaround
+Year: 2023-2024
+Significance: Recognized by CEO for exceptional technical delivery and impact
+
+🏆 Best Research Paper Award - National University of Singapore
+Project: "ICD10 Medical Code Classification Using Deep Learning"
+Year: 2022
+Cohort: 110+ candidates
+Significance: Highest research achievement in Data Science program
+
+🏆 Top 3% - NUS Kaggle Competition
+Competition: Spam Email Classification
+Year: 2021-2022
+Ranking: Top 3% among all participants
+Significance: Demonstrated competitive machine learning skills
+
+TECHNICAL COMMUNITY CONTRIBUTIONS
+---------------------------------------------------
+🎤 Conference Speaker & Panelist
+
+1. AWS User Group - Technical Workshop
+   Topic: "Finetune Hugging Face transformers with AWS Sagemaker"
+   Focus: Speech + text models using HUBERT transformer and OpenAI Whisper API
+   
+2. Asia Tech x Singapore Summit - Technical Presentation
+   Topic: "Fully open sourced web research assistant"
+   Stack: Ollama, Langgraph, Tavily, DuckDuckgo
+   
+3. Conversational AI & Customer Experience Summit - Panel Discussion
+   Topic: "Conversational AI strategies in Asia"
+   Role: Industry Expert Panelist
+   
+4. Google Developer Expert Session
+   Topic: "Talk with resumes app using Google Gemini Multimodal API"
+   Focus: Multimodal AI applications
+   
+5. NTU Career Talk
+   Topic: "Regular day in life of a Data Scientist"
+   Role: Industry Speaker & Career Mentor
+
+LEADERSHIP & SPORTS
+---------------------------------------------------
+⚡ Captain - College Cricket Team
+Institution: PEC University of Technology
+Duration: 2013-2016
+Role: Team Captain & Player
+
+Key Responsibilities:
+• Led college cricket team in inter-college tournaments
+• Team strategy and player coordination
+• Balanced academics with sports commitment
+
+Skills Developed:
+• Leadership under pressure
+• Team management
+• Strategic thinking
+• Time management
+• Sportsmanship
+
+🎓 Head of Application Development
+Institution: PEC University of Technology
+Event: College Festival
+Year: 2015-2016
+
+Achievement:
+• Developed college festival's first-ever Android application and website
+• Recorded 10,000+ transactions in 4 days
+• Led development team to deliver under tight deadlines
+• Managed end-to-end project lifecycle
+
+Impact:
+Digitized college festival operations, significantly improving user experience and 
+transaction efficiency
+
+MENTORSHIP & TEACHING
+---------------------------------------------------
+👨‍🏫 Team Mentor - Singapore Airlines
+Role: Technical Mentor
+Team Size: 5 data scientists and engineers
+Duration: 2022 - Present
+
+Activities:
+• Code reviews and technical guidance
+• Career development discussions
+• Knowledge sharing sessions
+• Project mentorship
+
+🎓 Academic Mentor - NUS & NTU
+Activities:
+• Career talks at leading universities
+• Sharing industry insights with students
+• Guidance on transitioning from academia to industry
+
+INTERESTS & HOBBIES
+---------------------------------------------------
+• 🤖 Open Source AI Development
+• 📚 Research & Continuous Learning
+• 🎤 Public Speaking & Knowledge Sharing
+• 🏏 Cricket & Team Sports
+• 💻 Building AI Tools & Applications
+• 🌏 Tech Community Building in Asia
+
+
+TECHNICAL REQUIREMENTS
+================================================================================================
+
+FRONTEND:
+- HTML5, CSS3, JavaScript
+- Framework: React.js or Vue.js (recommended) or vanilla JavaScript
+- Responsive design (mobile-first approach)
+- Smooth scrolling between sections
+- CSS animations and transitions
+
+STYLING:
+- CSS Grid and Flexbox for layouts
+- Dark reddish theme with CSS variables for easy customization
+- Google Fonts (professional fonts like Inter, Roboto, or Poppins)
+- Font Awesome or similar for icons
+
+PERFORMANCE:
+- Optimized images (WebP format recommended)
+- Lazy loading for images
+- Minified CSS and JavaScript
+- Fast page load time (< 3 seconds)
+
+SEO:
+- Semantic HTML
+- Meta tags (title, description, keywords)
+- Open Graph tags for social sharing
+- Structured data (Schema.org)
+
+HOSTING:
+- Static site hosting (Netlify, Vercel, GitHub Pages, or AWS S3)
+- Custom domain: buildwithai.com
+- SSL certificate (HTTPS)
+- CDN for fast global delivery
+
+ACCESSIBILITY:
+- WCAG 2.1 Level AA compliance
+- Keyboard navigation
+- Screen reader friendly
+- Alt text for images
+- Proper heading hierarchy
+
+BROWSER COMPATIBILITY:
+- Chrome, Firefox, Safari, Edge (latest versions)
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+ASSETS REQUIRED
+================================================================================================
+
+IMAGES:
+1. Profile Photo: /Users/sahil_sharma/Downloads/atsg2.jpeg
+   - Copy to project assets folder
+   - Optimize for web (compress without quality loss)
+   - Create multiple sizes for responsive design
+   - Recommended sizes: 400px, 600px, 800px
+
+2. Company Logos (optional, if available):
+   - Singapore Airlines
+   - NUS
+   - Munich Re
+   - X0PA AI
+   - EY
+   - KPMG
+   - PayU
+   - PEC University
+
+3. Icons:
+   - Social media icons (LinkedIn, GitHub, Twitter, Email)
+   - Skill icons for technologies
+   - Section icons
+
+FONTS:
+- Primary: Inter or Roboto (headings)
+- Secondary: Poppins or Open Sans (body text)
+- Monospace: Fira Code or JetBrains Mono (for code/technical content)
+
+RECOMMENDED STRUCTURE
+================================================================================================
+
+buildwithai/
+│
+├── index.html
+├── css/
+│   ├── style.css
+│   ├── theme.css (dark reddish theme colors)
+│   └── responsive.css
+├── js/
+│   ├── main.js
+│   ├── navigation.js
+│   └── animations.js
+├── assets/
+│   ├── images/
+│   │   ├── profile.jpg (copy from /Users/sahil_sharma/Downloads/atsg2.jpeg)
+│   │   └── icons/
+│   └── fonts/
+├── sections/ (optional, if using component-based structure)
+│   ├── introduction.html
+│   ├── projects.html
+│   ├── education.html
+│   ├── experience.html
+│   ├── skills.html
+│   └── extracurriculars.html
+└── README.md
+
+OPTIONAL ENHANCEMENTS
+================================================================================================
+
+ANIMATIONS:
+- Fade-in animations on scroll
+- Hover effects on cards and buttons
+- Smooth transitions between sections
+- Parallax effects (subtle)
+
+INTERACTIVE ELEMENTS:
+- Project filters (by technology, year, type)
+- Skill level indicators (animated progress bars)
+- Timeline animations for experience section
+- Downloadable resume button (PDF)
+
+CONTACT FORM:
+- Simple contact form with validation
+- Integration with email service (EmailJS, Formspree)
+- Alternative: Direct mailto links
+
+ANALYTICS:
+- Google Analytics for tracking visitors
+- Privacy-friendly analytics (Plausible, Fathom)
+
+DARK/LIGHT MODE TOGGLE:
+- Optional toggle between dark reddish theme and light theme
+- Save preference in localStorage
+
+PROJECT FILTERING:
+- Filter projects by category (GenAI, ML, NLP, etc.)
+- Search functionality for projects
+
+TESTIMONIALS SECTION (Future):
+- Add testimonials from colleagues or supervisors
+- Recommendations from LinkedIn
+
+BLOG SECTION (Future):
+- Technical blog for sharing insights
+- Integration with Medium or DEV.to
+
+================================================================================================
+END OF REQUIREMENTS DOCUMENT
+================================================================================================
+
+USAGE INSTRUCTIONS FOR AI/LLM:
+1. Read this entire document carefully
+2. Start with the design specifications to understand the theme
+3. Build the navigation structure as specified
+4. Implement each section with the content provided
+5. Copy the profile image from the specified location
+6. Apply the dark reddish theme consistently
+7. Ensure responsive design for all screen sizes
+8. Test all links and interactive elements
+9. Optimize for performance and SEO
+10. Deploy to hosting platform with custom domain
+
+CONTENT UPDATE INSTRUCTIONS:
+- All content is extracted from the resume provided
+- Maintain professional tone throughout
+- Highlight quantifiable achievements (10M+ pages, 50+ clients, etc.)
+- Emphasize GenAI and AI expertise
+- Showcase leadership and mentorship
+- Include all awards and recognitions
+- Link to actual profiles (LinkedIn, GitHub, Twitter)
+
+================================================================================================

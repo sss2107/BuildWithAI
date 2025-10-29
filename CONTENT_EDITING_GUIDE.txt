@@ -1,0 +1,289 @@
+╔════════════════════════════════════════════════════════════════╗
+║       CONTENT EDITING GUIDE - BuildWithAI Portfolio           ║
+║       How to Edit Your Website Content Easily                  ║
+╚════════════════════════════════════════════════════════════════╝
+
+📁 CONTENT FILES LOCATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+All content is now in the "content/" folder:
+
+/Users/sahil_sharma/Downloads/BuildWithAI/content/
+├── Introduction.txt          # Your intro, photo caption, highlights
+├── AI_Projects.txt           # All your AI projects
+├── Education.txt             # University degrees and achievements
+├── Experience.txt            # Work experience and roles
+├── Skills.txt                # Technical skills and expertise
+└── ExtraCurriculars.txt      # Awards, talks, leadership
+
+✏️ HOW TO EDIT CONTENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Open the file you want to edit
+   - Use any text editor (TextEdit, VS Code, Notepad, etc.)
+   - Open the .txt file from the content/ folder
+
+Step 2: Find the section you want to change
+   - Look for [SECTION_NAME] in square brackets
+   - These are the labels for each piece of content
+
+Step 3: Edit the text BELOW the label
+   - Don't change the [LABELS] in square brackets
+   - Edit only the text below each label
+   - You can change, add, or remove text
+
+Step 4: Save the file
+   - Save using Ctrl+S (Windows) or Cmd+S (Mac)
+
+Step 5: Refresh your browser
+   - Press F5 or Ctrl+R to see changes
+   - Content will update automatically!
+
+📝 FILE FORMAT EXPLAINED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Example:
+  # This is a comment (ignored)
+  
+  [TITLE]
+  This is the content that will appear on the website
+  
+  [SUBTITLE]
+  This is another piece of content
+
+RULES:
+✓ Lines starting with # are comments (ignored)
+✓ [LABELS] in square brackets are section identifiers
+✓ DON'T change [LABELS], only change the text below them
+✓ You can have multi-line content
+✓ Empty lines are okay
+
+📄 DETAILED FILE GUIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣ Introduction.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What's in it:
+  [TITLE]                  - Main heading "Hi, I'm..."
+  [SUBTITLE]               - Your title/role
+  [DESCRIPTION_PARAGRAPH_1] - First intro paragraph
+  [DESCRIPTION_PARAGRAPH_2] - Second intro paragraph
+  [LOCATION]               - Where you're based
+  [HIGHLIGHTS]             - Bullet points (one per line)
+
+Example edit:
+  Change: "Hi, I'm Sahil Sharma"
+  To: "Hello, I'm Sahil Sharma"
+  
+  Just edit the text after [TITLE]
+
+2️⃣ AI_Projects.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What's in it:
+  [PROJECT_X_TITLE]        - Project name
+  [PROJECT_X_ORG]          - Company and dates
+  [PROJECT_X_DESCRIPTION]  - What the project does
+  [PROJECT_X_ACHIEVEMENTS] - Key accomplishments (one per line)
+  [PROJECT_X_TECH]         - Technologies (comma-separated)
+  [PROJECT_X_BADGE]        - Badge type (Production, Research, etc.)
+
+To add a new project:
+  1. Copy an existing PROJECT_X block
+  2. Change X to next number (e.g., PROJECT_9)
+  3. Fill in all the details
+  4. Save the file
+
+To remove a project:
+  1. Delete the entire PROJECT_X block
+  2. Save the file
+
+3️⃣ Education.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What's in it:
+  [EDUCATION_X_DEGREE]        - Degree name
+  [EDUCATION_X_INSTITUTION]   - University name
+  [EDUCATION_X_LOCATION]      - City, Country
+  [EDUCATION_X_DATE]          - Graduation date
+  [EDUCATION_X_SKILLS]        - Skills learned (comma-separated)
+  [EDUCATION_X_ACHIEVEMENTS]  - Awards (one per line)
+
+4️⃣ Experience.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What's in it:
+  [EXP_X_TITLE]     - Job title
+  [EXP_X_COMPANY]   - Company name
+  [EXP_X_DATE]      - Duration
+  [EXP_X_WORK]      - Responsibilities (one per line)
+  [EXP_X_TECH]      - Technologies used (comma-separated)
+
+To add new experience:
+  1. Copy an existing EXP_X block
+  2. Change X to next number (e.g., EXP_7)
+  3. Fill in details
+  4. Save
+
+5️⃣ Skills.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What's in it:
+  [AI_ML_SKILLS]      - AI skills with percentages (%)
+  [FRAMEWORKS]        - Frameworks with levels (expert/advanced)
+  [PROGRAMMING]       - Languages with percentages
+  
+Skill Levels:
+  - (expert) = Advanced proficiency
+  - (advanced) = Good proficiency
+  - (intermediate) = Basic proficiency
+  - (95%) = Percentage proficiency
+
+Example:
+  Python (95%)
+  TensorFlow (expert)
+  React (intermediate)
+
+6️⃣ ExtraCurriculars.txt
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What's in it:
+  [AWARD_X_TITLE]       - Award name
+  [AWARD_X_ORG]         - Organization
+  [AWARD_X_DESC]        - Description
+  [AWARD_X_YEAR]        - Year received
+  
+  [TALK_X]              - Full talk description (single line)
+  
+  [LEADERSHIP_X_TITLE]  - Leadership role
+  [LEADERSHIP_X_DETAILS]- What you did (one per line)
+
+💡 QUICK TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ DO:
+  • Edit text below [LABELS]
+  • Add new lines within sections
+  • Save and refresh browser to see changes
+  • Keep backups of your content files
+  • Use simple text (avoid special characters like <, >)
+
+❌ DON'T:
+  • Change [LABELS] in square brackets
+  • Delete [LABELS] unless removing entire section
+  • Use HTML tags (unless you know what you're doing)
+  • Forget to save the file!
+
+🔄 COMMON EDITS - STEP BY STEP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXAMPLE 1: Update your job title
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open: content/Introduction.txt
+2. Find: [SUBTITLE]
+3. Change the line below it
+4. Save file
+5. Refresh browser (F5)
+
+EXAMPLE 2: Add a new project
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open: content/AI_Projects.txt
+2. Scroll to end of projects
+3. Copy entire PROJECT_8 block (all lines from [PROJECT_8_TITLE] to [PROJECT_8_BADGE])
+4. Paste below it
+5. Change all "8" to "9"
+6. Edit the content for your new project
+7. Save file
+8. Refresh browser
+
+EXAMPLE 3: Update your skills
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open: content/Skills.txt
+2. Find the skill category (e.g., [PROGRAMMING])
+3. Add new line: "Go (80%)"
+4. Save file
+5. Refresh browser
+
+EXAMPLE 4: Edit introduction paragraph
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Open: content/Introduction.txt
+2. Find: [DESCRIPTION_PARAGRAPH_1]
+3. Edit the text below (can be multiple lines)
+4. Save file
+5. Refresh browser
+
+🐛 TROUBLESHOOTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problem: Changes don't appear
+Solution:
+  1. Make sure you saved the file (Ctrl+S / Cmd+S)
+  2. Hard refresh browser (Ctrl+Shift+R / Cmd+Shift+R)
+  3. Check browser console for errors (F12)
+  4. Make sure [LABELS] are still correct
+
+Problem: Content looks broken
+Solution:
+  1. Check if you accidentally changed a [LABEL]
+  2. Make sure [LABELS] are on their own line
+  3. Restore from backup if needed
+
+Problem: Can't find a section
+Solution:
+  1. Use Ctrl+F (Cmd+F) to search in file
+  2. Search for keywords from the website
+  3. Check the file structure guide above
+
+📦 BACKUP YOUR CONTENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMPORTANT: Before making big changes:
+  1. Copy the entire "content/" folder
+  2. Name it "content_backup_2025-10-29"
+  3. Make your edits
+  4. If something breaks, restore from backup
+
+🔄 WORKFLOW EXAMPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Daily content update routine:
+
+1. 📂 Open content file you want to edit
+2. ✏️  Make your changes
+3. 💾 Save the file (Ctrl+S)
+4. 🔄 Refresh browser (F5)
+5. ✅ Check the changes look good
+6. 🎉 Done!
+
+⚡ ADVANCED: Edit Multiple Files
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To update multiple sections:
+  1. Edit all needed .txt files
+  2. Save all files
+  3. Refresh browser once
+  4. All changes will appear together
+
+📧 NEED HELP?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If you have questions or issues:
+  • Check this guide again
+  • Look at the example files
+  • Restore from backup if needed
+  • Ask the developer who built your site
+
+════════════════════════════════════════════════════════════════════
+
+🎯 KEY TAKEAWAY: 
+Just edit the .txt files in the content/ folder and refresh your 
+browser. It's that simple!
+
+════════════════════════════════════════════════════════════════════
+
+Last Updated: October 29, 2025

@@ -1,0 +1,212 @@
+╔════════════════════════════════════════════════════════════════╗
+║         BUILDWITHAI - PORTFOLIO WEBSITE                        ║
+║         Quick Reference Guide                                   ║
+╚════════════════════════════════════════════════════════════════╝
+
+🌐 LOCAL ACCESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your website is currently running at:
+👉 http://localhost:8000
+
+The server is running in the background. To stop it:
+- Press Ctrl+C in the terminal
+- Or close the VS Code terminal
+
+📂 PROJECT FILES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Location: /Users/sahil_sharma/Downloads/BuildWithAI/
+
+Structure:
+├── index.html              # Main website file
+├── README.md              # Full documentation
+├── requirements.txt       # Detailed requirements
+├── css/
+│   └── style.css         # Dark reddish theme
+├── js/
+│   └── main.js           # Interactive features
+└── assets/
+    └── images/
+        └── profile.jpg   # Your photo
+
+🎨 WEBSITE SECTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Introduction
+   - Your photo and professional summary
+   - Key highlights and contact info
+
+✅ AI Projects and Applied Research
+   - 10+ major projects
+   - Conference talks
+   - Technologies and achievements
+
+✅ Education
+   - NUS Master's degree
+   - PEC Bachelor's degree
+   - Awards and achievements
+
+✅ Experience
+   - 7 professional positions
+   - Timeline format
+   - Detailed responsibilities
+
+✅ Skills
+   - AI/ML, Frameworks, MLOps
+   - Programming languages
+   - Specialized skills
+
+✅ Extra Curriculars
+   - Awards (CEO Award, Best Research Paper, etc.)
+   - Conference speaking
+   - Leadership roles
+   - Mentorship
+
+🎨 DESIGN FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✓ Dark reddish theme (#1a0000 - #dc143c)
+✓ Smooth scroll navigation
+✓ Mobile responsive design
+✓ Animated skill bars
+✓ Scroll-based animations
+✓ Hover effects on cards
+✓ Fixed navigation header
+✓ Scroll-to-top button
+✓ Mobile hamburger menu
+
+🚀 NEXT STEPS - DEPLOYMENT OPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1️⃣ NETLIFY (Easiest - Recommended)
+   - Sign up at netlify.com
+   - Drag & drop the BuildWithAI folder
+   - Configure custom domain: buildwithai.com
+   - Free SSL certificate included
+   ⏱️ Time: 5 minutes
+
+2️⃣ VERCEL
+   - Sign up at vercel.com
+   - Import project from folder
+   - Configure domain
+   ⏱️ Time: 5 minutes
+
+3️⃣ GITHUB PAGES
+   - Create GitHub repository
+   - Push code to repository
+   - Enable Pages in Settings
+   - Configure custom domain
+   ⏱️ Time: 10 minutes
+
+4️⃣ AWS S3 + CLOUDFRONT
+   - Create S3 bucket
+   - Enable static hosting
+   - Upload files
+   - Set up CloudFront CDN
+   ⏱️ Time: 20 minutes
+
+✏️ QUICK EDITS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To update content:
+→ Open index.html in any text editor
+→ Find the section you want to edit
+→ Update the text
+→ Save and refresh browser
+
+To change colors:
+→ Open css/style.css
+→ Edit the :root variables at the top
+→ Save and refresh browser
+
+To add GitHub/Twitter links:
+→ Open index.html
+→ Find the social-links sections
+→ Replace # with your actual URLs
+
+🔧 TESTING CHECKLIST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test the following:
+□ All navigation links work
+□ Smooth scrolling functions
+□ Mobile menu opens/closes
+□ All sections load properly
+□ Images display correctly
+□ Hover effects work on cards
+□ Social media icons (update URLs!)
+□ Scroll-to-top button appears
+□ Content is accurate and up-to-date
+□ Test on mobile device/emulator
+
+📱 MOBILE TESTING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Desktop:
+→ Chrome DevTools (F12 → Toggle Device Toolbar)
+→ Test different screen sizes
+
+Mobile:
+→ Share localhost URL via ngrok or similar
+→ Or test after deployment
+
+🎯 PERFORMANCE TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before deployment:
+1. Compress profile image (use TinyPNG or similar)
+2. Add favicon.ico file
+3. Update GitHub and Twitter links
+4. Test all links work
+5. Run through Google PageSpeed Insights
+6. Add Google Analytics (optional)
+
+📊 ANALYTICS SETUP (Optional)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+To track visitors:
+1. Sign up for Google Analytics
+2. Get tracking code
+3. Add to index.html before </head>
+4. Deploy and start tracking
+
+🔐 DOMAIN CONFIGURATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For buildwithai.com:
+1. Purchase domain (Namecheap, GoDaddy, etc.)
+2. Configure DNS settings:
+   - Add A record or CNAME
+   - Point to hosting provider
+3. Enable SSL certificate (free with most hosts)
+4. Wait for DNS propagation (up to 24 hours)
+
+💡 TIPS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Keep backups of your files
+• Update content regularly
+• Add new projects as you complete them
+• Share on LinkedIn after deployment
+• Consider adding a blog section later
+• Test on multiple browsers
+
+📧 YOUR CONTACT INFO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Email: sahil21@u.nus.edu
+Phone: +65 93952564
+LinkedIn: linkedin.com/in/sahil-sharma-13540375/
+
+Remember to update GitHub and Twitter URLs in:
+- Header social links (line ~30)
+- Footer social links (line ~900+)
+
+════════════════════════════════════════════════════════════════════
+
+🎉 CONGRATULATIONS! Your website is ready!
+
+Next: Test everything, then deploy to make it live at buildwithai.com
+
+════════════════════════════════════════════════════════════════════

@@ -1,0 +1,61 @@
+# EDUCATION SECTION CONTENT
+# Edit this file to update your education details
+
+[SECTION_TITLE]
+Education
+
+[SECTION_SUBTITLE]
+Academic foundation in data science and computer science
+
+[EDUCATION_1_DEGREE]
+Master of Science in Analytics (Data Science)
+
+[EDUCATION_1_INSTITUTION]
+National University of Singapore (NUS)
+
+[EDUCATION_1_LOCATION]
+Singapore
+
+[EDUCATION_1_DATE]
+Graduated: September 2022
+
+[EDUCATION_1_SPECIALIZATION]
+Deep Learning
+
+[EDUCATION_1_SKILLS]
+MLOps, Information Retrieval, Neural Networks, Machine Learning, Data Warehousing
+
+[EDUCATION_1_THESIS_TITLE]
+ICD 10 Medical Code Classification Using Deep Learning
+
+[EDUCATION_1_THESIS_NOTE]
+Won Best Research Paper Award in cohort of 150+ candidates
+
+[EDUCATION_1_ACHIEVEMENTS]
+Best Research Paper Award winner
+Top 3% in NUS Kaggle competition (spam classification)
+Presented to Blockchain CEO consortium
+Multiple successful academic projects with real-world applications
+
+[EDUCATION_2_DEGREE]
+Bachelor of Engineering in Computer Science
+
+[EDUCATION_2_INSTITUTION]
+PEC University of Technology
+
+[EDUCATION_2_LOCATION]
+Chandigarh, India
+
+[EDUCATION_2_DATE]
+Graduated: June 2016
+
+[EDUCATION_2_LANGUAGES]
+Java, C, C++, Python, JavaScript, SQL
+
+[EDUCATION_2_LEADERSHIP_ROLE]
+Head, Application Development
+
+[EDUCATION_2_LEADERSHIP_DETAILS]
+Developed college festival's first-ever Android application and website
+Recorded 10,000+ transactions in 4 days
+Led development team for major campus event

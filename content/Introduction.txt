@@ -1,0 +1,25 @@
+# INTRODUCTION SECTION CONTENT
+# Edit this file to update your introduction text
+
+[TITLE]
+Hi, I'm Sahil Sharma
+
+[SUBTITLE]
+Senior Data Scientist | AI & GenAI Specialist | Google Developer Expert
+
+[DESCRIPTION_PARAGRAPH_1]
+I'm a Senior Data Scientist at Singapore Airlines and a Google Developer Expert in AI/ML, specializing in designing and deploying cutting-edge AI solutions. With a Master's in Data Science from the National University of Singapore and extensive experience across AI, Machine Learning, and GenAI applications, I build intelligent systems that solve real-world problems.
+
+[DESCRIPTION_PARAGRAPH_2]
+My expertise spans from developing advanced RAG chatbots processing millions of pages, to creating AI-powered flight recommenders, to building confidential GenAI applications for C-suite executives. As a Google Developer Expert, I've trained hundreds of developers in AI/ML technologies. I'm passionate about pushing the boundaries of what's possible with AI while mentoring the next generation of data scientists.
+
+[LOCATION]
+Based in Singapore | Open to collaboration and consulting opportunities
+
+[HIGHLIGHTS]
+Master's in Data Science (NUS)
+Senior Data Scientist @ Singapore Airlines
+Google Developer Expert (GDE) in AI/ML
+GenAI, RAG, MLOps, Deep Learning
+CEO Award | Best Research Paper
++65 93952564 | sahil21@u.nus.edu

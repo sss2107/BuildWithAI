@@ -1,0 +1,71 @@
+🚀 QUICK GITHUB PAGES DEPLOYMENT COMMANDS
+================================================================================================
+
+📋 STEP 1: Navigate to project folder
+cd /Users/sahil_sharma/Downloads/BuildWithAI
+
+📋 STEP 2: Initialize Git (if not already done)
+git init
+
+📋 STEP 3: Add all files
+git add .
+
+📋 STEP 4: Create first commit
+git commit -m "Initial commit: Portfolio website"
+
+📋 STEP 5: Rename branch to main
+git branch -M main
+
+📋 STEP 6: Add GitHub remote
+⚠️ Replace 'yourusername' with your actual GitHub username!
+git remote add origin https://github.com/yourusername/BuildWithAI.git
+
+📋 STEP 7: Push to GitHub
+git push -u origin main
+
+📋 STEP 8: Enable GitHub Pages
+1. Go to: https://github.com/yourusername/BuildWithAI
+2. Click "Settings" tab
+3. Click "Pages" in left sidebar
+4. Under "Branch", select "main" and "/" (root)
+5. Click "Save"
+6. Wait 1-2 minutes
+
+🎉 DONE! Your site is live at:
+https://yourusername.github.io/BuildWithAI/
+
+================================================================================================
+
+🔄 UPDATING YOUR WEBSITE (After Changes)
+================================================================================================
+
+After editing any file:
+
+git add .
+git commit -m "Update: describe what you changed"
+git push origin main
+
+Wait 1-2 minutes, then refresh your live site!
+
+================================================================================================
+
+✅ PRE-DEPLOYMENT CHECKLIST
+================================================================================================
+□ GitHub account created
+□ Git installed on your Mac (check: git --version)
+□ Repository name decided (e.g., BuildWithAI)
+□ All files ready in /Users/sahil_sharma/Downloads/BuildWithAI/
+
+================================================================================================
+
+⚠️ IMPORTANT NOTES
+================================================================================================
+1. Repository MUST be PUBLIC (not private) for free GitHub Pages
+2. Use Personal Access Token (not password) when pushing
+   Create at: https://github.com/settings/tokens
+3. Replace 'yourusername' with your actual GitHub username in all commands
+4. Wait 1-2 minutes after enabling Pages for site to go live
+
+================================================================================================
+
+📖 FULL GUIDE: See GITHUB_PAGES_DEPLOYMENT.md for detailed instructions
