@@ -12,6 +12,7 @@ A modern, professional portfolio website showcasing AI and Data Science expertis
 - 📱 **Fully Responsive**: Works seamlessly on desktop, tablet, and mobile devices
 - ⚡ **Smooth Animations**: Scroll-based animations and smooth transitions
 - 🧭 **Interactive Navigation**: Fixed header with active section highlighting
+- 📝 **Dynamic Content Loading**: Content loaded from `.txt` files for easy updates without touching code
 - 🎯 **Six Main Sections**:
   - 👋 Introduction with professional photo
   - 🤖 AI Projects and Applied Research (9+ production projects)
@@ -85,11 +86,13 @@ BuildWithAI/
 
 ### Technical Implementation
 - ✅ Pure HTML/CSS/JS - No frameworks or build tools needed
-- ✅ Modular content system with separate `.txt` files
+- ✅ **Dynamic content loading** from `.txt` files using Fetch API
+- ✅ Modular content system with [LABEL] format parsing
 - ✅ Smooth scroll navigation with active section highlighting
 - ✅ Mobile-first responsive design
 - ✅ CSS Grid & Flexbox layouts
 - ✅ Intersection Observer API for scroll animations
+- ✅ AOS (Animate On Scroll) library integration with dynamic content
 - ✅ Optimized performance (<3s load time)
 
 ### Content Highlights
@@ -170,26 +173,188 @@ xdg-open index.html # Linux
      Value: yourusername.github.io
      ```
 
-## 🎨 Customization
+## 📝 Dynamic Content Loading System
 
-### Update Content
+This website features a **powerful dynamic content loading system** that separates content from code. Instead of hardcoding text in HTML, content is loaded from `.txt` files, making updates incredibly easy!
 
-**Easy Way** - Edit content text files:
-```bash
-# Edit any content file in the content/ folder
-nano content/Introduction.txt
-nano content/AI_Projects.txt
-nano content/Skills.txt
-# etc.
+### 🎯 Why Dynamic Loading?
+
+- ✅ **No Code Editing Required**: Update content without touching HTML/CSS/JS
+- ✅ **Version Control Friendly**: Text files are easy to track in Git
+- ✅ **Maintainability**: Non-technical users can edit content safely
+- ✅ **Consistency**: Standardized format across all sections
+- ✅ **Quick Updates**: Edit → Commit → Push → Auto-deploy in 2 minutes
+
+### 📂 Sections Using Dynamic Loading
+
+Currently, these sections dynamically load content from `.txt` files:
+- ✅ **Introduction** - Hero section (title, subtitle, descriptions, highlights)
+- ✅ **AI Projects** - All 9 projects with full details
+
+*Note: Education, Experience, Skills, and Extra Curriculars sections are still hardcoded in HTML but can be converted to dynamic loading if needed.*
+
+### 📋 Content File Format
+
+Content files use a simple `[LABEL]` format. Here's an example:
+
+**content/Introduction.txt**
+```txt
+[TITLE]
+Hi, I'm Sahil Sharma
+
+[SUBTITLE]
+AI & GenAI Specialist
+
+[DESCRIPTION_PARAGRAPH_1]
+I'm a Senior Data Scientist at Singapore Airlines...
+
+[DESCRIPTION_PARAGRAPH_2]
+With a proven track record in deploying AI solutions...
+
+[LOCATION]
+Singapore
+
+[HIGHLIGHTS]
+Google Developer Expert (GDE) in AI/ML
+Senior Data Scientist at Singapore Airlines
+7+ Years in AI/ML Engineering
+Master's in Data Science from NUS
+40+ Technologies Mastered
 ```
 
-**Direct Way** - Edit HTML:
+**content/AI_Projects.txt**
+```txt
+[PROJECT_1_TITLE]
+Curie - HR Policy Chatbot (Agentic Framework)
+
+[PROJECT_1_ORG]
+Singapore Airlines | 2022 - Present
+
+[PROJECT_1_DESCRIPTION]
+Designed and developed Curie, an employee-facing HR chatbot...
+
+[PROJECT_1_ACHIEVEMENTS]
+Intelligent policy routing across 7+ HR domains
+Reduced HR query response time by 80%
+24/7 automated policy assistance for employees
+
+[PROJECT_1_TECH]
+Langgraph, OpenAI, AWS, Agent Framework, RAG
+
+[PROJECT_1_BADGE]
+Production
+
+[PROJECT_2_TITLE]
+...
+```
+
+### 🔧 How to Update Content
+
+**Step 1: Edit the `.txt` file**
+```bash
+# Open the file you want to edit
+nano content/Introduction.txt
+# or
+nano content/AI_Projects.txt
+
+# Make your changes following the [LABEL] format
+# Save and exit
+```
+
+**Step 2: Commit your changes**
+```bash
+git add content/
+git commit -m "Update introduction section"
+```
+
+**Step 3: Push to GitHub**
+```bash
+git push origin main
+```
+
+**Step 4: Wait for auto-deployment**
+- GitHub Pages will automatically rebuild your site in 1-2 minutes
+- Visit https://yourusername.github.io/BuildWithAI to see your changes live!
+
+### 🚨 Important: Local Development Requirements
+
+**You MUST use an HTTP server for local testing** due to browser CORS restrictions on the `fetch()` API:
+
+```bash
+# Start a local server (choose one)
+python3 -m http.server 8001      # Python 3
+python -m SimpleHTTPServer 8001  # Python 2
+
+# Then open in browser
+open http://localhost:8001
+```
+
+❌ **Don't use**: `file:///path/to/index.html` - Dynamic loading will fail!  
+✅ **Use**: `http://localhost:8001` - Dynamic loading works perfectly!
+
+### 🛠️ Technical Details
+
+The dynamic loading system is powered by `js/content-loader.js`:
+
+- **parseContent()**: Parses `[LABEL]\nvalue` format into JavaScript objects
+- **loadContentFile()**: Fetches content files via Fetch API
+- **loadIntroduction()**: Updates hero section with dynamic content
+- **loadProjects()**: Generates all 9 project cards dynamically
+- **AOS.refresh()**: Reinitializes animations after DOM updates
+- **Inline styles**: Ensures visibility of dynamically loaded content
+
+### 🐛 Troubleshooting Dynamic Content
+
+**Problem**: Content not loading locally  
+**Solution**: Make sure you're using `http://localhost:8001`, not `file://`
+
+**Problem**: Content loads but not visible  
+**Solution**: Already fixed! The system includes `AOS.refresh()` and inline visibility styles
+
+**Problem**: New content not showing on live site  
+**Solution**: Wait 2 minutes for GitHub Pages to rebuild, clear browser cache (Ctrl+Shift+R)
+
+**Problem**: Console shows "Failed to load content"  
+**Solution**: Check that `.txt` files exist in `content/` folder with correct filenames
+
+### 📊 Content File Reference
+
+| File | Section | Status |
+|------|---------|--------|
+| `content/Introduction.txt` | Hero/Intro | ✅ Dynamic |
+| `content/AI_Projects.txt` | Projects Grid | ✅ Dynamic |
+| `content/Education.txt` | Education Timeline | ⚪ Hardcoded |
+| `content/Experience.txt` | Work Experience | ⚪ Hardcoded |
+| `content/Skills.txt` | Skills Grid | ⚪ Hardcoded |
+| `content/ExtraCurriculars.txt` | Awards/Talks | ⚪ Hardcoded |
+
+
+
+## 🎨 Customization
+
+### Update Content - The Easy Way! 📝
+
+**For sections with dynamic loading (Introduction, AI Projects):**
+```bash
+# Simply edit the .txt files
+nano content/Introduction.txt
+nano content/AI_Projects.txt
+
+# Commit and push
+git add content/
+git commit -m "Update content"
+git push origin main
+
+# GitHub Pages auto-deploys in 1-2 minutes!
+```
+
+**For other sections (Education, Experience, Skills, Extra Curriculars):**
 ```bash
 # Edit the main HTML file
 nano index.html
 ```
 
-See `docs/CONTENT_EDITING_GUIDE.txt` for detailed instructions.
+See the **📝 Dynamic Content Loading System** section above for detailed instructions.
 
 ### Change Colors
 
@@ -252,6 +417,8 @@ See `docs/CONTENT_EDITING_GUIDE.txt` for complete editing instructions.
 ✅ Safari  
 ✅ Edge  
 ✅ Mobile browsers (iOS Safari, Chrome Mobile)
+
+*Note: Dynamic content loading requires modern browsers with Fetch API support (all browsers since 2015)*
 
 ## 🚀 Performance
 
