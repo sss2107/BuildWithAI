@@ -79,7 +79,7 @@ Embedding Model Fine-tuning for Aviation Retrieval
 Singapore Airlines | 2023 - Present
 
 [PROJECT_4_DESCRIPTION]
-Fine-tuned BGE-1.5-Large embedding model on aircraft defect logs to optimize retrieval accuracy for aviation-specific terminology. Worked with business units to label defect-action pairs and ATA chapter data, creating a domain-specific training corpus. The fine-tuned model assigns higher weightage to airline industry acronyms and technical jargon, enabling users to input queries without extensive context while maintaining precise retrieval.
+Fine-tuned BAAI/bge-large-en-v1.5 embedding model on aircraft defect logs to optimize retrieval accuracy for aviation-specific terminology. Worked with business units to label defect-action pairs and ATA chapter data, creating a domain-specific training corpus. The fine-tuned model assigns higher weightage to airline industry acronyms and technical jargon, enabling users to input queries without extensive context while maintaining precise retrieval.
 
 [PROJECT_4_ACHIEVEMENTS]
 7% improvement in retrieval accuracy
@@ -89,7 +89,7 @@ Enhanced understanding of airline industry acronyms
 Production deployment for defect log retrieval
 
 [PROJECT_4_TECH]
-BGE-1.5-Large, Embedding Fine-tuning, RAG, Information Retrieval, PyTorch, Domain Adaptation
+BAAI/bge-large-en-v1.5, Embedding Fine-tuning, RAG, Information Retrieval, PyTorch, Domain Adaptation
 
 [PROJECT_4_BADGE]
 Production
