@@ -6,59 +6,48 @@
 AI Projects and Applied Research
 
 [SECTION_SUBTITLE]
-Buildin[PROJECT_10_ACHIEVEMENTS]
-Zero cloud LLM dependency - fully local execution
-Reduced API costs by 100% through local models
-Agent orchestration with reasoning chains
-Real-time web search and information synthesis
-Presented at Asia Tech x Singapore Summit 2025
-
-[PROJECT_10_TECH]
-LangGraph, Tavily, Ollama, Local LLMs, Agent Orchestration, Information Retrieval
-
-[PROJECT_10_BADGE]
-Productionge AI solutions that make a real-world impact
+Building cutting-edge AI solutions that make a real-world impact
 
 [PROJECT_1_TITLE]
-Curie - HR Policy Chatbot (Agentic Framework)
-
-[PROJECT_1_ORG]
-Singapore Airlines | 2022 - Present
-
-[PROJECT_1_DESCRIPTION]
-Designed and developed Curie, an employee-facing HR chatbot for answering HR policy-related questions using a router-based agentic framework. The system intelligently analyzes user queries and routes them to the appropriate policy domain (Finance, Leave, Appraisal, IT, Code of Conduct, Medical Reimbursement, Payroll, etc.), then employs a retrieval system to identify relevant page numbers and provide context-aware responses.
-
-[PROJECT_1_ACHIEVEMENTS]
-Intelligent policy routing across 7+ HR domains
-Reduced HR query response time by 80%
-24/7 automated policy assistance for employees
-High accuracy context retrieval system
-Production deployment serving 1000s of employees
-
-[PROJECT_1_TECH]
-Langgraph, OpenAI, AWS, Agent Framework, RAG, Policy Router
-
-[PROJECT_1_BADGE]
-Production
-
-[PROJECT_2_TITLE]
 AMS AI Agent - Production Support Automation
 
-[PROJECT_2_ORG]
+[PROJECT_1_ORG]
 Singapore Airlines | 2023 - Present
 
-[PROJECT_2_DESCRIPTION]
-Built an intelligent AI agent that automates Application Management Services (AMS) workflows and production support tasks. The agent autonomously handles user-reported issues post-deployment by connecting to multiple systems: application codebases (via Git/repositories), infrastructure and application logs (Splunk), databases (S3, Data Mart), and external systems (Altea). Using a multi-tool agentic framework, the system diagnoses issues, queries relevant data sources, and provides resolutions without manual intervention.
+[PROJECT_1_DESCRIPTION]
+Built an intelligent AI agent that automates Application Management Services (AMS) workflows and production support tasks. The agent autonomously handles user-reported issues post-deployment by connecting to multiple systems: application codebases (via AWS CodeCommit), infrastructure and application logs (Splunk), databases (S3, Data Mart), and external systems (Altea). Using a multi-tool agentic framework, the system diagnoses issues, queries relevant data sources, and provides resolutions without manual intervention.
 
-[PROJECT_2_ACHIEVEMENTS]
+[PROJECT_1_ACHIEVEMENTS]
 9 production applications successfully onboarded
 Autonomous issue diagnosis and resolution
 Multi-system integration (codebase, logs, databases, external apps)
 Reduced production support response time
 24/7 automated incident handling
 
+[PROJECT_1_TECH]
+Agentic AI, LangGraph, Splunk, AWS S3, Data Mart, Altea Integration, AWS CodeCommit, Multi-Tool Orchestration
+
+[PROJECT_1_BADGE]
+Production
+
+[PROJECT_2_TITLE]
+Curie - HR Policy Chatbot (Agentic Framework)
+
+[PROJECT_2_ORG]
+Singapore Airlines | 2022 - Present
+
+[PROJECT_2_DESCRIPTION]
+Designed and developed Curie, an employee-facing HR chatbot for answering HR policy-related questions using a router-based agentic framework. The system intelligently analyzes user queries and routes them to the appropriate policy domain (Finance, Leave, Appraisal, IT, Code of Conduct, Medical Reimbursement, Payroll, etc.), then employs a retrieval system to identify relevant page numbers and provide context-aware responses.
+
+[PROJECT_2_ACHIEVEMENTS]
+Intelligent policy routing across 7+ HR domains
+Reduced HR query response time by 80%
+24/7 automated policy assistance for employees
+High accuracy context retrieval system
+Production deployment serving 1000s of employees
+
 [PROJECT_2_TECH]
-Agentic AI, LangGraph, Splunk, AWS S3, Data Mart, Altea Integration, Git/Codebase Analysis, Multi-Tool Orchestration
+Langgraph, OpenAI, AWS, Agent Framework, RAG, Policy Router
 
 [PROJECT_2_BADGE]
 Production
