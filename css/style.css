@@ -1,19 +1,19 @@
 /* ==========================================
-   ROOT VARIABLES - Dark Reddish Theme
+   ROOT VARIABLES - Dark Professional Theme
    ========================================== */
 :root {
     /* Color Palette */
-    --primary-dark: #1a0000;
-    --secondary-dark: #2d0a0a;
-    --tertiary-dark: #3d1010;
+    --primary-dark: #0a0a0a;
+    --secondary-dark: #151515;
+    --tertiary-dark: #1a1a1a;
     --accent-red: #dc143c;
     --accent-red-hover: #ff4444;
     --accent-red-light: #ff6b6b;
     --text-primary: #f5f5f5;
     --text-secondary: #a0a0a0;
     --text-muted: #707070;
-    --bg-card: rgba(61, 16, 16, 0.6);
-    --bg-card-hover: rgba(61, 16, 16, 0.8);
+    --bg-card: rgba(26, 26, 26, 0.6);
+    --bg-card-hover: rgba(26, 26, 26, 0.8);
     --border-color: rgba(220, 20, 60, 0.3);
     
     /* Typography */
