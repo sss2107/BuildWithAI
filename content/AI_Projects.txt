@@ -6,7 +6,18 @@
 AI Projects and Applied Research
 
 [SECTION_SUBTITLE]
-Building cutting-edge AI solutions that make a real-world impact
+Buildin[PROJECT_10_ACHIEVEMENTS]
+Zero cloud LLM dependency - fully local execution
+Reduced API costs by 100% through local models
+Agent orchestration with reasoning chains
+Real-time web search and information synthesis
+Presented at Asia Tech x Singapore Summit 2025
+
+[PROJECT_10_TECH]
+LangGraph, Tavily, Ollama, Local LLMs, Agent Orchestration, Information Retrieval
+
+[PROJECT_10_BADGE]
+Productionge AI solutions that make a real-world impact
 
 [PROJECT_1_TITLE]
 Curie - HR Policy Chatbot (Agentic Framework)
@@ -18,6 +29,7 @@ Singapore Airlines | 2022 - Present
 Designed and developed Curie, an employee-facing HR chatbot for answering HR policy-related questions using a router-based agentic framework. The system intelligently analyzes user queries and routes them to the appropriate policy domain (Finance, Leave, Appraisal, IT, Code of Conduct, Medical Reimbursement, Payroll, etc.), then employs a retrieval system to identify relevant page numbers and provide context-aware responses.
 
 [PROJECT_1_ACHIEVEMENTS]
+Intelligent policy routing across 7+ HR domains
 Reduced HR query response time by 80%
 24/7 automated policy assistance for employees
 High accuracy context retrieval system
@@ -30,155 +42,177 @@ Langgraph, OpenAI, AWS, Agent Framework, RAG, Policy Router
 Production
 
 [PROJECT_2_TITLE]
-Advanced RAG Chatbot for Aircraft Manuals
+AMS AI Agent - Production Support Automation
 
 [PROJECT_2_ORG]
-Singapore Airlines | 2022 - Present
+Singapore Airlines | 2023 - Present
 
 [PROJECT_2_DESCRIPTION]
-Designed and developed an advanced RAG (Retrieval-Augmented Generation) chatbot that indexes over 10 million pages of all Airbus and Boeing aircraft manuals. Implemented efficient query retrieval, processing, and caching mechanisms.
+Built an intelligent AI agent that automates Application Management Services (AMS) workflows and production support tasks. The agent autonomously handles user-reported issues post-deployment by connecting to multiple systems: application codebases (via Git/repositories), infrastructure and application logs (Splunk), databases (S3, Data Mart), and external systems (Altea). Using a multi-tool agentic framework, the system diagnoses issues, queries relevant data sources, and provides resolutions without manual intervention.
 
 [PROJECT_2_ACHIEVEMENTS]
-10M+ pages indexed
-Improved accuracy & latency
-Efficient caching
+9 production applications successfully onboarded
+Autonomous issue diagnosis and resolution
+Multi-system integration (codebase, logs, databases, external apps)
+Reduced production support response time
+24/7 automated incident handling
 
 [PROJECT_2_TECH]
-Advanced RAG frameworks, LlamaIndex, FAISS, AWS OpenSearch
+Agentic AI, LangGraph, Splunk, AWS S3, Data Mart, Altea Integration, Git/Codebase Analysis, Multi-Tool Orchestration
 
 [PROJECT_2_BADGE]
 Production
 
 [PROJECT_3_TITLE]
-Engineer Assist - Defect Recommendation Engine
+Advanced RAG Chatbot for Aircraft Manuals
 
 [PROJECT_3_ORG]
-Singapore Airlines | Nov, 2022 - Present
+Singapore Airlines | 2022 - Present
 
 [PROJECT_3_DESCRIPTION]
-Built "Engineer Assist", a defect recommendation system to forecast aircraft recurring defects and provide defect recommendations, enhancing maintenance efficiency and safety.
+Designed and developed an advanced RAG (Retrieval-Augmented Generation) chatbot that indexes over 10 million pages of all Airbus and Boeing aircraft manuals. Implemented efficient query retrieval, processing, and caching mechanisms.
 
 [PROJECT_3_ACHIEVEMENTS]
-Defect prediction
-Automated recommendations
-Improved efficiency
+10M+ pages indexed
+Improved accuracy & latency
+Efficient caching
 
 [PROJECT_3_TECH]
-Machine Learning, Time Series, AWS Sagemaker
+Advanced RAG frameworks, LlamaIndex, FAISS, AWS OpenSearch
 
 [PROJECT_3_BADGE]
 Production
 
 [PROJECT_4_TITLE]
-Confidential GenAI for CEO Meetings
+Engineer Assist - Defect Recommendation Engine
 
 [PROJECT_4_ORG]
-Singapore Airlines | 2023 - Present
+Singapore Airlines | Nov, 2022 - Present
 
 [PROJECT_4_DESCRIPTION]
-Developed a highly confidential GenAI application for CEO meetings with end-to-end security. Ensured complete data privacy through a zero-logging policy, preventing any response or log data transmission to external LLM providers or cloud services.
+Built "Engineer Assist", a defect recommendation system to forecast aircraft recurring defects and provide defect recommendations, enhancing maintenance efficiency and safety.
 
 [PROJECT_4_ACHIEVEMENTS]
+Defect prediction
+Automated recommendations
+Improved efficiency
+
+[PROJECT_4_TECH]
+Machine Learning, Time Series, AWS Sagemaker
+
+[PROJECT_4_BADGE]
+Production
+
+[PROJECT_5_TITLE]
+Confidential GenAI for CEO Meetings
+
+[PROJECT_5_ORG]
+Singapore Airlines | 2023 - Present
+
+[PROJECT_5_DESCRIPTION]
+Developed a highly confidential GenAI application for CEO meetings with end-to-end security. Ensured complete data privacy through a zero-logging policy, preventing any response or log data transmission to external LLM providers or cloud services.
+
+[PROJECT_5_ACHIEVEMENTS]
 Zero-logging policy
 Complete data privacy
 Secure on-premise deployment
 
-[PROJECT_4_TECH]
+[PROJECT_5_TECH]
 GenAI, Private LLMs, Encryption, AWS
 
-[PROJECT_4_BADGE]
+[PROJECT_5_BADGE]
 Confidential
 
-[PROJECT_5_TITLE]
+[PROJECT_6_TITLE]
 ICD-10 Medical Code Classification
 
-[PROJECT_5_ORG]
+[PROJECT_6_ORG]
 Munich Reinsurance (via NUS) | May 2022 - Oct 2022
 
-[PROJECT_5_DESCRIPTION]
+[PROJECT_6_DESCRIPTION]
 Solved multi-class and multi-output ICD-10 code classification problem on free medical text including doctor diagnoses and prescriptions using Transformer models. Won Best Research Paper Award at NUS.
 
-[PROJECT_5_ACHIEVEMENTS]
+[PROJECT_6_ACHIEVEMENTS]
 Best Research Paper Award
 Multi-class classification
 Transformer models
 
-[PROJECT_5_TECH]
+[PROJECT_6_TECH]
 BERT, Transformers, NLP, PyTorch
 
-[PROJECT_5_BADGE]
+[PROJECT_6_BADGE]
 Award Winner
 
-[PROJECT_6_TITLE]
+[PROJECT_7_TITLE]
 X0PA Room - AI Video Interview Platform
 
-[PROJECT_6_ORG]
+[PROJECT_7_ORG]
 X0PA AI | Nov 2021 - April 2022
 
-[PROJECT_6_DESCRIPTION]
-Built "X0PA Room", an AI-powered video interview platform that rates candidates using AI scoring metrics based on video analytics, audio text transcripts, and topic analysis.
+[PROJECT_7_DESCRIPTION]
+Built "X0PA Room", an AI-powered video interview platform that rates candidates using AI scoring metrics based on video analytics, audio text transcepts, and topic analysis.
 
-[PROJECT_6_ACHIEVEMENTS]
+[PROJECT_7_ACHIEVEMENTS]
 Multi-modal analysis
 Feature extraction
 Resume analysis
 
-[PROJECT_6_TECH]
+[PROJECT_7_TECH]
 NLP, Computer Vision, Audio Processing, Deep Learning
 
-[PROJECT_6_BADGE]
+[PROJECT_7_BADGE]
 Production
 
-[PROJECT_7_TITLE]
-Bitcoin Price Prediction System
-
-[PROJECT_7_ORG]
-NUS Academic Project | 2021 - 2022
-
-[PROJECT_7_DESCRIPTION]
-Developed LSTM-based model to predict bitcoin prices using multiple data sources. Achieved 2% MAPE (Mean Absolute Percentage Error). Shortlisted to present to Blockchain CEO consortium.
-
-[PROJECT_7_ACHIEVEMENTS]
-2% MAPE accuracy
-CEO presentation
-Multi-source data
-
-[PROJECT_7_TECH]
-LSTM, Time Series, TensorFlow, Python
-
-[PROJECT_7_BADGE]
-Research
-
 [PROJECT_8_TITLE]
-COVID-19 Question Answering System
+Bitcoin Price Prediction System
 
 [PROJECT_8_ORG]
 NUS Academic Project | 2021 - 2022
 
 [PROJECT_8_DESCRIPTION]
-Developed a Question Answering (QA) system to answer queries about COVID-19 and reduce misinformation using Transformer (BERT) models.
+Developed LSTM-based model to predict bitcoin prices using multiple data sources. Achieved 2% MAPE (Mean Absolute Percentage Error). Shortlisted to present to Blockchain CEO consortium.
 
 [PROJECT_8_ACHIEVEMENTS]
-Combat misinformation
-Accurate QA system
-Real-time retrieval
+2% MAPE accuracy
+CEO presentation
+Multi-source data
 
 [PROJECT_8_TECH]
-BERT, Transformers, NLP, Information Retrieval
+LSTM, Time Series, TensorFlow, Python
 
 [PROJECT_8_BADGE]
 Research
 
 [PROJECT_9_TITLE]
-Local Web Search Agent with LLMs
+COVID-19 Question Answering System
 
 [PROJECT_9_ORG]
-Asia Tech x Singapore Summit | Production Project
+NUS Academic Project | 2021 - 2022
 
 [PROJECT_9_DESCRIPTION]
-Built a production-grade web search agent using locally-run language models that processes natural language queries, performs web searches, and synthesizes results without relying on cloud-based LLMs. The system combines LangGraph for agent orchestration, Tavily for web search API integration, and Ollama for local model execution, creating a cost-effective solution that reduces API costs while maintaining privacy and control.
+Developed a Question Answering (QA) system to answer queries about COVID-19 and reduce misinformation using Transformer (BERT) models.
 
 [PROJECT_9_ACHIEVEMENTS]
+Combat misinformation
+Accurate QA system
+Real-time retrieval
+
+[PROJECT_9_TECH]
+BERT, Transformers, NLP, Information Retrieval
+
+[PROJECT_9_BADGE]
+Research
+
+[PROJECT_10_TITLE]
+Local Web Search Agent with LLMs
+
+[PROJECT_10_ORG]
+Asia Tech x Singapore Summit | Production Project
+
+[PROJECT_10_DESCRIPTION]
+Built a production-grade web search agent using locally-run language models that processes natural language queries, performs web searches, and synthesizes results without relying on cloud-based LLMs. The system combines LangGraph for agent orchestration, Tavily for web search API integration, and Ollama for local model execution, creating a cost-effective solution that reduces API costs while maintaining privacy and control.
+
+[PROJECT_10_ACHIEVEMENTS]
 Zero cloud LLM dependency - fully local execution
 Reduced API costs by 100% through local models
 Agent orchestration with reasoning chains

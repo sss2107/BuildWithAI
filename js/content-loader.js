@@ -126,7 +126,7 @@ const ContentLoader = {
             sectionSubtitle.textContent = content.SECTION_SUBTITLE;
         }
 
-        // Load all projects (PROJECT_1 through PROJECT_9)
+        // Load all projects (PROJECT_1 through PROJECT_10)
         const projectsGrid = document.querySelector('#projects .projects-grid');
         if (!projectsGrid) {
             console.error('Could not find .projects-grid element');
@@ -136,7 +136,7 @@ const ContentLoader = {
         let projectsHTML = '';
         let projectCount = 0;
         
-        for (let i = 1; i <= 9; i++) {
+        for (let i = 1; i <= 10; i++) {
             const titleKey = `PROJECT_${i}_TITLE`;
             if (!content[titleKey]) {
                 console.log(`No PROJECT_${i}_TITLE found, skipping...`);
