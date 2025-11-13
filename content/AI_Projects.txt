@@ -31,43 +31,43 @@ Agentic AI, LangGraph, Splunk, AWS S3, Data Mart, Altea Integration, AWS CodeCom
 Production
 
 [PROJECT_2_TITLE]
-Curie - HR Policy Chatbot (Agentic Framework)
+Advanced RAG Chatbot for Aircraft Manuals
 
 [PROJECT_2_ORG]
 Singapore Airlines | 2022 - Present
 
 [PROJECT_2_DESCRIPTION]
-Designed and developed Curie, an employee-facing HR chatbot for answering HR policy-related questions using a router-based agentic framework. The system intelligently analyzes user queries and routes them to the appropriate policy domain (Finance, Leave, Appraisal, IT, Code of Conduct, Medical Reimbursement, Payroll, etc.), then employs a retrieval system to identify relevant page numbers and provide context-aware responses.
+Designed and developed an advanced RAG (Retrieval-Augmented Generation) chatbot that indexes over 10 million pages of all Airbus and Boeing aircraft manuals. Implemented efficient query retrieval, processing, and caching mechanisms.
 
 [PROJECT_2_ACHIEVEMENTS]
+10M+ pages indexed
+Improved accuracy & latency
+Efficient caching
+
+[PROJECT_2_TECH]
+Advanced RAG frameworks, LlamaIndex, FAISS, AWS OpenSearch
+
+[PROJECT_2_BADGE]
+Production
+
+[PROJECT_3_TITLE]
+Curie - HR Policy Chatbot (Agentic Framework)
+
+[PROJECT_3_ORG]
+Singapore Airlines | 2022 - Present
+
+[PROJECT_3_DESCRIPTION]
+Designed and developed Curie, an employee-facing HR chatbot for answering HR policy-related questions using a router-based agentic framework. The system intelligently analyzes user queries and routes them to the appropriate policy domain (Finance, Leave, Appraisal, IT, Code of Conduct, Medical Reimbursement, Payroll, etc.), then employs a retrieval system to identify relevant page numbers and provide context-aware responses.
+
+[PROJECT_3_ACHIEVEMENTS]
 Intelligent policy routing across 7+ HR domains
 Reduced HR query response time by 80%
 24/7 automated policy assistance for employees
 High accuracy context retrieval system
 Production deployment serving 1000s of employees
 
-[PROJECT_2_TECH]
-Langgraph, OpenAI, AWS, Agent Framework, RAG, Policy Router
-
-[PROJECT_2_BADGE]
-Production
-
-[PROJECT_3_TITLE]
-Advanced RAG Chatbot for Aircraft Manuals
-
-[PROJECT_3_ORG]
-Singapore Airlines | 2022 - Present
-
-[PROJECT_3_DESCRIPTION]
-Designed and developed an advanced RAG (Retrieval-Augmented Generation) chatbot that indexes over 10 million pages of all Airbus and Boeing aircraft manuals. Implemented efficient query retrieval, processing, and caching mechanisms.
-
-[PROJECT_3_ACHIEVEMENTS]
-10M+ pages indexed
-Improved accuracy & latency
-Efficient caching
-
 [PROJECT_3_TECH]
-Advanced RAG frameworks, LlamaIndex, FAISS, AWS OpenSearch
+Langgraph, OpenAI, AWS, Agent Framework, RAG, Policy Router
 
 [PROJECT_3_BADGE]
 Production
