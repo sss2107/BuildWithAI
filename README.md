@@ -13,9 +13,10 @@ A modern, professional portfolio website showcasing AI and Data Science expertis
 - ⚡ **Smooth Animations**: Scroll-based animations and smooth transitions
 - 🧭 **Interactive Navigation**: Fixed header with active section highlighting
 - 📝 **Dynamic Content Loading**: Content loaded from `.txt` files for easy updates without touching code
+- 📊 **Google Analytics Integration**: Track visitors, page views, and user engagement
 - 🎯 **Six Main Sections**:
   - 👋 Introduction with professional photo
-  - 🤖 AI Projects and Applied Research (9+ production projects)
+  - 🤖 AI Projects and Applied Research (10 production projects)
   - 🎓 Education (NUS Master's & Bachelor's)
   - 💼 Experience (7 professional positions)
   - 🛠️ Skills (40+ technologies categorized by expertise)
@@ -80,6 +81,7 @@ BuildWithAI/
 - **Icons**: Font Awesome 6.4.0
 - **Fonts**: Google Fonts (Inter, Poppins)
 - **Animations**: AOS (Animate On Scroll) library
+- **Analytics**: Google Analytics 4 (GA4)
 - **Deployment**: GitHub Pages
 - **Version Control**: Git
 
@@ -384,6 +386,7 @@ BuildWithAI/
 - ✅ Pure HTML/CSS/JS - No frameworks or build tools needed
 - ✅ **Dynamic content loading** from `.txt` files using Fetch API
 - ✅ Modular content system with [LABEL] format parsing
+- ✅ **Google Analytics 4** integration for visitor tracking
 - ✅ Smooth scroll navigation with active section highlighting
 - ✅ Mobile-first responsive design
 - ✅ CSS Grid & Flexbox layouts
@@ -392,7 +395,7 @@ BuildWithAI/
 - ✅ Optimized performance (<3s load time)
 
 ### Content Highlights
-- 🤖 **9+ AI/ML Production Projects**: Including agentic chatbots, RAG systems, and local LLM agents
+- 🤖 **10 AI/ML Production Projects**: Including AMS automation agent, agentic chatbots, RAG systems, and local LLM agents
 - 🏆 **Multiple Awards**: CEO Award, Best Research Paper, Hackathon Winner
 - 🎤 **5+ Conference Talks**: AWS User Group, Asia Tech Summit, Google Developer Expert sessions
 - 💼 **7 Professional Positions**: Singapore Airlines, Munich Re, X0PA AI, EY, KPMG, PayU
@@ -623,6 +626,76 @@ The dynamic loading system is powered by `js/content-loader.js`:
 | `content/Experience.txt` | Work Experience | ⚪ Hardcoded |
 | `content/Skills.txt` | Skills Grid | ⚪ Hardcoded |
 | `content/ExtraCurriculars.txt` | Awards/Talks | ⚪ Hardcoded |
+
+## 📊 Google Analytics Integration
+
+This portfolio includes **Google Analytics 4 (GA4)** tracking to monitor visitor engagement and site performance.
+
+### 🎯 What's Being Tracked
+
+The GA4 integration automatically tracks:
+- 👥 **Visitor Count**: Total and unique visitors
+- 🌍 **Geographic Data**: Countries, cities, and regions
+- 📱 **Device Information**: Desktop, mobile, tablet breakdown
+- 🌐 **Browser & OS**: Chrome, Safari, Firefox usage
+- ⏱️ **Session Duration**: Time spent on site
+- 📄 **Page Views**: Which sections get the most attention
+- 🔗 **Traffic Sources**: Direct, referrals, social media
+- 📈 **Real-time Data**: Live visitor tracking
+- 📊 **User Flow**: How visitors navigate through sections
+- 🖱️ **Enhanced Measurement**: Scrolls, clicks, file downloads (auto-enabled)
+
+### 📱 Accessing Your Analytics Dashboard
+
+1. Go to: **https://analytics.google.com/**
+2. Select your property: "BuildWithAI Portfolio"
+3. Navigate through:
+   - **Reports → Realtime**: See live visitors
+   - **Reports → Engagement**: Pages and events
+   - **Reports → User Acquisition**: Traffic sources
+   - **Reports → Demographics**: Location and device data
+
+### 🔧 Current Configuration
+
+**Tracking ID**: `G-G96WZXEYC4`  
+**Location**: Added to `<head>` section in `index.html`  
+**Enhanced Measurement**: ✅ Enabled (auto-tracks scrolls, clicks, searches)
+
+### 🛠️ Updating Your Tracking ID
+
+If you want to use a different GA4 property:
+
+1. Get your new tracking ID from Google Analytics
+2. Edit `index.html`:
+   ```html
+   <!-- Find this line -->
+   gtag('config', 'G-G96WZXEYC4');
+   
+   <!-- Replace with your new ID -->
+   gtag('config', 'G-YOUR-NEW-ID');
+   ```
+3. Commit and push changes
+
+### 📈 Data Availability
+
+- **First data**: Appears within 24-48 hours of deployment
+- **Real-time reports**: Available immediately after first visit
+- **Historical data**: Retained indefinitely (free tier)
+
+### 🔒 Privacy Compliance
+
+- Google Analytics 4 is GDPR/CCPA compliant
+- No personally identifiable information (PII) is collected
+- IP addresses are anonymized by default in GA4
+- Users can opt-out via browser extensions
+
+### 💡 Pro Tips
+
+- **Download the GA4 mobile app** for on-the-go analytics
+- **Set up custom events** to track specific button clicks
+- **Create conversion goals** to track resume downloads or contact clicks
+- **Weekly email reports** available in GA4 settings
+- **Share dashboard** with recruiters to show portfolio reach
 
 
 
