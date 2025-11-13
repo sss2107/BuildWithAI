@@ -133,85 +133,107 @@ BERT, Transformers, NLP, PyTorch
 Award Winner
 
 [PROJECT_7_TITLE]
-X0PA Room - AI Video Interview Platform
+Speech Emotion Recognition with Hubert Fine-tuning
 
 [PROJECT_7_ORG]
-X0PA AI | Nov 2021 - April 2022
+NUS Academic Project | 2021 - 2022
 
 [PROJECT_7_DESCRIPTION]
-Built "X0PA Room", an AI-powered video interview platform that rates candidates using AI scoring metrics based on video analytics, audio text transcepts, and topic analysis.
+Developed a multimodal emotion classification system using transfer learning on Hubert models. Combined multiple public SER datasets with speech augmentation techniques to create a balanced corpus. Fine-tuned Hubert by experimenting with various layer-freezing strategies, ultimately achieving optimal performance by updating only the classifier layer while keeping pre-trained layers frozen. Integrated audio embeddings from Hubert with text embeddings from OpenAI Whisper and BERT for joint training.
 
 [PROJECT_7_ACHIEVEMENTS]
+Transfer learning on Hubert (audio) + Whisper + BERT (text)
+Multi-dataset corpus with augmentation techniques
+Optimal fine-tuning: classifier-only updates outperformed unfreezing
+Multimodal fusion of audio and text embeddings
+(U+W)*A metric optimization for balanced evaluation
+
+[PROJECT_7_TECH]
+Hubert, OpenAI Whisper, BERT, Transfer Learning, Speech Augmentation, PyTorch, Multimodal Learning
+
+[PROJECT_7_BADGE]
+Research
+
+[PROJECT_8_TITLE]
+X0PA Room - AI Video Interview Platform
+
+[PROJECT_8_ORG]
+X0PA AI | Nov 2021 - April 2022
+
+[PROJECT_8_DESCRIPTION]
+Built "X0PA Room", an AI-powered video interview platform that rates candidates using AI scoring metrics based on video analytics, audio text transcepts, and topic analysis.
+
+[PROJECT_8_ACHIEVEMENTS]
 Multi-modal analysis
 Feature extraction
 Resume analysis
 
-[PROJECT_7_TECH]
+[PROJECT_8_TECH]
 NLP, Computer Vision, Audio Processing, Deep Learning
 
-[PROJECT_7_BADGE]
+[PROJECT_8_BADGE]
 Production
 
-[PROJECT_8_TITLE]
-Bitcoin Price Prediction System
-
-[PROJECT_8_ORG]
-NUS Academic Project | 2021 - 2022
-
-[PROJECT_8_DESCRIPTION]
-Developed LSTM-based model to predict bitcoin prices using multiple data sources. Achieved 2% MAPE (Mean Absolute Percentage Error). Shortlisted to present to Blockchain CEO consortium.
-
-[PROJECT_8_ACHIEVEMENTS]
-2% MAPE accuracy
-CEO presentation
-Multi-source data
-
-[PROJECT_8_TECH]
-LSTM, Time Series, TensorFlow, Python
-
-[PROJECT_8_BADGE]
-Research
-
 [PROJECT_9_TITLE]
-COVID-19 Question Answering System
+Bitcoin Price Prediction System
 
 [PROJECT_9_ORG]
 NUS Academic Project | 2021 - 2022
 
 [PROJECT_9_DESCRIPTION]
-Developed a Question Answering (QA) system to answer queries about COVID-19 and reduce misinformation using Transformer (BERT) models.
+Developed LSTM-based model to predict bitcoin prices using multiple data sources. Achieved 2% MAPE (Mean Absolute Percentage Error). Shortlisted to present to Blockchain CEO consortium.
 
 [PROJECT_9_ACHIEVEMENTS]
-Combat misinformation
-Accurate QA system
-Real-time retrieval
+2% MAPE accuracy
+CEO presentation
+Multi-source data
 
 [PROJECT_9_TECH]
-BERT, Transformers, NLP, Information Retrieval
+LSTM, Time Series, TensorFlow, Python
 
 [PROJECT_9_BADGE]
 Research
 
 [PROJECT_10_TITLE]
-Local Web Search Agent with LLMs
+COVID-19 Question Answering System
 
 [PROJECT_10_ORG]
-Asia Tech x Singapore Summit | Production Project
+NUS Academic Project | 2021 - 2022
 
 [PROJECT_10_DESCRIPTION]
-Built a production-grade web search agent using locally-run language models that processes natural language queries, performs web searches, and synthesizes results without relying on cloud-based LLMs. The system combines LangGraph for agent orchestration, Tavily for web search API integration, and Ollama for local model execution, creating a cost-effective solution that reduces API costs while maintaining privacy and control.
+Developed a Question Answering (QA) system to answer queries about COVID-19 and reduce misinformation using Transformer (BERT) models.
 
 [PROJECT_10_ACHIEVEMENTS]
+Combat misinformation
+Accurate QA system
+Real-time retrieval
+
+[PROJECT_10_TECH]
+BERT, Transformers, NLP, Information Retrieval
+
+[PROJECT_10_BADGE]
+Research
+
+[PROJECT_11_TITLE]
+Local Web Search Agent with LLMs
+
+[PROJECT_11_ORG]
+Asia Tech x Singapore Summit | Production Project
+
+[PROJECT_11_DESCRIPTION]
+Built a production-grade web search agent using locally-run language models that processes natural language queries, performs web searches, and synthesizes results without relying on cloud-based LLMs. The system combines LangGraph for agent orchestration, Tavily for web search API integration, and Ollama for local model execution, creating a cost-effective solution that reduces API costs while maintaining privacy and control.
+
+[PROJECT_11_ACHIEVEMENTS]
 Zero cloud LLM dependency - fully local execution
 Reduced API costs by 100% through local models
 Agent orchestration with reasoning chains
 Real-time web search and information synthesis
 Presented at Asia Tech x Singapore Summit 2025
 
-[PROJECT_9_TECH]
+[PROJECT_11_TECH]
 LangGraph, Tavily, Ollama, Local LLMs, Agent Orchestration, Information Retrieval
 
-[PROJECT_9_BADGE]
+[PROJECT_11_BADGE]
 Production
 
 [CONFERENCE_TALKS]
