@@ -1,0 +1,122 @@
+#!/bin/bash
+
+# AWS Lambda Deployment Script for RAG Chatbot
+# This script packages and deploys your Lambda function
+
+set -e  # Exit on error
+
+echo "🚀 Deploying RAG Chatbot to AWS Lambda..."
+
+# Configuration
+FUNCTION_NAME="sahil-resume-chatbot"
+REGION="us-east-1"
+RUNTIME="python3.11"
+HANDLER="chatbot_handler.lambda_handler"
+ROLE_NAME="lambda-chatbot-role"
+
+# Colors for output
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${BLUE}Step 1: Installing dependencies...${NC}"
+pip install -r requirements.txt -t package/
+
+echo -e "${BLUE}Step 2: Copying Lambda handler...${NC}"
+cp chatbot_handler.py package/
+
+echo -e "${BLUE}Step 3: Creating deployment package...${NC}"
+cd package
+zip -r ../lambda_function.zip .
+cd ..
+
+echo -e "${BLUE}Step 4: Creating IAM role (if not exists)...${NC}"
+# Check if role exists
+if aws iam get-role --role-name $ROLE_NAME 2>/dev/null; then
+    echo "Role $ROLE_NAME already exists"
+else
+    echo "Creating role $ROLE_NAME..."
+    
+    # Create trust policy
+    cat > trust-policy.json << EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+    
+    # Create role
+    aws iam create-role \
+        --role-name $ROLE_NAME \
+        --assume-role-policy-document file://trust-policy.json
+    
+    # Attach basic Lambda execution policy
+    aws iam attach-role-policy \
+        --role-name $ROLE_NAME \
+        --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    
+    # Attach Secrets Manager read policy
+    aws iam attach-role-policy \
+        --role-name $ROLE_NAME \
+        --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
+    
+    echo "Waiting for role to be available..."
+    sleep 10
+fi
+
+# Get role ARN
+ROLE_ARN=$(aws iam get-role --role-name $ROLE_NAME --query 'Role.Arn' --output text)
+echo "Role ARN: $ROLE_ARN"
+
+echo -e "${BLUE}Step 5: Creating/Updating Lambda function...${NC}"
+# Check if function exists
+if aws lambda get-function --function-name $FUNCTION_NAME --region $REGION 2>/dev/null; then
+    echo "Updating existing function..."
+    aws lambda update-function-code \
+        --function-name $FUNCTION_NAME \
+        --zip-file fileb://lambda_function.zip \
+        --region $REGION
+else
+    echo "Creating new function..."
+    aws lambda create-function \
+        --function-name $FUNCTION_NAME \
+        --runtime $RUNTIME \
+        --role $ROLE_ARN \
+        --handler $HANDLER \
+        --zip-file fileb://lambda_function.zip \
+        --timeout 30 \
+        --memory-size 512 \
+        --region $REGION
+fi
+
+echo -e "${BLUE}Step 6: Creating API Gateway...${NC}"
+# This will be done through AWS Console or SAM template
+echo "⚠️  Manual step: Create API Gateway REST API and connect to Lambda"
+echo "   OR use AWS SAM template (see deploy_with_sam.sh)"
+
+echo -e "${GREEN}✅ Deployment complete!${NC}"
+echo ""
+echo "Next steps:"
+echo "1. Go to AWS Console → API Gateway"
+echo "2. Create new REST API"
+echo "3. Create POST method → Connect to Lambda: $FUNCTION_NAME"
+echo "4. Enable CORS"
+echo "5. Deploy API to 'prod' stage"
+echo "6. Copy API endpoint URL"
+echo "7. Update chatbot.js with your API endpoint"
+
+# Cleanup
+rm -rf package
+rm trust-policy.json 2>/dev/null || true
+
+echo ""
+echo "📝 Function ARN:"
+aws lambda get-function --function-name $FUNCTION_NAME --region $REGION --query 'Configuration.FunctionArn' --output text

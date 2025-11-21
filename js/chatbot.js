@@ -5,6 +5,7 @@
 class Chatbot {
     constructor() {
         this.isOpen = false;
+        this.apiEndpoint = 'https://4ctco04k53.execute-api.us-east-1.amazonaws.com/Prod/chat';
         this.init();
     }
 
@@ -60,10 +61,9 @@ class Chatbot {
                             type="text" 
                             class="chatbot-input" 
                             id="chatbotInput" 
-                            placeholder="Coming soon..." 
-                            disabled
+                            placeholder="Ask about Sahil's experience, projects, skills..." 
                         >
-                        <button class="chatbot-send-button" id="chatbotSend" disabled>
+                        <button class="chatbot-send-button" id="chatbotSend">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
@@ -88,15 +88,13 @@ class Chatbot {
 
         // Handle input (for future functionality)
         chatbotInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !chatbotInput.disabled) {
+            if (e.key === 'Enter') {
                 this.sendMessage();
             }
         });
 
         chatbotSend.addEventListener('click', () => {
-            if (!chatbotSend.disabled) {
-                this.sendMessage();
-            }
+            this.sendMessage();
         });
 
         // Close on outside click
@@ -133,30 +131,89 @@ class Chatbot {
             <div class="welcome-message">
                 <i class="fas fa-robot"></i>
                 <h4>Hi there! 👋</h4>
-                <p>Soon, you'll be able to "chat" and "call" Sahil's resume.</p>
+                <p>I'm Sahil's AI assistant. Ask me anything about his experience, projects, or skills!</p>
                 <p style="font-size: 13px; margin-top: 16px;">
-                    Ask questions about:<br>
+                    You can ask about:<br>
                     • Work experience & projects<br>
                     • Technical skills & expertise<br>
                     • Awards & achievements<br>
                     • Conference talks & more
                 </p>
-                <span class="coming-soon-badge">🚀 COMING SOON</span>
             </div>
         `;
         
         messagesContainer.innerHTML = welcomeHTML;
     }
 
-    sendMessage() {
-        // Placeholder for future RAG implementation
+    async sendMessage() {
         const input = document.getElementById('chatbotInput');
+        const sendButton = document.getElementById('chatbotSend');
         const message = input.value.trim();
         
         if (message) {
-            console.log('Message sent:', message);
+            // Add user message
+            this.addMessage(message, 'user');
             input.value = '';
-            // Future: Call RAG backend here
+            
+            // Disable input while processing
+            input.disabled = true;
+            sendButton.disabled = true;
+            
+            // Add typing indicator
+            this.addTypingIndicator();
+            
+            try {
+                // Call Lambda API
+                const response = await fetch(this.apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: message })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Remove typing indicator
+                this.removeTypingIndicator();
+                
+                // Add bot response
+                this.addMessage(data.answer, 'bot');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                this.removeTypingIndicator();
+                this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+            } finally {
+                // Re-enable input
+                input.disabled = false;
+                sendButton.disabled = false;
+                input.focus();
+            }
+        }
+    }
+
+    addTypingIndicator() {
+        const messagesContainer = document.getElementById('chatbotMessages');
+        const typingHTML = `
+            <div class="message bot typing-indicator" id="typingIndicator">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        `;
+        messagesContainer.insertAdjacentHTML('beforeend', typingHTML);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    removeTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
         }
     }
 

@@ -1,0 +1,59 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Sahil's Resume RAG Chatbot - Serverless Backend
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+    Runtime: python3.11
+  Api:
+    Cors:
+      AllowMethods: "'POST, OPTIONS'"
+      AllowHeaders: "'Content-Type,Authorization'"
+      AllowOrigin: "'*'"  # Change to your GitHub Pages domain for production
+
+Resources:
+  # Lambda Function
+  ChatbotFunction:
+    Type: AWS::Serverless::Function
+    Metadata:
+      BuildMethod: python3.11
+    Properties:
+      FunctionName: sahil-resume-chatbot
+      CodeUri: ./
+      Handler: chatbot_handler.lambda_handler
+      Description: RAG chatbot for Sahil's resume
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO
+      Policies:
+        - SecretsManagerReadWrite
+      Events:
+        ChatAPI:
+          Type: Api
+          Properties:
+            Path: /chat
+            Method: post
+            Auth:
+              ApiKeyRequired: false
+            
+  # CloudWatch Log Group
+  ChatbotLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${ChatbotFunction}'
+      RetentionInDays: 7
+
+Outputs:
+  ChatbotApi:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/chat"
+  
+  ChatbotFunctionArn:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt ChatbotFunction.Arn
+  
+  ChatbotIamRole:
+    Description: "Lambda IAM Role ARN"
+    Value: !GetAtt ChatbotFunctionRole.Arn
