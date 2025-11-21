@@ -133,7 +133,7 @@ class Chatbot {
             <div class="welcome-message">
                 <i class="fas fa-robot"></i>
                 <h4>Hi there! 👋</h4>
-                <p>Soon, you'll be able to "chat" with Sahil's resume.</p>
+                <p>Soon, you'll be able to "chat" and "call" Sahil's resume.</p>
                 <p style="font-size: 13px; margin-top: 16px;">
                     Ask questions about:<br>
                     • Work experience & projects<br>
