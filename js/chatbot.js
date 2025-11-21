@@ -61,9 +61,10 @@ class Chatbot {
                             type="text" 
                             class="chatbot-input" 
                             id="chatbotInput" 
-                            placeholder="Ask about Sahil's experience, projects, skills..." 
+                            placeholder="Coming soon..." 
+                            disabled
                         >
-                        <button class="chatbot-send-button" id="chatbotSend">
+                        <button class="chatbot-send-button" id="chatbotSend" disabled>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
@@ -88,13 +89,15 @@ class Chatbot {
 
         // Handle input (for future functionality)
         chatbotInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !chatbotInput.disabled) {
                 this.sendMessage();
             }
         });
 
         chatbotSend.addEventListener('click', () => {
-            this.sendMessage();
+            if (!chatbotSend.disabled) {
+                this.sendMessage();
+            }
         });
 
         // Close on outside click
@@ -131,14 +134,15 @@ class Chatbot {
             <div class="welcome-message">
                 <i class="fas fa-robot"></i>
                 <h4>Hi there! 👋</h4>
-                <p>I'm Sahil's AI assistant. Ask me anything about his experience, projects, or skills!</p>
+                <p>Soon, you'll be able to chat with Sahil's AI assistant powered by advanced RAG architecture.</p>
                 <p style="font-size: 13px; margin-top: 16px;">
-                    You can ask about:<br>
+                    Ask questions about:<br>
                     • Work experience & projects<br>
                     • Technical skills & expertise<br>
                     • Awards & achievements<br>
                     • Conference talks & more
                 </p>
+                <span class="coming-soon-badge">🚀 COMING SOON</span>
             </div>
         `;
         

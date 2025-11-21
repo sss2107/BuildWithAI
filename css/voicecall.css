@@ -1,0 +1,253 @@
+/* ==========================================
+   VOICE CALL WIDGET STYLES
+   ========================================== */
+
+/* Voice Call Button */
+.voicecall-button {
+    position: fixed;
+    bottom: 110px; /* Above the chatbot button */
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(40, 167, 69, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 24px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 999;
+    animation: pulse-green 2s ease-in-out infinite;
+}
+
+.voicecall-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(40, 167, 69, 0.6);
+}
+
+.voicecall-button:active {
+    transform: scale(0.95);
+}
+
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(40, 167, 69, 0.4);
+    }
+    50% {
+        box-shadow: 0 4px 30px rgba(40, 167, 69, 0.7);
+    }
+}
+
+/* Voice Call Window */
+.voicecall-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 380px;
+    height: 450px;
+    background: #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.voicecall-window.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+}
+
+/* Voice Call Header */
+.voicecall-header {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.voicecall-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.voicecall-avatar {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.voicecall-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.voicecall-info p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 4px 0 0 0;
+}
+
+.voicecall-close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.voicecall-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: rotate(90deg);
+}
+
+/* Voice Call Content */
+.voicecall-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.voicecall-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(32, 201, 151, 0.1) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #28a745;
+    margin-bottom: 24px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.voicecall-content h4 {
+    font-size: 20px;
+    color: #f5f5f5;
+    margin: 0 0 12px 0;
+    font-weight: 600;
+}
+
+.voicecall-content p {
+    font-size: 14px;
+    color: #a0a0a0;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+    max-width: 280px;
+}
+
+.voicecall-features {
+    margin-top: 20px;
+    text-align: left;
+    width: 100%;
+    max-width: 280px;
+}
+
+.voicecall-features p {
+    font-size: 13px;
+    color: #a0a0a0;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.voicecall-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    color: #c0c0c0;
+    font-size: 13px;
+}
+
+.voicecall-feature i {
+    color: #28a745;
+    font-size: 16px;
+    width: 20px;
+}
+
+.voicecall-coming-soon-badge {
+    display: inline-block;
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .voicecall-button {
+        bottom: 100px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+
+    .voicecall-window {
+        width: calc(100vw - 40px);
+        right: 20px;
+        bottom: 80px;
+        height: 400px;
+    }
+
+    .voicecall-content {
+        padding: 30px 20px;
+    }
+
+    .voicecall-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 40px;
+    }
+
+    .voicecall-content h4 {
+        font-size: 18px;
+    }
+}
