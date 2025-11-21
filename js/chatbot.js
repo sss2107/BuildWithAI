@@ -82,10 +82,24 @@ class Chatbot {
         const chatbotWindow = document.getElementById('chatbotWindow');
         const chatbotInput = document.getElementById('chatbotInput');
         const chatbotSend = document.getElementById('chatbotSend');
+        const chatbotMessages = document.getElementById('chatbotMessages');
 
         // Toggle chatbot window
         chatbotButton.addEventListener('click', () => this.toggleChatbot());
         chatbotClose.addEventListener('click', () => this.closeChatbot());
+
+        // Prevent scroll propagation to parent page
+        chatbotMessages.addEventListener('wheel', (e) => {
+            const isScrollable = chatbotMessages.scrollHeight > chatbotMessages.clientHeight;
+            if (isScrollable) {
+                e.stopPropagation();
+            }
+        });
+
+        // Prevent touchmove propagation on mobile
+        chatbotMessages.addEventListener('touchmove', (e) => {
+            e.stopPropagation();
+        }, { passive: true });
 
         // Handle input (for future functionality)
         chatbotInput.addEventListener('keypress', (e) => {

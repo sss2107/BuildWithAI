@@ -84,10 +84,26 @@ class VoiceCall {
         const voiceCallButton = document.getElementById('voiceCallButton');
         const voiceCallClose = document.getElementById('voiceCallClose');
         const voiceCallWindow = document.getElementById('voiceCallWindow');
+        const voiceCallContent = document.querySelector('.voicecall-content');
 
         // Toggle voice call window
         voiceCallButton.addEventListener('click', () => this.toggleVoiceCall());
         voiceCallClose.addEventListener('click', () => this.closeVoiceCall());
+
+        // Prevent scroll propagation to parent page
+        if (voiceCallContent) {
+            voiceCallContent.addEventListener('wheel', (e) => {
+                const isScrollable = voiceCallContent.scrollHeight > voiceCallContent.clientHeight;
+                if (isScrollable) {
+                    e.stopPropagation();
+                }
+            });
+
+            // Prevent touchmove propagation on mobile
+            voiceCallContent.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+            }, { passive: true });
+        }
 
         // Close on outside click
         document.addEventListener('click', (e) => {
