@@ -1,13 +1,13 @@
 """
 AWS Lambda Handler for ADK-based RAG Chatbot
-Uses Google ADK with Gemini Flash 2.5 and tool-based routing
+Uses Google GenAI SDK with Gemini and tool-based routing
 """
 
 import json
 import os
 import boto3
 from typing import Dict, Any, List
-import google.generativeai as genai
+from google import genai
 
 # Initialize AWS clients
 secretsmanager = boto3.client('secretsmanager')
@@ -109,81 +109,56 @@ TOOLS = {
 }
 
 # ==========================================
-# GEMINI ADK AGENT
+# GEMINI AGENT WITH NEW SDK
 # ==========================================
 
-def create_adk_agent(api_key: str):
-    """Create Gemini agent with tool calling"""
-    genai.configure(api_key=api_key)
-    
-    # Create model with function calling using Python functions directly
-    model = genai.GenerativeModel(
-        model_name='gemini-2.0-flash-exp',
-        tools=[
-            get_introduction,
-            get_ai_projects,
-            get_experience,
-            get_education,
-            get_skills,
-            get_extracurriculars
-        ]
-    )
-    
-    return model
-
-def process_with_adk(question: str, api_key: str) -> str:
+def process_with_genai(question: str, api_key: str) -> str:
     """
-    Process question using Google ADK agent with tool calling
+    Process question using new Google GenAI SDK with automatic tool calling
     """
     try:
-        model = create_adk_agent(api_key)
+        from google.genai import types
+        
+        # Initialize client
+        client = genai.Client(api_key=api_key)
         
         # System instruction
-        system_prompt = """You are Sahil Sharma's AI assistant. Answer questions about Sahil professionally and conversationally.
+        system_instruction = """You are Sahil Sharma's AI assistant. Answer questions about Sahil professionally and conversationally.
 
 When answering:
-1. Use the tools to get relevant information
-2. Provide concise, helpful responses
+1. Use the provided tools to get accurate information
+2. Provide concise, helpful responses based on the tool results
 3. Be friendly and professional
-4. If multiple tools are relevant, use them all
-5. Synthesize information naturally
-
-Remember: You're speaking ON BEHALF of Sahil, so use first person when appropriate."""
+4. Synthesize information naturally from multiple tools if needed
+5. Speak ON BEHALF of Sahil using first person when appropriate"""
         
-        # Start chat
-        chat = model.start_chat()
+        # Configure with automatic function calling
+        # The SDK will automatically call the Python functions and handle the response cycle
+        config = types.GenerateContentConfig(
+            tools=[
+                get_introduction,
+                get_ai_projects,
+                get_experience,
+                get_education,
+                get_skills,
+                get_extracurriculars
+            ],
+            system_instruction=system_instruction,
+        )
         
-        # Send message with automatic function calling
-        response = chat.send_message(f"{system_prompt}\n\nUser question: {question}")
+        # Generate response - SDK automatically handles function calling
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=question,
+            config=config,
+        )
         
-        # Handle function calls
-        while response.candidates[0].content.parts[0].function_call:
-            function_call = response.candidates[0].content.parts[0].function_call
-            function_name = function_call.name
-            
-            # Execute the function
-            if function_name in TOOLS:
-                function_result = TOOLS[function_name]()
-                
-                # Send function result back to model
-                response = chat.send_message(
-                    genai.protos.Content(
-                        parts=[genai.protos.Part(
-                            function_response=genai.protos.FunctionResponse(
-                                name=function_name,
-                                response={"result": function_result}
-                            )
-                        )]
-                    )
-                )
-            else:
-                break
-        
-        # Extract final text response
         return response.text
         
     except Exception as e:
-        print(f"ADK Error: {str(e)}")
+        print(f"GenAI Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         # Fallback to simple response
         return f"I'm Sahil Sharma's AI assistant. I encountered an error: {str(e)}. Please try asking about my experience, projects, or skills."
 
@@ -239,8 +214,8 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'body': json.dumps({'error': 'API key not configured'})
                 }
         
-        # Process with ADK agent
-        answer = process_with_adk(question, api_key)
+        # Process with GenAI agent
+        answer = process_with_genai(question, api_key)
         
         # Return response
         return {
@@ -254,8 +229,8 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'body': json.dumps({
                 'answer': answer,
                 'question': question,
-                'model': 'gemini-2.0-flash-exp',
-                'agent': 'google-adk'
+                'model': 'gemini-2.5-flash',
+                'agent': 'google-genai-sdk'
             })
         }
         

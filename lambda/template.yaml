@@ -27,7 +27,7 @@ Resources:
       Environment:
         Variables:
           LOG_LEVEL: INFO
-          GEMINI_API_KEY: "AIzaSyDItSL2n0iuNnaE1sHDeqyz86XeJqM9Rjc"
+          GEMINI_API_KEY: "AIzaSyCa9h68h_tTGmzA91csS2sskApANJziVrY"
       Policies:
         - SecretsManagerReadWrite
       Events:
@@ -36,8 +36,6 @@ Resources:
           Properties:
             Path: /chat
             Method: post
-            Auth:
-              ApiKeyRequired: false
             
   # CloudWatch Log Group
   ChatbotLogGroup:

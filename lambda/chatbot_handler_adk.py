@@ -116,68 +116,17 @@ def create_adk_agent(api_key: str):
     """Create Gemini agent with tool calling"""
     genai.configure(api_key=api_key)
     
-    # Define tools for Gemini
-    tools = [
-        {
-            "name": "get_introduction",
-            "description": "Get Sahil's introduction, background, and current role. Use when user asks: who are you, tell me about yourself, introduction.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": []
-            }
-        },
-        {
-            "name": "get_ai_projects",
-            "description": "Get details about Sahil's AI/ML projects. Use when user asks about: projects, what have you built, portfolio, work samples.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": []
-            }
-        },
-        {
-            "name": "get_experience",
-            "description": "Get Sahil's work experience and professional history. Use when user asks about: experience, work history, companies, career path.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": []
-            }
-        },
-        {
-            "name": "get_education",
-            "description": "Get Sahil's educational background. Use when user asks about: education, degrees, university, where did you study.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": []
-            }
-        },
-        {
-            "name": "get_skills",
-            "description": "Get Sahil's technical skills. Use when user asks about: skills, technologies, tools, programming languages, frameworks.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": []
-            }
-        },
-        {
-            "name": "get_extracurriculars",
-            "description": "Get achievements, awards, talks, conferences. Use when user asks about: achievements, awards, GDE, speaking, presentations.",
-            "parameters": {
-                "type": "object",
-                "properties": {},
-                "required": []
-            }
-        }
-    ]
-    
-    # Create model with function calling
+    # Create model with function calling using Python functions directly
     model = genai.GenerativeModel(
-        model_name='gemini-2.0-flash-exp',  # Gemini Flash 2.5
-        tools=tools
+        model_name='gemini-2.5-flash',
+        tools=[
+            get_introduction,
+            get_ai_projects,
+            get_experience,
+            get_education,
+            get_skills,
+            get_extracurriculars
+        ]
     )
     
     return model
@@ -269,22 +218,26 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'body': json.dumps({'error': 'Question is required'})
             }
         
-        # Get Gemini API key from Secrets Manager
-        try:
-            secrets = get_secret('chatbot/gemini-api-key')
-            api_key = secrets.get('GEMINI_API_KEY')
-        except Exception as e:
-            print(f"Secret retrieval failed: {e}")
-            return {
-                'statusCode': 500,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    'Access-Control-Allow-Methods': 'POST, OPTIONS'
-                },
-                'body': json.dumps({'error': 'API key not configured'})
-            }
+        # Get Gemini API key from environment variable or Secrets Manager
+        api_key = os.environ.get('GEMINI_API_KEY')
+        
+        if not api_key:
+            # Fallback to Secrets Manager if env var not set
+            try:
+                secrets = get_secret('chatbot/gemini-api-key')
+                api_key = secrets.get('GEMINI_API_KEY')
+            except Exception as e:
+                print(f"Secret retrieval failed: {e}")
+                return {
+                    'statusCode': 500,
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                    },
+                    'body': json.dumps({'error': 'API key not configured'})
+                }
         
         # Process with ADK agent
         answer = process_with_adk(question, api_key)
@@ -301,7 +254,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'body': json.dumps({
                 'answer': answer,
                 'question': question,
-                'model': 'gemini-2.0-flash-exp',
+                'model': 'gemini-2.5-flash',
                 'agent': 'google-adk'
             })
         }
@@ -333,7 +286,6 @@ if __name__ == "__main__":
     import sys
     
     # Set content directory for local testing
-    global CONTENT_DIR
     CONTENT_DIR = "../content"
     
     # Get API key from environment
