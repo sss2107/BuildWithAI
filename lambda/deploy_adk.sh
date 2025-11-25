@@ -5,29 +5,24 @@ set -e
 
 echo "🚀 Deploying Google ADK Chatbot to AWS Lambda..."
 
-# Check if Gemini API key is in Secrets Manager
-echo "📝 Checking for Gemini API key in Secrets Manager..."
+# Check if Gemini API key is in template.yaml
+echo "📝 Checking for Gemini API key in template.yaml..."
 
-if ! aws secretsmanager describe-secret --secret-id chatbot/gemini-api-key 2>/dev/null; then
+if grep -q "GEMINI_API_KEY: \"YOUR_API_KEY_HERE\"" template.yaml; then
     echo ""
-    echo "⚠️  Gemini API key not found in Secrets Manager!"
+    echo "⚠️  Please update template.yaml with your Gemini API key!"
     echo ""
-    echo "Please create it first:"
-    echo "1. Get your Gemini API key from: https://makersuite.google.com/app/apikey"
-    echo "2. Run this command:"
+    echo "1. Get your key from: https://makersuite.google.com/app/apikey"
+    echo "2. Edit template.yaml and replace YOUR_API_KEY_HERE with your actual key"
+    echo "3. Re-run this script"
     echo ""
-    echo '   aws secretsmanager create-secret \'
-    echo '       --name chatbot/gemini-api-key \'
-    echo '       --secret-string '"'"'{"GEMINI_API_KEY":"YOUR_KEY_HERE"}'"'"' \'
-    echo '       --region us-east-1'
-    echo ""
-    read -p "Do you want to continue anyway? (y/n) " -n 1 -r
+    read -p "Have you updated the API key in template.yaml? (y/n) " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
         exit 1
     fi
 else
-    echo "✅ Gemini API key found in Secrets Manager"
+    echo "✅ Gemini API key found in template.yaml"
 fi
 
 # Copy content files to lambda directory

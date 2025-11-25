@@ -27,6 +27,7 @@ Resources:
       Environment:
         Variables:
           LOG_LEVEL: INFO
+          GEMINI_API_KEY: "AIzaSyDItSL2n0iuNnaE1sHDeqyz86XeJqM9Rjc"
       Policies:
         - SecretsManagerReadWrite
       Events:
