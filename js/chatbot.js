@@ -61,10 +61,9 @@ class Chatbot {
                             type="text" 
                             class="chatbot-input" 
                             id="chatbotInput" 
-                            placeholder="Coming soon..." 
-                            disabled
+                            placeholder="Ask me anything..." 
                         >
-                        <button class="chatbot-send-button" id="chatbotSend" disabled>
+                        <button class="chatbot-send-button" id="chatbotSend">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
@@ -148,15 +147,14 @@ class Chatbot {
             <div class="welcome-message">
                 <i class="fas fa-robot"></i>
                 <h4>Hi there! 👋</h4>
-                <p>Soon, you'll be able to chat with Sahil's AI assistant powered by advanced RAG architecture.</p>
+                <p>I'm Sahil's AI assistant powered by advanced RAG architecture and Gemini 2.5 Flash.</p>
                 <p style="font-size: 13px; margin-top: 16px;">
-                    Ask questions about:<br>
+                    Ask me about:<br>
                     • Work experience & projects<br>
                     • Technical skills & expertise<br>
                     • Awards & achievements<br>
-                    • Conference talks & more
+                    • Education & background
                 </p>
-                <span class="coming-soon-badge">🚀 COMING SOON</span>
             </div>
         `;
         
