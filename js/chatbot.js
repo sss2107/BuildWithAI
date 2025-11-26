@@ -6,7 +6,41 @@ class Chatbot {
     constructor() {
         this.isOpen = false;
         this.apiEndpoint = 'https://4ctco04k53.execute-api.us-east-1.amazonaws.com/Prod/chat';
+        this.sessionId = this.getOrCreateSessionId();
+        this.conversationHistory = this.loadHistoryFromStorage();
         this.init();
+    }
+    
+    getOrCreateSessionId() {
+        // Check if session ID exists in localStorage
+        let sessionId = localStorage.getItem('chatbot_session_id');
+        if (!sessionId) {
+            // Generate new session ID (timestamp + random)
+            sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            localStorage.setItem('chatbot_session_id', sessionId);
+        }
+        return sessionId;
+    }
+    
+    loadHistoryFromStorage() {
+        try {
+            const stored = localStorage.getItem(`chatbot_history_${this.sessionId}`);
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            console.error('Error loading history:', e);
+            return [];
+        }
+    }
+    
+    saveHistoryToStorage() {
+        try {
+            localStorage.setItem(
+                `chatbot_history_${this.sessionId}`,
+                JSON.stringify(this.conversationHistory)
+            );
+        } catch (e) {
+            console.error('Error saving history:', e);
+        }
     }
 
     init() {
@@ -21,7 +55,23 @@ class Chatbot {
     setup() {
         this.createChatbotHTML();
         this.attachEventListeners();
-        this.displayWelcomeMessage();
+        
+        // Display welcome or restore conversation
+        if (this.conversationHistory.length > 0) {
+            this.restoreConversation();
+        } else {
+            this.displayWelcomeMessage();
+        }
+    }
+    
+    restoreConversation() {
+        const messagesContainer = document.getElementById('chatbotMessages');
+        messagesContainer.innerHTML = '';
+        
+        // Render all messages from history
+        this.conversationHistory.forEach(msg => {
+            this.addMessageToUI(msg.content, msg.role);
+        });
     }
 
     createChatbotHTML() {
@@ -167,9 +217,19 @@ class Chatbot {
         const message = input.value.trim();
         
         if (message) {
-            // Add user message
-            this.addMessage(message, 'user');
+            // Add user message to history
+            this.conversationHistory.push({
+                role: 'user',
+                content: message,
+                timestamp: Date.now()
+            });
+            
+            // Display user message
+            this.addMessageToUI(message, 'user');
             input.value = '';
+            
+            // Save to localStorage
+            this.saveHistoryToStorage();
             
             // Disable input while processing
             input.disabled = true;
@@ -179,13 +239,20 @@ class Chatbot {
             this.addTypingIndicator();
             
             try {
-                // Call Lambda API
+                // Get last 3 Q&A pairs (6 messages) for context
+                const recentHistory = this.conversationHistory.slice(-6);
+                
+                // Call Lambda API with history and session ID
                 const response = await fetch(this.apiEndpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ question: message })
+                    body: JSON.stringify({ 
+                        question: message,
+                        history: recentHistory,
+                        sessionId: this.sessionId
+                    })
                 });
                 
                 if (!response.ok) {
@@ -197,13 +264,30 @@ class Chatbot {
                 // Remove typing indicator
                 this.removeTypingIndicator();
                 
-                // Add bot response
-                this.addMessage(data.answer, 'bot');
+                // Add bot response to history
+                this.conversationHistory.push({
+                    role: 'assistant',
+                    content: data.answer,
+                    timestamp: Date.now()
+                });
+                
+                // Display bot response
+                this.addMessageToUI(data.answer, 'bot');
+                
+                // Save to localStorage
+                this.saveHistoryToStorage();
                 
             } catch (error) {
                 console.error('Error:', error);
                 this.removeTypingIndicator();
-                this.addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                const errorMsg = 'Sorry, I encountered an error. Please try again.';
+                this.conversationHistory.push({
+                    role: 'assistant',
+                    content: errorMsg,
+                    timestamp: Date.now()
+                });
+                this.addMessageToUI(errorMsg, 'bot');
+                this.saveHistoryToStorage();
             } finally {
                 // Re-enable input
                 input.disabled = false;
@@ -233,7 +317,7 @@ class Chatbot {
         }
     }
 
-    addMessage(text, sender = 'bot') {
+    addMessageToUI(text, sender = 'bot') {
         const messagesContainer = document.getElementById('chatbotMessages');
         
         // Remove welcome message if exists
@@ -252,6 +336,11 @@ class Chatbot {
         
         // Scroll to bottom
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    // Legacy method for compatibility
+    addMessage(text, sender = 'bot') {
+        this.addMessageToUI(text, sender);
     }
 }
 

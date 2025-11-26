@@ -112,9 +112,10 @@ TOOLS = {
 # GEMINI AGENT WITH NEW SDK
 # ==========================================
 
-def process_with_genai(question: str, api_key: str) -> str:
+def process_with_genai(question: str, history: List[Dict], api_key: str) -> str:
     """
     Process question using new Google GenAI SDK with automatic tool calling
+    Includes conversation history for context (last 3 Q&A pairs)
     """
     try:
         from google.genai import types
@@ -130,10 +131,10 @@ When answering:
 2. Provide concise, helpful responses based on the tool results
 3. Be friendly and professional
 4. Synthesize information naturally from multiple tools if needed
-5. Speak ON BEHALF of Sahil using first person when appropriate"""
+5. Speak ON BEHALF of Sahil using first person when appropriate
+6. Use conversation history for context on follow-up questions"""
         
         # Configure with automatic function calling
-        # The SDK will automatically call the Python functions and handle the response cycle
         config = types.GenerateContentConfig(
             tools=[
                 get_introduction,
@@ -146,10 +147,27 @@ When answering:
             system_instruction=system_instruction,
         )
         
+        # Build conversation contents with history
+        contents = []
+        
+        # Add conversation history (last 3 Q&A pairs = 6 messages)
+        for msg in history:
+            role = 'user' if msg.get('role') == 'user' else 'model'
+            contents.append(types.Content(
+                role=role,
+                parts=[types.Part(text=msg.get('content', ''))]
+            ))
+        
+        # Add current question
+        contents.append(types.Content(
+            role='user',
+            parts=[types.Part(text=question)]
+        ))
+        
         # Generate response - SDK automatically handles function calling
         response = client.models.generate_content(
             model="gemini-2.5-flash",
-            contents=question,
+            contents=contents,
             config=config,
         )
         
@@ -168,7 +186,7 @@ When answering:
 
 def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     """
-    Main Lambda handler with Google ADK
+    Main Lambda handler with session management and CloudWatch logging
     """
     print(f"Received event: {json.dumps(event)}")
     
@@ -180,6 +198,8 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             body = event.get('body', {})
         
         question = body.get('question', '')
+        history = body.get('history', [])  # Last 3 Q&A pairs from frontend
+        session_id = body.get('sessionId', 'unknown')
         
         if not question:
             return {
@@ -192,6 +212,16 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 },
                 'body': json.dumps({'error': 'Question is required'})
             }
+        
+        # Log question to CloudWatch for analytics
+        import time
+        print(json.dumps({
+            'event_type': 'user_question',
+            'session_id': session_id,
+            'question': question,
+            'history_length': len(history),
+            'timestamp': time.time()
+        }))
         
         # Get Gemini API key from environment variable or Secrets Manager
         api_key = os.environ.get('GEMINI_API_KEY')
@@ -214,8 +244,16 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'body': json.dumps({'error': 'API key not configured'})
                 }
         
-        # Process with GenAI agent
-        answer = process_with_genai(question, api_key)
+        # Process with GenAI agent (with conversation history)
+        answer = process_with_genai(question, history, api_key)
+        
+        # Log response to CloudWatch
+        print(json.dumps({
+            'event_type': 'bot_response',
+            'session_id': session_id,
+            'answer_length': len(answer),
+            'timestamp': time.time()
+        }))
         
         # Return response
         return {
