@@ -62,6 +62,11 @@ class Chatbot {
         } else {
             this.displayWelcomeMessage();
         }
+        
+        // Auto-open chatbot after a short delay
+        setTimeout(() => {
+            this.toggleChatbot();
+        }, 800);
     }
     
     restoreConversation() {
@@ -78,7 +83,7 @@ class Chatbot {
         const chatbotHTML = `
             <!-- Chatbot Button -->
             <button class="chatbot-button" id="chatbotButton" aria-label="Open chatbot">
-                <i class="fas fa-comments"></i>
+                <i class="fas fa-phone-alt"></i>
             </button>
 
             <!-- Chatbot Window -->
@@ -175,18 +180,27 @@ class Chatbot {
 
     toggleChatbot() {
         const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotButton = document.getElementById('chatbotButton');
+        const buttonIcon = chatbotButton.querySelector('i');
+        
         this.isOpen = !this.isOpen;
         
         if (this.isOpen) {
             chatbotWindow.classList.add('active');
+            buttonIcon.className = 'fas fa-times';
         } else {
             chatbotWindow.classList.remove('active');
+            buttonIcon.className = 'fas fa-phone-alt';
         }
     }
 
     closeChatbot() {
         const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotButton = document.getElementById('chatbotButton');
+        const buttonIcon = chatbotButton.querySelector('i');
+        
         chatbotWindow.classList.remove('active');
+        buttonIcon.className = 'fas fa-phone-alt';
         this.isOpen = false;
     }
 
