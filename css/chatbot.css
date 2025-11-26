@@ -47,11 +47,11 @@
     }
 }
 
-/* Green Call Button - Slides up above chat when open */
+/* Green Call Button - Slides up to the left of chat when open */
 .call-button {
     position: fixed;
     bottom: -80px; /* Hidden below screen initially */
-    right: 30px;
+    right: 430px; /* To the left of chat window (380px width + 50px gap from right edge) */
     width: 60px;
     height: 60px;
     background: linear-gradient(135deg, #00c853 0%, #00e676 100%);
@@ -68,7 +68,7 @@
 }
 
 .call-button.visible {
-    bottom: 680px; /* Above the chat window (550px height + 110px bottom + 20px gap) */
+    bottom: 600px; /* Vertically centered with chat window */
     opacity: 1;
 }
 
