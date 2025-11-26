@@ -5,28 +5,87 @@ Uses Google GenAI SDK with Gemini and tool-based routing
 
 import json
 import os
-import boto3
 from typing import Dict, Any, List
 from google import genai
-
-# Initialize AWS clients
-secretsmanager = boto3.client('secretsmanager')
 
 # Content file paths (will be included in Lambda package)
 CONTENT_DIR = "/var/task/content"
 
-def get_secret(secret_name: str) -> Dict[str, str]:
-    """Retrieve secret from AWS Secrets Manager"""
-    try:
-        response = secretsmanager.get_secret_value(SecretId=secret_name)
-        return json.loads(response['SecretString'])
-    except Exception as e:
-        print(f"Error retrieving secret: {e}")
-        # For local testing, use environment variable
-        api_key = os.environ.get('GEMINI_API_KEY')
-        if api_key:
-            return {'GEMINI_API_KEY': api_key}
-        raise
+# Security limits - STRICT to prevent abuse
+MAX_QUESTION_LENGTH = 2000  # 2000 character limit per question
+MAX_HISTORY_LENGTH = 6      # Max messages in history (3 Q&A pairs)
+MAX_MESSAGE_LENGTH = 2000   # Max characters per history message
+
+# Rate limiting - STRICT
+MAX_REQUESTS_PER_SESSION = 20   # Max 20 questions per session
+MAX_REQUESTS_PER_DAY = 100      # Max 100 total requests per day (all sessions)
+
+# Simple in-memory rate limiting
+rate_limit_cache = {}       # {session_id: [timestamps]}
+daily_request_count = []    # [timestamps] for all requests today
+
+def check_rate_limit(session_id: str) -> tuple[bool, str]:
+    """
+    Check if session has exceeded rate limits
+    Returns (is_allowed, error_message)
+    """
+    import time
+    current_time = time.time()
+    
+    # Check daily global limit (100 requests/day across ALL sessions)
+    global daily_request_count
+    daily_request_count = [
+        ts for ts in daily_request_count 
+        if current_time - ts < 86400  # Last 24 hours
+    ]
+    
+    if len(daily_request_count) >= MAX_REQUESTS_PER_DAY:
+        return False, f"Daily limit exceeded ({MAX_REQUESTS_PER_DAY} requests/day). Try again tomorrow."
+    
+    # Check per-session limit (20 requests per session)
+    if session_id in rate_limit_cache:
+        rate_limit_cache[session_id] = [
+            ts for ts in rate_limit_cache[session_id] 
+            if current_time - ts < 86400  # Keep 24 hours for tracking
+        ]
+    else:
+        rate_limit_cache[session_id] = []
+    
+    session_requests = rate_limit_cache[session_id]
+    
+    if len(session_requests) >= MAX_REQUESTS_PER_SESSION:
+        return False, f"Session limit exceeded ({MAX_REQUESTS_PER_SESSION} questions per session). Please start a new session."
+    
+    # Add current request to both counters
+    rate_limit_cache[session_id].append(current_time)
+    daily_request_count.append(current_time)
+    
+    return True, ""
+
+def validate_input(question: str, history: List[Dict]) -> tuple[bool, str]:
+    """
+    Validate user input to prevent abuse
+    Returns (is_valid, error_message)
+    """
+    # Check question length
+    if len(question) > MAX_QUESTION_LENGTH:
+        return False, f"Question too long (max {MAX_QUESTION_LENGTH} characters)"
+    
+    # Check history length
+    if len(history) > MAX_HISTORY_LENGTH:
+        return False, f"History too long (max {MAX_HISTORY_LENGTH} messages)"
+    
+    # Check each history message length
+    for msg in history:
+        content = msg.get('content', '')
+        if len(content) > MAX_MESSAGE_LENGTH:
+            return False, f"History message too long (max {MAX_MESSAGE_LENGTH} characters)"
+    
+    # Check for suspicious patterns
+    if question.count('A') > 100 or question.count('a') > 100:
+        return False, "Suspicious input pattern detected"
+    
+    return True, ""
 
 # ==========================================
 # TOOL DEFINITIONS - One per content file
@@ -206,11 +265,55 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'statusCode': 400,
                 'headers': {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'https://sss2107.github.io',
                     'Access-Control-Allow-Headers': 'Content-Type',
                     'Access-Control-Allow-Methods': 'POST, OPTIONS'
                 },
                 'body': json.dumps({'error': 'Question is required'})
+            }
+        
+        # SECURITY: Rate limiting (20/session, 100/day)
+        is_allowed, rate_limit_msg = check_rate_limit(session_id)
+        if not is_allowed:
+            print(json.dumps({
+                'event_type': 'rate_limit_exceeded',
+                'session_id': session_id,
+                'reason': rate_limit_msg,
+                'timestamp': time.time()
+            }))
+            return {
+                'statusCode': 429,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': 'https://sss2107.github.io',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                    'Retry-After': '86400'  # Retry after 24 hours
+                },
+                'body': json.dumps({
+                    'error': rate_limit_msg,
+                    'retry_after': 86400
+                })
+            }
+        
+        # SECURITY: Input validation
+        is_valid, error_msg = validate_input(question, history)
+        if not is_valid:
+            print(json.dumps({
+                'event_type': 'invalid_input',
+                'session_id': session_id,
+                'error': error_msg,
+                'timestamp': time.time()
+            }))
+            return {
+                'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': 'https://sss2107.github.io',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                },
+                'body': json.dumps({'error': error_msg})
             }
         
         # Log question to CloudWatch for analytics
@@ -223,35 +326,29 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'timestamp': time.time()
         }))
         
-        # Get Gemini API key from environment variable or Secrets Manager
+        # Get API key from encrypted environment variable
         api_key = os.environ.get('GEMINI_API_KEY')
-        
         if not api_key:
-            # Fallback to Secrets Manager if env var not set
-            try:
-                secrets = get_secret('chatbot/gemini-api-key')
-                api_key = secrets.get('GEMINI_API_KEY')
-            except Exception as e:
-                print(f"Secret retrieval failed: {e}")
-                return {
-                    'statusCode': 500,
-                    'headers': {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Headers': 'Content-Type',
-                        'Access-Control-Allow-Methods': 'POST, OPTIONS'
-                    },
-                    'body': json.dumps({'error': 'API key not configured'})
-                }
+            return {
+                'statusCode': 500,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': 'https://sss2107.github.io',
+                    'Access-Control-Allow-Headers': 'Content-Type',
+                    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                },
+                'body': json.dumps({'error': 'API key not configured'})
+            }
         
         # Process with GenAI agent (with conversation history)
         answer = process_with_genai(question, history, api_key)
         
-        # Log response to CloudWatch
+        # Log response to CloudWatch (truncated for cost control)
         print(json.dumps({
             'event_type': 'bot_response',
             'session_id': session_id,
             'answer_length': len(answer),
+            'question_preview': question[:100],  # Only first 100 chars
             'timestamp': time.time()
         }))
         
@@ -260,7 +357,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 200,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'https://sss2107.github.io',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS'
             },
@@ -281,7 +378,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 500,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'https://sss2107.github.io',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS'
             },
