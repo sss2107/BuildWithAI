@@ -83,6 +83,11 @@ class Chatbot {
         const chatbotHTML = `
             <!-- Chatbot Button -->
             <button class="chatbot-button" id="chatbotButton" aria-label="Open chatbot">
+                <i class="fas fa-comments"></i>
+            </button>
+            
+            <!-- Green Call Button (slides up when chat opens) -->
+            <button class="call-button" id="callButton" aria-label="Call Sahil">
                 <i class="fas fa-phone-alt"></i>
             </button>
 
@@ -180,27 +185,25 @@ class Chatbot {
 
     toggleChatbot() {
         const chatbotWindow = document.getElementById('chatbotWindow');
-        const chatbotButton = document.getElementById('chatbotButton');
-        const buttonIcon = chatbotButton.querySelector('i');
+        const callButton = document.getElementById('callButton');
         
         this.isOpen = !this.isOpen;
         
         if (this.isOpen) {
             chatbotWindow.classList.add('active');
-            buttonIcon.className = 'fas fa-times';
+            callButton.classList.add('visible');
         } else {
             chatbotWindow.classList.remove('active');
-            buttonIcon.className = 'fas fa-phone-alt';
+            callButton.classList.remove('visible');
         }
     }
 
     closeChatbot() {
         const chatbotWindow = document.getElementById('chatbotWindow');
-        const chatbotButton = document.getElementById('chatbotButton');
-        const buttonIcon = chatbotButton.querySelector('i');
+        const callButton = document.getElementById('callButton');
         
         chatbotWindow.classList.remove('active');
-        buttonIcon.className = 'fas fa-phone-alt';
+        callButton.classList.remove('visible');
         this.isOpen = false;
     }
 
