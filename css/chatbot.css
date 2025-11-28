@@ -47,13 +47,13 @@
     }
 }
 
-/* Green Call Button - Slides up to the left of chat when open */
+/* Green Call Button - Slides up above X button when chat opens */
 .call-button {
     position: fixed;
     bottom: -80px; /* Hidden below screen initially */
-    right: 430px; /* To the left of chat window (380px width + 50px gap from right edge) */
-    width: 60px;
-    height: 60px;
+    right: 30px; /* Same alignment as chat window */
+    width: 50px;
+    height: 50px;
     background: linear-gradient(135deg, #00c853 0%, #00e676 100%);
     border-radius: 50%;
     display: flex;
@@ -62,13 +62,13 @@
     cursor: pointer;
     box-shadow: 0 4px 20px rgba(0, 200, 83, 0.4);
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    z-index: 1001;
+    z-index: 1002; /* Above chatbot window */
     border: none;
     opacity: 0;
 }
 
 .call-button.visible {
-    bottom: 600px; /* Vertically centered with chat window */
+    bottom: 680px; /* Above chat window (110px bottom + 550px height + 20px gap) */
     opacity: 1;
 }
 
