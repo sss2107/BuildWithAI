@@ -85,11 +85,6 @@ class Chatbot {
             <button class="chatbot-button" id="chatbotButton" aria-label="Open chatbot">
                 <i class="fas fa-comments"></i>
             </button>
-            
-            <!-- Green Call Button (slides up when chat opens) -->
-            <button class="call-button" id="callButton" aria-label="Call Sahil">
-                <i class="fas fa-phone-alt"></i>
-            </button>
 
             <!-- Chatbot Window -->
             <div class="chatbot-window" id="chatbotWindow">
@@ -142,17 +137,10 @@ class Chatbot {
         const chatbotInput = document.getElementById('chatbotInput');
         const chatbotSend = document.getElementById('chatbotSend');
         const chatbotMessages = document.getElementById('chatbotMessages');
-        const callButton = document.getElementById('callButton');
 
         // Toggle chatbot window
         chatbotButton.addEventListener('click', () => this.toggleChatbot());
         chatbotClose.addEventListener('click', () => this.closeChatbot());
-        
-        // Call button - show voice feature message
-        callButton.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.showVoiceMessage();
-        });
 
         // Prevent scroll propagation to parent page
         chatbotMessages.addEventListener('wheel', (e) => {
@@ -192,25 +180,20 @@ class Chatbot {
 
     toggleChatbot() {
         const chatbotWindow = document.getElementById('chatbotWindow');
-        const callButton = document.getElementById('callButton');
         
         this.isOpen = !this.isOpen;
         
         if (this.isOpen) {
             chatbotWindow.classList.add('active');
-            callButton.classList.add('visible');
         } else {
             chatbotWindow.classList.remove('active');
-            callButton.classList.remove('visible');
         }
     }
 
     closeChatbot() {
         const chatbotWindow = document.getElementById('chatbotWindow');
-        const callButton = document.getElementById('callButton');
         
         chatbotWindow.classList.remove('active');
-        callButton.classList.remove('visible');
         this.isOpen = false;
     }
     
