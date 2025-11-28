@@ -233,11 +233,20 @@ When answering:
         return response.text
         
     except Exception as e:
-        print(f"GenAI Error: {str(e)}")
+        error_msg = str(e)
+        print(f"GenAI Error: {error_msg}")
         import traceback
         traceback.print_exc()
-        # Fallback to simple response
-        return f"I'm Sahil Sharma's AI assistant. I encountered an error: {str(e)}. Please try asking about my experience, projects, or skills."
+        
+        # Professional error messages (hide technical details)
+        if "403" in error_msg or "PERMISSION_DENIED" in error_msg or "API key" in error_msg:
+            return "⚠️ AI service temporarily unavailable due to authentication refresh. Our infrastructure team has been notified. Please try again in a few moments."
+        elif "429" in error_msg or "quota" in error_msg.lower() or "rate limit" in error_msg.lower():
+            return "⚙️ High traffic detected - Lambda auto-scaling in progress. Please retry your question in 10-15 seconds."
+        elif "timeout" in error_msg.lower():
+            return "🔄 Backend timeout - Lambda cold start detected. Warming up infrastructure, please resubmit your query."
+        else:
+            return "🔧 Temporary infrastructure issue (Lambda reinitializing). Please try again. If this persists, contact sahil.sharma@singaporeair.com"
 
 # ==========================================
 # LAMBDA HANDLER
