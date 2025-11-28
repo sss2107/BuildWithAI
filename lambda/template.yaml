@@ -11,7 +11,7 @@ Globals:
     Cors:
       AllowMethods: "'POST, OPTIONS'"
       AllowHeaders: "'Content-Type,Authorization'"
-      AllowOrigin: "'*'"  # Change to your GitHub Pages domain for production
+      AllowOrigin: "'https://sss2107.github.io'"  # Only your GitHub Pages domain
 
 Resources:
   # Lambda Function
@@ -27,9 +27,16 @@ Resources:
       Environment:
         Variables:
           LOG_LEVEL: INFO
-          GEMINI_API_KEY: "AIzaSyCa9h68h_tTGmzA91csS2sskApANJziVrY"
+          GEMINI_API_KEY: AIzaSyD5hggzp_0gvP0Md0uqXoUqRi0fh1QVFSU  # Encrypted at rest by Lambda
       Policies:
-        - SecretsManagerReadWrite
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - logs:CreateLogGroup
+                - logs:CreateLogStream
+                - logs:PutLogEvents
+              Resource: '*'
       Events:
         ChatAPI:
           Type: Api
