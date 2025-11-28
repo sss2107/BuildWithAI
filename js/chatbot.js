@@ -142,10 +142,17 @@ class Chatbot {
         const chatbotInput = document.getElementById('chatbotInput');
         const chatbotSend = document.getElementById('chatbotSend');
         const chatbotMessages = document.getElementById('chatbotMessages');
+        const callButton = document.getElementById('callButton');
 
         // Toggle chatbot window
         chatbotButton.addEventListener('click', () => this.toggleChatbot());
         chatbotClose.addEventListener('click', () => this.closeChatbot());
+        
+        // Call button - show voice feature message
+        callButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.showVoiceMessage();
+        });
 
         // Prevent scroll propagation to parent page
         chatbotMessages.addEventListener('wheel', (e) => {
@@ -205,6 +212,20 @@ class Chatbot {
         chatbotWindow.classList.remove('active');
         callButton.classList.remove('visible');
         this.isOpen = false;
+    }
+    
+    showVoiceMessage() {
+        const messagesContainer = document.getElementById('chatbotMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'bot-message';
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                <strong>Voice Conversations Coming Soon! 🎙️</strong>
+                <p>I'm learning to talk! Voice chat feature will be available soon. For now, feel free to ask me anything via text.</p>
+            </div>
+        `;
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
     displayWelcomeMessage() {

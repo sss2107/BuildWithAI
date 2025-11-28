@@ -68,7 +68,7 @@
 }
 
 .call-button.visible {
-    bottom: 680px; /* Above chat window (110px bottom + 550px height + 20px gap) */
+    bottom: 720px; /* Much higher - above chat window (110px bottom + 550px height + 60px gap) */
     opacity: 1;
 }
 
