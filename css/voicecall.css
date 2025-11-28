@@ -5,8 +5,8 @@
 /* Voice Call Button */
 .voicecall-button {
     position: fixed;
-    bottom: 110px; /* Above the chatbot button */
-    right: 30px;
+    bottom: 30px; /* Bottom left corner */
+    left: 30px; /* Changed from right to left */
     width: 60px;
     height: 60px;
     background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
@@ -45,8 +45,8 @@
 /* Voice Call Window */
 .voicecall-window {
     position: fixed;
-    bottom: 100px;
-    right: 30px;
+    bottom: 110px; /* Above the green button */
+    left: 30px; /* Changed from right to left */
     width: 380px;
     height: 450px;
     background: #1a1a1a;
