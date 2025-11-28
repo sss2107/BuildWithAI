@@ -337,21 +337,63 @@ class Chatbot {
 
     addTypingIndicator() {
         const messagesContainer = document.getElementById('chatbotMessages');
-        const typingHTML = `
-            <div class="message bot typing-indicator" id="typingIndicator">
-                <span></span>
-                <span></span>
-                <span></span>
+        const agenticHTML = `
+            <div class="agentic-workflow" id="agenticWorkflow">
+                <div class="workflow-step" id="step1">
+                    <span class="step-icon">🔍</span>
+                    <span class="step-text">Retriever agent analyzing query...</span>
+                </div>
+                <div class="workflow-step hidden" id="step2">
+                    <span class="step-icon">📄</span>
+                    <span class="step-text">Reading <span id="sectionCount">0</span> relevant sections...</span>
+                </div>
+                <div class="workflow-step hidden" id="step3">
+                    <span class="step-icon">✨</span>
+                    <span class="step-text">Summarizer agent processing response...</span>
+                </div>
+                <div class="workflow-step hidden" id="step4">
+                    <span class="step-icon">✓</span>
+                    <span class="step-text">Validating response accuracy...</span>
+                </div>
             </div>
         `;
-        messagesContainer.insertAdjacentHTML('beforeend', typingHTML);
+        messagesContainer.insertAdjacentHTML('beforeend', agenticHTML);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+        // Animate workflow steps
+        this.animateAgenticSteps();
+    }
+    
+    animateAgenticSteps() {
+        const steps = [
+            { id: 'step1', delay: 0 },
+            { id: 'step2', delay: 800, action: () => {
+                // Simulate section count (random 2-5 sections)
+                const count = Math.floor(Math.random() * 4) + 2;
+                document.getElementById('sectionCount').textContent = count;
+            }},
+            { id: 'step3', delay: 1600 },
+            { id: 'step4', delay: 2200 }
+        ];
+        
+        steps.forEach(step => {
+            setTimeout(() => {
+                const element = document.getElementById(step.id);
+                if (element) {
+                    element.classList.remove('hidden');
+                    element.classList.add('active');
+                    if (step.action) step.action();
+                }
+            }, step.delay);
+        });
     }
 
     removeTypingIndicator() {
-        const typingIndicator = document.getElementById('typingIndicator');
-        if (typingIndicator) {
-            typingIndicator.remove();
+        const agenticWorkflow = document.getElementById('agenticWorkflow');
+        if (agenticWorkflow) {
+            // Fade out and remove
+            agenticWorkflow.style.opacity = '0';
+            setTimeout(() => agenticWorkflow.remove(), 300);
         }
     }
 
