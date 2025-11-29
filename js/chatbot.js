@@ -95,7 +95,7 @@ class Chatbot {
                 <div class="chatbot-header">
                     <div class="chatbot-header-content">
                         <div class="chatbot-avatar">
-                            <i class="fas fa-robot"></i>
+                            🙋‍♂️
                         </div>
                         <div class="chatbot-info">
                             <h3>Sahil's AI Assistant</h3>
