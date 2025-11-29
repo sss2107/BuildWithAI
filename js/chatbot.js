@@ -99,7 +99,7 @@ class Chatbot {
                         </div>
                         <div class="chatbot-info">
                             <h3>Sahil's AI Assistant</h3>
-                            <p>Ask about my experience & projects</p>
+                            <p>Book a meeting with me or ask about my experience</p>
                         </div>
                     </div>
                     <button class="chatbot-close" id="chatbotClose" aria-label="Close chatbot">
