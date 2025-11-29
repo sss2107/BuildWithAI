@@ -63,10 +63,13 @@ class Chatbot {
             this.displayWelcomeMessage();
         }
         
-        // Auto-open chatbot after a short delay
-        setTimeout(() => {
-            this.toggleChatbot();
-        }, 800);
+        // Auto-open chatbot only on desktop (not mobile)
+        const isMobile = window.innerWidth <= 768;
+        if (!isMobile) {
+            setTimeout(() => {
+                this.toggleChatbot();
+            }, 800);
+        }
     }
     
     restoreConversation() {
