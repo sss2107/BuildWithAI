@@ -49,6 +49,17 @@ yarn-debug.log*
 yarn-error.log*
 nohup.out
 
+# AWS & API Keys - NEVER COMMIT THESE
+*.pem
+*.key
+.env
+.env.*
+template.yaml
+samconfig.toml
+*_credentials*
+*apikey*
+*api_key*
+
 # Environment variables
 .env
 .env.local
