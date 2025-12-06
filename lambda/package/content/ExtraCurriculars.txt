@@ -1,0 +1,112 @@
+# EXTRA CURRICULARS SECTION CONTENT
+# Edit this file to update awards, talks, and activities
+
+[SECTION_TITLE]
+Extra Curriculars
+
+[SECTION_SUBTITLE]
+Awards, community contributions, and leadership beyond work
+
+[AWARD_1_TITLE]
+CEO Award
+
+[AWARD_1_ORG]
+Singapore Airlines
+
+[AWARD_1_DESC]
+Building Data Science pipeline with fast turnaround
+
+[AWARD_1_YEAR]
+2023-2024
+
+[AWARD_2_TITLE]
+Best Research Paper Award
+
+[AWARD_2_ORG]
+National University of Singapore
+
+[AWARD_2_DESC]
+"ICD10 Medical Code Classification Using Deep Learning"
+
+[AWARD_2_YEAR]
+2022 | Cohort: 150+ candidates
+
+[AWARD_3_TITLE]
+Top 3% - Kaggle Competition
+
+[AWARD_3_ORG]
+NUS Intra-University Competition
+
+[AWARD_3_DESC]
+Spam Email Classification
+
+[AWARD_3_YEAR]
+2021-2022
+
+[TALK_1]
+AWS User Group - Technical Workshop | Finetune Hugging Face transformers with AWS Sagemaker | Focus: Speech + text models using HUBERT transformer and OpenAI Whisper API
+
+[TALK_2]
+Asia Tech x Singapore Summit | Fully open sourced web research assistant | Stack: Ollama, Langgraph, Tavily, DuckDuckgo
+
+[TALK_3]
+Conversational AI & Customer Experience Summit | Industry Expert Panelist | Topic: "Conversational AI strategies in Asia"
+
+[TALK_4]
+Google Developer Expert Session | Talk with resumes app using Google Gemini Multimodal API | Focus: Multimodal AI applications
+
+[TALK_5]
+NTU Career Talk | Regular day in life of a Data Scientist | Role: Industry Speaker & Career Mentor
+
+[LEADERSHIP_1_TITLE]
+Captain - College Cricket Team
+
+[LEADERSHIP_1_ORG]
+PEC University of Technology | 2013-2016
+
+[LEADERSHIP_1_DETAILS]
+Led college cricket team in inter-college tournaments
+Team strategy and player coordination
+Balanced academics with sports commitment
+Skills Developed: Leadership under pressure, Team management, Strategic thinking
+
+[LEADERSHIP_2_TITLE]
+Head of Application Development
+
+[LEADERSHIP_2_ORG]
+PEC University - College Festival | 2015-2016
+
+[LEADERSHIP_2_DETAILS]
+Developed college festival's first-ever Android application
+Recorded 10,000+ transactions in 4 days
+Led development team under tight deadlines
+Impact: Digitized college festival operations, significantly improving user experience
+
+[LEADERSHIP_3_TITLE]
+Google Developer Expert - AI/ML
+
+[LEADERSHIP_3_ORG]
+Google Developers Group | Oct 2023 - Present
+
+[LEADERSHIP_3_DETAILS]
+Empowering developers and organizations to harness AI/ML on Google Cloud Platform
+Trained 100s of developers and professionals in AI/ML technologies
+Design and deliver technical training sessions, workshops, and meetups
+Develop and share technical resources, code samples, tutorials, and documentation
+Mentor developers and startups in AI/ML-related projects
+Participate in Google Developers Group events, conferences, and meetups
+Skills: TensorFlow, PyTorch, GCP AI Platform, AutoML, Cloud Vision API
+
+[MENTORSHIP_1]
+Team Mentor - Singapore Airlines | Team Size: 5 data scientists and engineers | 2022 - Present | Code reviews, technical guidance, career development, knowledge sharing sessions
+
+[MENTORSHIP_2]
+Academic Mentor - NUS & NTU | Career talks at leading universities, sharing industry insights with students | Guidance on transitioning from academia to industry
+
+[INTERESTS]
+Open Source AI Development
+Research & Continuous Learning
+Public Speaking & Knowledge Sharing
+Cricket & Team Sports
+Building AI Tools & Applications
+Tech Community Building in Asia

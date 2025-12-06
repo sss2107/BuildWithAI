@@ -1,0 +1,267 @@
+# AI PROJECTS AND APPLIED RESEARCH SECTION
+# Edit this file to update your projects
+# Format: [PROJECT_X] followed by details
+
+[SECTION_TITLE]
+AI Projects and Applied Research
+
+[SECTION_SUBTITLE]
+Building cutting-edge AI solutions that make a real-world impact
+
+[PROJECT_1_TITLE]
+SAP Maintenance AI Integration via Model Context Protocol (MCP)
+
+[PROJECT_1_ORG]
+Singapore Airlines | 2024 - Present
+
+[PROJECT_1_DESCRIPTION]
+Architected and deployed an AI-powered SAP maintenance system integrating Google Gemini with SAP S/4HANA using Model Context Protocol. Built FastMCP server exposing RESTful OData v4 APIs as AI-consumable tools for maintenance item and task list operations (IP01, IA05, IA07 transactions). Implemented CSRF token authentication, proxy endpoint integration, and comprehensive error handling. Enabled natural language processing for PDF extraction to SAP task creation workflows. Systematically resolved API limitations through authentication testing, achieving production-ready deployment supporting all maintenance and creation tasks lists.
+
+[PROJECT_1_ACHIEVEMENTS]
+FastMCP server with SAP S/4HANA integration
+Natural language processing for PDF to task creation
+CSRF token authentication and proxy endpoints
+Production-ready deployment
+Supports IP01, IA05, IA07 transaction operations
+
+[PROJECT_1_TECH]
+FastMCP, Google Gemini, SAP S/4HANA, OData v4 APIs, CSRF Authentication, REST APIs, Natural Language Processing
+
+[PROJECT_1_BADGE]
+Production
+Production
+
+[PROJECT_2_TITLE]
+Advanced RAG Chatbot for Aircraft Manuals
+
+[PROJECT_2_ORG]
+Singapore Airlines | 2022 - Present
+
+[PROJECT_2_DESCRIPTION]
+Designed and developed an advanced RAG (Retrieval-Augmented Generation) chatbot that indexes over 10 million pages of all Airbus and Boeing aircraft manuals. Implemented efficient query retrieval, processing, and caching mechanisms.
+
+[PROJECT_2_ACHIEVEMENTS]
+10M+ pages indexed
+Improved accuracy & latency
+Efficient caching
+
+[PROJECT_2_TECH]
+Advanced RAG frameworks, LlamaIndex, FAISS, AWS OpenSearch
+
+[PROJECT_2_BADGE]
+Production
+
+[PROJECT_3_TITLE]
+Curie - HR Policy Chatbot (Agentic Framework)
+
+[PROJECT_3_ORG]
+Singapore Airlines | 2022 - Present
+
+[PROJECT_3_DESCRIPTION]
+Designed and developed Curie, an employee-facing HR chatbot for answering HR policy-related questions using a router-based agentic framework. The system intelligently analyzes user queries and routes them to the appropriate policy domain (Finance, Leave, Appraisal, IT, Code of Conduct, Medical Reimbursement, Payroll, etc.), then employs a retrieval system to identify relevant page numbers and provide context-aware responses.
+
+[PROJECT_3_ACHIEVEMENTS]
+Intelligent policy routing across 7+ HR domains
+Reduced HR query response time by 80%
+24/7 automated policy assistance for employees
+High accuracy context retrieval system
+Production deployment serving 1000s of employees
+
+[PROJECT_3_TECH]
+Langgraph, OpenAI, AWS, Agent Framework, RAG, Policy Router
+
+[PROJECT_3_BADGE]
+Production
+
+[PROJECT_4_TITLE]
+Embedding Model Fine-tuning for Aviation Retrieval
+
+[PROJECT_4_ORG]
+Singapore Airlines | 2023 - Present
+
+[PROJECT_4_DESCRIPTION]
+Fine-tuned BAAI/bge-large-en-v1.5 embedding model on aircraft defect logs to optimize retrieval accuracy for aviation-specific terminology. Worked with business units to label defect-action pairs and ATA chapter data, creating a domain-specific training corpus. The fine-tuned model assigns higher weightage to airline industry acronyms and technical jargon, enabling users to input queries without extensive context while maintaining precise retrieval.
+
+[PROJECT_4_ACHIEVEMENTS]
+7% improvement in retrieval accuracy
+Domain-specific fine-tuning on aviation terminology
+Business unit collaboration for data labeling
+Enhanced understanding of airline industry acronyms
+Production deployment for defect log retrieval
+
+[PROJECT_4_TECH]
+BAAI/bge-large-en-v1.5, Embedding Fine-tuning, RAG, Information Retrieval, PyTorch, Domain Adaptation
+
+[PROJECT_4_BADGE]
+Production
+
+[PROJECT_5_TITLE]
+Engineer Assist - Defect Recommendation Engine
+
+[PROJECT_5_ORG]
+Singapore Airlines | Nov, 2022 - Present
+
+[PROJECT_5_DESCRIPTION]
+Built "Engineer Assist", a defect recommendation system to forecast aircraft recurring defects and provide defect recommendations, enhancing maintenance efficiency and safety.
+
+[PROJECT_5_ACHIEVEMENTS]
+Defect prediction
+Automated recommendations
+Improved efficiency
+
+[PROJECT_5_TECH]
+Machine Learning, Time Series, AWS Sagemaker
+
+[PROJECT_5_BADGE]
+Production
+
+[PROJECT_6_TITLE]
+Confidential GenAI for CEO Meetings
+
+[PROJECT_6_ORG]
+Singapore Airlines | 2023 - Present
+
+[PROJECT_6_DESCRIPTION]
+Developed a highly confidential GenAI application for CEO meetings with end-to-end security. Ensured complete data privacy through a zero-logging policy, preventing any response or log data transmission to external LLM providers or cloud services.
+
+[PROJECT_6_ACHIEVEMENTS]
+Zero-logging policy
+Complete data privacy
+Secure on-premise deployment
+
+[PROJECT_6_TECH]
+GenAI, Private LLMs, Encryption, AWS
+
+[PROJECT_6_BADGE]
+Confidential
+
+[PROJECT_7_TITLE]
+ICD-10 Medical Code Classification
+
+[PROJECT_7_ORG]
+Munich Reinsurance (via NUS) | May 2022 - Oct 2022
+
+[PROJECT_7_DESCRIPTION]
+Solved multi-class and multi-output ICD-10 code classification problem on free medical text including doctor diagnoses and prescriptions using Transformer models. Won Best Research Paper Award at NUS.
+
+[PROJECT_7_ACHIEVEMENTS]
+Best Research Paper Award
+Multi-class classification
+Transformer models
+
+[PROJECT_7_TECH]
+BERT, Transformers, NLP, PyTorch
+
+[PROJECT_7_BADGE]
+Award Winner
+
+[PROJECT_8_TITLE]
+Speech Emotion Recognition with Hubert Fine-tuning
+
+[PROJECT_8_ORG]
+NUS Academic Project | 2021 - 2022
+
+[PROJECT_8_DESCRIPTION]
+Developed a multimodal emotion classification system using transfer learning on Hubert models. Combined multiple public SER datasets with speech augmentation techniques to create a balanced corpus. Fine-tuned Hubert by experimenting with various layer-freezing strategies, ultimately achieving optimal performance by updating only the classifier layer while keeping pre-trained layers frozen. Integrated audio embeddings from Hubert with text embeddings from OpenAI Whisper and BERT for joint training.
+
+[PROJECT_8_ACHIEVEMENTS]
+Transfer learning on Hubert (audio) + Whisper + BERT (text)
+Multi-dataset corpus with augmentation techniques
+Optimal fine-tuning: classifier-only updates outperformed unfreezing
+Multimodal fusion of audio and text embeddings
+(U+W)*A metric optimization for balanced evaluation
+
+[PROJECT_8_TECH]
+Hubert, OpenAI Whisper, BERT, Transfer Learning, Speech Augmentation, PyTorch, Multimodal Learning
+
+[PROJECT_8_BADGE]
+Research
+
+[PROJECT_9_TITLE]
+X0PA Room - AI Video Interview Platform
+
+[PROJECT_9_ORG]
+X0PA AI | Nov 2021 - April 2022
+
+[PROJECT_9_DESCRIPTION]
+Built "X0PA Room", an AI-powered video interview platform that rates candidates using AI scoring metrics based on video analytics, audio text transcepts, and topic analysis.
+
+[PROJECT_9_ACHIEVEMENTS]
+Multi-modal analysis
+Feature extraction
+Resume analysis
+
+[PROJECT_9_TECH]
+NLP, Computer Vision, Audio Processing, Deep Learning
+
+[PROJECT_9_BADGE]
+Production
+
+[PROJECT_10_TITLE]
+Bitcoin Price Prediction System
+
+[PROJECT_10_ORG]
+NUS Academic Project | 2021 - 2022
+
+[PROJECT_10_DESCRIPTION]
+Developed LSTM-based model to predict bitcoin prices using multiple data sources. Achieved 2% MAPE (Mean Absolute Percentage Error). Shortlisted to present to Blockchain CEO consortium.
+
+[PROJECT_10_ACHIEVEMENTS]
+2% MAPE accuracy
+CEO presentation
+Multi-source data
+
+[PROJECT_10_TECH]
+LSTM, Time Series, TensorFlow, Python
+
+[PROJECT_10_BADGE]
+Research
+
+[PROJECT_11_TITLE]
+COVID-19 Question Answering System
+
+[PROJECT_11_ORG]
+NUS Academic Project | 2021 - 2022
+
+[PROJECT_11_DESCRIPTION]
+Developed a Question Answering (QA) system to answer queries about COVID-19 and reduce misinformation using Transformer (BERT) models.
+
+[PROJECT_11_ACHIEVEMENTS]
+Combat misinformation
+Accurate QA system
+Real-time retrieval
+
+[PROJECT_11_TECH]
+BERT, Transformers, NLP, Information Retrieval
+
+[PROJECT_11_BADGE]
+Research
+
+[PROJECT_12_TITLE]
+Local Web Search Agent with LLMs
+
+[PROJECT_12_ORG]
+Asia Tech x Singapore Summit | Production Project
+
+[PROJECT_12_DESCRIPTION]
+Built a production-grade web search agent using locally-run language models that processes natural language queries, performs web searches, and synthesizes results without relying on cloud-based LLMs. The system combines LangGraph for agent orchestration, Tavily for web search API integration, and Ollama for local model execution, creating a cost-effective solution that reduces API costs while maintaining privacy and control.
+
+[PROJECT_12_ACHIEVEMENTS]
+Zero cloud LLM dependency - fully local execution
+Reduced API costs by 100% through local models
+Agent orchestration with reasoning chains
+Real-time web search and information synthesis
+Presented at Asia Tech x Singapore Summit 2025
+
+[PROJECT_12_TECH]
+LangGraph, Tavily, Ollama, Local LLMs, Agent Orchestration, Information Retrieval
+
+[PROJECT_12_BADGE]
+Production
+
+[CONFERENCE_TALKS]
+AWS User Group: Finetune Hugging Face transformers with AWS Sagemaker using HUBERT and Whisper API
+Asia Tech x Singapore Summit 2025: Built and presented production web search agent using locally-run LLMs with LangGraph, Tavily, and Ollama - demonstrating agent orchestration, reasoning chains, and cost-effective local model integration
+Conversational AI Summit: Panel discussion on "Conversational AI strategies in Asia"
+Google Developer Expert: Develop "talk with resumes" app using Google Gemini Multimodal API
+NTU Career Talk: Regular day in life of a Data Scientist

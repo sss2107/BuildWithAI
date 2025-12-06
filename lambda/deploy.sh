@@ -20,10 +20,12 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}Step 1: Installing dependencies...${NC}"
-pip install -r requirements.txt -t package/
+pip3 install -r requirements.txt -t package/
 
-echo -e "${BLUE}Step 2: Copying Lambda handler...${NC}"
+echo -e "${BLUE}Step 2: Copying Lambda handler and content files...${NC}"
 cp chatbot_handler.py package/
+cp calendar_integration.py package/
+cp -r content package/
 
 echo -e "${BLUE}Step 3: Creating deployment package...${NC}"
 cd package
@@ -63,10 +65,15 @@ EOF
         --role-name $ROLE_NAME \
         --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
     
-    # Attach Secrets Manager read policy
+    # Attach DynamoDB policy for calendar bookings
     aws iam attach-role-policy \
         --role-name $ROLE_NAME \
-        --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite
+        --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+    
+    # Attach SES policy for email notifications
+    aws iam attach-role-policy \
+        --role-name $ROLE_NAME \
+        --policy-arn arn:aws:iam::aws:policy/AmazonSESFullAccess
     
     echo "Waiting for role to be available..."
     sleep 10
@@ -79,10 +86,16 @@ echo "Role ARN: $ROLE_ARN"
 echo -e "${BLUE}Step 5: Creating/Updating Lambda function...${NC}"
 # Check if function exists
 if aws lambda get-function --function-name $FUNCTION_NAME --region $REGION 2>/dev/null; then
-    echo "Updating existing function..."
+    echo "Updating existing function code..."
     aws lambda update-function-code \
         --function-name $FUNCTION_NAME \
         --zip-file fileb://lambda_function.zip \
+        --region $REGION
+    
+    echo "Updating environment variables..."
+    aws lambda update-function-configuration \
+        --function-name $FUNCTION_NAME \
+        --environment "Variables={LOG_LEVEL=INFO,GEMINI_API_KEY=AIzaSyAl_G4d74NhGbkRplXTYAqtSxIEN4Qfwkk}" \
         --region $REGION
 else
     echo "Creating new function..."
@@ -94,8 +107,21 @@ else
         --zip-file fileb://lambda_function.zip \
         --timeout 30 \
         --memory-size 512 \
+        --environment "Variables={LOG_LEVEL=INFO,GEMINI_API_KEY=AIzaSyAl_G4d74NhGbkRplXTYAqtSxIEN4Qfwkk}" \
         --region $REGION
 fi
+
+echo -e "${BLUE}Step 6: Updating IAM permissions for existing role...${NC}"
+# Add DynamoDB and SES permissions if not already attached
+aws iam attach-role-policy \
+    --role-name $ROLE_NAME \
+    --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess \
+    2>/dev/null || echo "DynamoDB policy already attached"
+
+aws iam attach-role-policy \
+    --role-name $ROLE_NAME \
+    --policy-arn arn:aws:iam::aws:policy/AmazonSESFullAccess \
+    2>/dev/null || echo "SES policy already attached"
 
 echo -e "${BLUE}Step 6: Creating API Gateway...${NC}"
 # This will be done through AWS Console or SAM template

@@ -1,14 +1,12 @@
 """
 AWS Lambda Handler for ADK-based RAG Chatbot
 Uses Google GenAI SDK with Gemini and tool-based routing
-Includes Google Calendar integration for meeting booking
 """
 
 import json
 import os
 from typing import Dict, Any, List
 from google import genai
-from calendar_integration import get_available_meeting_slots, book_meeting
 
 # Content file paths (will be included in Lambda package)
 CONTENT_DIR = "/var/task/content"
@@ -193,15 +191,9 @@ When answering:
 3. Be friendly and professional
 4. Synthesize information naturally from multiple tools if needed
 5. Speak ON BEHALF of Sahil using first person when appropriate
-6. Use conversation history for context on follow-up questions
-
-For meeting bookings:
-7. When user wants to schedule/book a meeting, FIRST show available slots using get_available_meeting_slots()
-8. Ask for their email address if they haven't provided it
-9. Then use book_meeting() with their email and chosen slot number
-10. Always confirm the booking details clearly"""
+6. Use conversation history for context on follow-up questions"""
         
-        # Configure with automatic function calling (including calendar tools)
+        # Configure with automatic function calling
         config = types.GenerateContentConfig(
             tools=[
                 get_introduction,
@@ -209,9 +201,7 @@ For meeting bookings:
                 get_experience,
                 get_education,
                 get_skills,
-                get_extracurriculars,
-                get_available_meeting_slots,  # Calendar tool
-                book_meeting                   # Calendar tool
+                get_extracurriculars
             ],
             system_instruction=system_instruction,
         )
