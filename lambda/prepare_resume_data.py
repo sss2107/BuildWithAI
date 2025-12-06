@@ -21,7 +21,7 @@ def extract_resume_data():
             "highlights": [
                 "Google Developer Expert (GDE) in AI/ML",
                 "Senior Data Scientist at Singapore Airlines",
-                "7+ Years in AI/ML Engineering",
+                "5+ Years in AI/ML Engineering",
                 "Master's in Data Science from NUS",
                 "40+ Technologies Mastered"
             ]
