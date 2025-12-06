@@ -9,23 +9,22 @@ AI Projects and Applied Research
 Building cutting-edge AI solutions that make a real-world impact
 
 [PROJECT_1_TITLE]
-AMS AI Agent - Production Support Automation
+SAP Maintenance AI Integration via Model Context Protocol (MCP)
 
 [PROJECT_1_ORG]
-Singapore Airlines | 2023 - Present
+Singapore Airlines | 2024 - Present
 
 [PROJECT_1_DESCRIPTION]
-Built an intelligent AI agent that automates Application Management Services (AMS) workflows and production support tasks. The agent autonomously handles user-reported issues post-deployment by connecting to multiple systems: application codebases (via AWS CodeCommit), infrastructure and application logs (Splunk), databases (S3, Data Mart), and external systems (Altea). Using a multi-tool agentic framework, the system diagnoses issues, queries relevant data sources, and provides resolutions without manual intervention.
+Architected and deployed an AI-powered SAP maintenance system integrating Google Gemini with SAP S/4HANA using Model Context Protocol. Built FastMCP server exposing RESTful OData v4 APIs as AI-consumable tools for maintenance item and task list operations (IP01, IA05, IA07 transactions). Implemented CSRF token authentication, proxy endpoint integration, and comprehensive error handling. Enabled natural language processing for PDF extraction to SAP task creation workflows.
 
 [PROJECT_1_ACHIEVEMENTS]
-9 production applications successfully onboarded
-Autonomous issue diagnosis and resolution
-Multi-system integration (codebase, logs, databases, external apps)
-Reduced production support response time
-24/7 automated incident handling
+MCP server with SAP S/4HANA
+NLP-powered PDF to task creation
+Production-ready deployment
+CSRF authentication & security
 
 [PROJECT_1_TECH]
-Agentic AI, LangGraph, Splunk, AWS S3, Data Mart, Altea Integration, AWS CodeCommit, Multi-Tool Orchestration
+FastMCP, Google Gemini, SAP OData v4, CSRF Auth, Python, RESTful APIs
 
 [PROJECT_1_BADGE]
 Production
