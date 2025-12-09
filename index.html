@@ -1031,8 +1031,20 @@
     <!-- Chatbot -->
     <script src="js/chatbot.js?v=20250131"></script>
     
-    <!-- Voice Call Widget -->
-    <script src="js/voicecall.js?v=20250131"></script>
+    <!-- Voice Call Widget - Load via fetch to bypass CSP -->
+    <script>
+        // Workaround for strict CSP that blocks external scripts
+        fetch('js/voicecall.js?v=20250131')
+            .then(response => response.text())
+            .then(code => {
+                // Execute the fetched code
+                const script = document.createElement('script');
+                script.textContent = code;
+                document.head.appendChild(script);
+                console.log('✅ VoiceCall script injected successfully');
+            })
+            .catch(err => console.error('❌ Failed to load voicecall.js:', err));
+    </script>
     
     <!-- Custom JavaScript -->
     <script src="js/main.js?v=20250131"></script>
