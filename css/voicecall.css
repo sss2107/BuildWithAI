@@ -298,24 +298,32 @@
     box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
 }
 
+.voicecall-mic-button.muted {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+}
+
 .voicecall-mic-button:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.voicecall-mic-button.muted:hover {
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
 }
 
 .voicecall-mic-button.listening {
-    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
     animation: pulse-listening 1s ease-in-out infinite;
 }
 
 @keyframes pulse-listening {
     0%, 100% {
         transform: scale(1);
-        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        box-shadow: 0 4px 15px rgba(255, 193, 7, 0.5);
     }
     50% {
         transform: scale(1.05);
-        box-shadow: 0 6px 25px rgba(220, 53, 69, 0.6);
+        box-shadow: 0 6px 25px rgba(255, 193, 7, 0.8), 0 0 30px rgba(255, 193, 7, 0.3);
     }
 }
 

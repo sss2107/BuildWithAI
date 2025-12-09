@@ -115,7 +115,7 @@ class VoiceCall {
                         </div>
                         <div class="voicecall-info">
                             <h3>Voice Assistant</h3>
-                            <p id="voiceStatus">Press the mic to talk</p>
+                            <p id="voiceStatus">Muted - Click mic to talk</p>
                         </div>
                     </div>
                     <button class="voicecall-close" id="voiceCallClose" aria-label="Close voice call">
@@ -130,8 +130,8 @@ class VoiceCall {
                     </div>
                     
                     <div class="voicecall-controls">
-                        <button class="voicecall-mic-button" id="voiceMicButton" aria-label="Toggle microphone">
-                            <i class="fas fa-microphone"></i>
+                        <button class="voicecall-mic-button muted" id="voiceMicButton" aria-label="Toggle microphone">
+                            <i class="fas fa-microphone-slash"></i>
                         </button>
                     </div>
                 </div>
@@ -229,7 +229,27 @@ class VoiceCall {
             this.stopListening();
         } else {
             this.startListening();
+            this.playUnmuteSound();
         }
+    }
+    
+    playUnmuteSound() {
+        // Play a short beep sound when unmuting (like Teams)
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800; // Higher pitch beep
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.1);
     }
     
     startListening() {
@@ -251,17 +271,23 @@ class VoiceCall {
         }
         this.isListening = false;
         this.updateMicButton();
-        this.updateStatus('Press the mic to talk');
+        this.updateStatus('Muted - Click mic to talk');
     }
     
     updateMicButton() {
         const button = document.getElementById('voiceMicButton');
         if (!button) return;
         
+        const icon = button.querySelector('i');
+        
         if (this.isListening) {
+            button.classList.remove('muted');
             button.classList.add('listening');
+            icon.className = 'fas fa-microphone';
         } else {
+            button.classList.add('muted');
             button.classList.remove('listening');
+            icon.className = 'fas fa-microphone-slash';
         }
     }
     
@@ -377,13 +403,13 @@ class VoiceCall {
         utterance.onend = () => {
             console.log('Speech ended');
             this.isSpeaking = false;
-            this.updateStatus('Press the mic to talk');
+            this.updateStatus('Muted - Click mic to talk');
         };
         
         utterance.onerror = (event) => {
             console.error('Speech error:', event);
             this.isSpeaking = false;
-            this.updateStatus('Press the mic to talk');
+            this.updateStatus('Muted - Click mic to talk');
         };
         
         // Small delay to ensure synthesis is ready
