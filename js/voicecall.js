@@ -14,6 +14,16 @@ class VoiceCall {
         this.sessionId = this.getOrCreateSessionId();
         this.conversationHistory = [];
         
+        // Multi-language support
+        this.currentLanguage = 'en-US'; // Default to English
+        this.supportedLanguages = {
+            'en': { code: 'en-US', name: 'English' },
+            'hi': { code: 'hi-IN', name: 'Hindi' },
+            'zh': { code: 'zh-CN', name: 'Chinese' },
+            'fr': { code: 'fr-FR', name: 'French' },
+            'ru': { code: 'ru-RU', name: 'Russian' }
+        };
+        
         // Speech recognition setup
         this.recognition = null;
         this.synthesis = window.speechSynthesis;
@@ -82,7 +92,7 @@ class VoiceCall {
         this.recognition = new SpeechRecognition();
         this.recognition.continuous = false;
         this.recognition.interimResults = false;
-        this.recognition.lang = 'en-US'; // American English
+        this.recognition.lang = this.currentLanguage;
         this.recognitionActive = false; // Track if recognition is running
         
         this.recognition.onstart = () => {
@@ -92,7 +102,16 @@ class VoiceCall {
         
         this.recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
-            console.log('🎤 Heard:', transcript);
+            const detectedLang = this.detectLanguage(transcript);
+            console.log('🎤 Heard:', transcript, '| Detected:', detectedLang);
+            
+            // Switch language if different
+            if (detectedLang && detectedLang !== this.currentLanguage) {
+                this.currentLanguage = detectedLang;
+                this.recognition.lang = detectedLang;
+                console.log('🌍 Switched to:', this.getSupportedLanguages()[detectedLang]?.name || detectedLang);
+            }
+            
             this.handleVoiceInput(transcript);
         };
         
@@ -115,6 +134,36 @@ class VoiceCall {
             this.isListening = false;
             this.updateMicButton();
         };
+    }
+    
+    detectLanguage(text) {
+        // Simple language detection based on character patterns
+        // Chinese characters
+        if (/[\u4e00-\u9fa5]/.test(text)) {
+            return 'zh-CN';
+        }
+        // Hindi Devanagari script
+        if (/[\u0900-\u097F]/.test(text)) {
+            return 'hi-IN';
+        }
+        // Cyrillic (Russian)
+        if (/[\u0400-\u04FF]/.test(text)) {
+            return 'ru-RU';
+        }
+        // French common words
+        if (/\b(je|tu|il|elle|nous|vous|ils|elles|le|la|les|de|du|des|un|une|et|ou|mais|bonjour|merci)\b/i.test(text)) {
+            return 'fr-FR';
+        }
+        // Default to English
+        return 'en-US';
+    }
+    
+    getSupportedLanguages() {
+        const langs = {};
+        for (let key in this.supportedLanguages) {
+            langs[this.supportedLanguages[key].code] = this.supportedLanguages[key];
+        }
+        return langs;
     }
 
     createVoiceCallHTML() {
@@ -458,15 +507,22 @@ class VoiceCall {
         const voices = this.synthesis.getVoices();
         console.log('Available voices:', voices.length);
         
-        const americanVoice = voices.find(voice => 
-            voice.lang === 'en-US' && (voice.name.includes('Google') || voice.name.includes('Samantha') || voice.name.includes('Microsoft'))
-        ) || voices.find(voice => voice.lang.startsWith('en-US')) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
+        // Get language prefix (e.g., 'en' from 'en-US')
+        const langPrefix = this.currentLanguage.split('-')[0];
         
-        if (americanVoice) {
-            utterance.voice = americanVoice;
-            console.log('Using voice:', americanVoice.name, 'Lang:', americanVoice.lang);
+        // Try to find best voice for current language
+        const selectedVoice = voices.find(voice => 
+            voice.lang === this.currentLanguage && (voice.name.includes('Google') || voice.name.includes('Microsoft'))
+        ) || voices.find(voice => voice.lang === this.currentLanguage)
+          || voices.find(voice => voice.lang.startsWith(langPrefix))
+          || voices[0];
+        
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+            utterance.lang = this.currentLanguage;
+            console.log('🔊 Using voice:', selectedVoice.name, '| Lang:', selectedVoice.lang);
         } else {
-            console.warn('No suitable voice found, using default');
+            console.log('⚠️ No suitable voice found for', this.currentLanguage, ', using default');
         }
         
         utterance.onstart = () => {
