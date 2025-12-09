@@ -8,7 +8,7 @@ import os
 from typing import Dict, Any, List
 from google import genai
 from calendar_integration import (
-    get_available_slots,
+    get_available_meeting_slots,
     book_meeting
 )
 
@@ -169,7 +169,7 @@ TOOLS = {
     "get_education": get_education,
     "get_skills": get_skills,
     "get_extracurriculars": get_extracurriculars,
-    "get_available_slots": get_available_slots,
+    "get_available_meeting_slots": get_available_meeting_slots,
     "book_meeting": book_meeting,
 }
 
@@ -201,7 +201,8 @@ When answering:
 7. Help users book meetings with Sahil using the calendar tools
 
 For meeting requests - IMPORTANT:
-- First, show available slots using get_available_slots()
+- First, ALWAYS check availability using get_available_meeting_slots()
+- Present the numbered list of slots to the user exactly as returned
 - MUST collect: full name AND email address before booking
 - Ask for BOTH name and email explicitly: "To book a meeting, I need your full name and email address"
 - Verify email looks valid (has @ and domain)
@@ -209,18 +210,33 @@ For meeting requests - IMPORTANT:
 - Never book without a valid email and real name
 - If user provides fake-looking info ("test", "admin"), politely ask for real details"""
         
+        # Define tools as function declarations for Gemini
+        # The SDK will automatically convert Python functions to the right format
+        tools = [
+            get_introduction,
+            get_ai_projects,
+            get_experience,
+            get_education,
+            get_skills,
+            get_extracurriculars,
+            get_available_meeting_slots,
+            book_meeting
+        ]
+        
+        # Debug: Print tool names
+        print(f"🔧 Tools configured: {[f.__name__ for f in tools]}")
+        
+        # Configure tool config to enable automatic function calling
+        tool_config = types.ToolConfig(
+            function_calling_config=types.FunctionCallingConfig(
+                mode=types.FunctionCallingConfigMode.AUTO
+            )
+        )
+        
         # Configure with automatic function calling
         config = types.GenerateContentConfig(
-            tools=[
-                get_introduction,
-                get_ai_projects,
-                get_experience,
-                get_education,
-                get_skills,
-                get_extracurriculars,
-                get_available_slots,
-                book_meeting
-            ],
+            tools=tools,
+            tool_config=tool_config,
             system_instruction=system_instruction,
         )
         
@@ -241,7 +257,7 @@ For meeting requests - IMPORTANT:
             parts=[types.Part(text=question)]
         ))
         
-        # Generate response - SDK automatically handles function calling
+        # Generate response with automatic function calling enabled
         response = client.models.generate_content(
             model="gemini-2.5-flash",
             contents=contents,

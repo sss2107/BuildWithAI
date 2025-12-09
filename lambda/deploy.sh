@@ -19,8 +19,19 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${BLUE}Step 1: Installing dependencies...${NC}"
-pip3 install -r requirements.txt -t package/
+echo -e "${BLUE}Step 1: Installing dependencies for Linux x86_64...${NC}"
+# Install only necessary dependencies (boto3/botocore already in Lambda runtime)
+# Only install google-genai and its required dependencies
+pip3 install google-genai pydantic -t package/ --platform manylinux2014_x86_64 --only-binary=:all: --upgrade
+
+# Remove AWS SDK packages (already in Lambda runtime) to reduce size
+rm -rf package/boto3* package/botocore* package/s3transfer* package/jmespath*
+
+# Remove unnecessary HTTP/network packages (Lambda provides these)
+rm -rf package/urllib3* package/requests* package/certifi* package/charset_normalizer* package/idna*
+
+# Remove image processing packages (not needed for chatbot)
+rm -rf package/PIL* package/pillow* package/websockets*
 
 echo -e "${BLUE}Step 2: Copying Lambda handler and content files...${NC}"
 cp chatbot_handler.py package/
