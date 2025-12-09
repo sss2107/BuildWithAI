@@ -2,8 +2,11 @@
    VOICE CALL WIDGET FUNCTIONALITY
    ========================================== */
 
+console.log('🎙️ VoiceCall script loaded');
+
 class VoiceCall {
     constructor() {
+        console.log('🎙️ VoiceCall constructor called');
         this.isOpen = false;
         this.isListening = false;
         this.isSpeaking = false;
@@ -475,4 +478,6 @@ class VoiceCall {
 }
 
 // Initialize voice call widget when page loads
+console.log('🎙️ About to initialize VoiceCall...');
 const voiceCall = new VoiceCall();
+console.log('🎙️ VoiceCall initialized:', voiceCall);
