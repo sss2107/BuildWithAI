@@ -14,8 +14,34 @@ class VoiceCall {
         // Speech recognition setup
         this.recognition = null;
         this.synthesis = window.speechSynthesis;
+        this.voicesLoaded = false;
+        
+        // Load voices
+        this.loadVoices();
         
         this.init();
+    }
+    
+    loadVoices() {
+        // Voices need time to load
+        const loadVoicesWhenAvailable = () => {
+            const voices = this.synthesis.getVoices();
+            if (voices.length > 0) {
+                this.voicesLoaded = true;
+                console.log('Voices loaded:', voices.length);
+            } else {
+                setTimeout(loadVoicesWhenAvailable, 100);
+            }
+        };
+        
+        if (this.synthesis.onvoiceschanged !== undefined) {
+            this.synthesis.onvoiceschanged = () => {
+                this.voicesLoaded = true;
+                console.log('Voices changed event fired');
+            };
+        }
+        
+        loadVoicesWhenAvailable();
     }
     
     getOrCreateSessionId() {
@@ -180,11 +206,13 @@ class VoiceCall {
             
             const randomIcebreaker = icebreakers[Math.floor(Math.random() * icebreakers.length)];
             
-            // Small delay to let window open
+            console.log('Playing icebreaker:', randomIcebreaker);
+            
+            // Longer delay to ensure window is open and voices are loaded
             setTimeout(() => {
                 this.addTranscriptMessage('assistant', randomIcebreaker);
                 this.speak(randomIcebreaker);
-            }, 500);
+            }, 800);
         }
     }
 
@@ -310,8 +338,16 @@ class VoiceCall {
     }
     
     speak(text) {
+        console.log('Attempting to speak:', text);
+        
         // Stop any ongoing speech
         this.stopSpeaking();
+        
+        // Ensure synthesis is ready
+        if (this.synthesis.speaking) {
+            console.log('Already speaking, cancelling...');
+            this.synthesis.cancel();
+        }
         
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.rate = 1.0;
@@ -321,30 +357,40 @@ class VoiceCall {
         
         // Try to use an American English voice if available
         const voices = this.synthesis.getVoices();
+        console.log('Available voices:', voices.length);
+        
         const americanVoice = voices.find(voice => 
-            voice.lang === 'en-US' && voice.name.includes('Google US English')
-        ) || voices.find(voice => voice.lang === 'en-US');
+            voice.lang === 'en-US' && (voice.name.includes('Google') || voice.name.includes('Samantha'))
+        ) || voices.find(voice => voice.lang === 'en-US') || voices[0];
         
         if (americanVoice) {
             utterance.voice = americanVoice;
+            console.log('Using voice:', americanVoice.name);
         }
         
         utterance.onstart = () => {
+            console.log('Speech started');
             this.isSpeaking = true;
             this.updateStatus('Speaking...');
         };
         
         utterance.onend = () => {
+            console.log('Speech ended');
             this.isSpeaking = false;
             this.updateStatus('Press the mic to talk');
         };
         
-        utterance.onerror = () => {
+        utterance.onerror = (event) => {
+            console.error('Speech error:', event);
             this.isSpeaking = false;
             this.updateStatus('Press the mic to talk');
         };
         
-        this.synthesis.speak(utterance);
+        // Small delay to ensure synthesis is ready
+        setTimeout(() => {
+            this.synthesis.speak(utterance);
+            console.log('Speech queued');
+        }, 100);
     }
     
     stopSpeaking() {
