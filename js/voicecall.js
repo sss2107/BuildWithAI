@@ -545,15 +545,31 @@ class VoiceCall {
         
         // Immediate speak without delay
         console.log('📢 Calling synthesis.speak()...');
-        this.synthesis.speak(utterance);
+        
+        // Mobile Safari/iOS workaround - ensure synthesis is ready
+        if (typeof window !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+            console.log('📱 Mobile browser detected - using workaround');
+            // Force a small delay for mobile browsers
+            setTimeout(() => {
+                this.synthesis.speak(utterance);
+            }, 50);
+        } else {
+            this.synthesis.speak(utterance);
+        }
         
         // Check if it actually started
         setTimeout(() => {
-            if (!this.synthesis.speaking) {
+            if (!this.synthesis.speaking && !this.isSpeaking) {
                 console.error('⚠️ Speech did not start! Browser may be blocking autoplay.');
                 console.log('Try clicking the mic button first to enable audio.');
+                // Try to restart speech
+                this.synthesis.cancel();
+                setTimeout(() => {
+                    console.log('🔄 Retrying speech...');
+                    this.synthesis.speak(utterance);
+                }, 100);
             }
-        }, 200);
+        }, 300);
     }
     
     stopSpeaking() {
