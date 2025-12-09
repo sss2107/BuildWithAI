@@ -53,7 +53,7 @@ class VoiceCall {
         this.recognition = new SpeechRecognition();
         this.recognition.continuous = false;
         this.recognition.interimResults = false;
-        this.recognition.lang = 'en-US';
+        this.recognition.lang = 'en-US'; // American English
         
         this.recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
@@ -161,8 +161,30 @@ class VoiceCall {
         
         if (this.isOpen) {
             voiceCallWindow.classList.add('active');
+            this.playIcebreaker();
         } else {
             voiceCallWindow.classList.remove('active');
+        }
+    }
+    
+    playIcebreaker() {
+        // Only play if no conversation history
+        if (this.conversationHistory.length === 0) {
+            const icebreakers = [
+                "Hey! How are you doing?",
+                "Hey! What's up?",
+                "Hi there! How can I help you today?",
+                "Hello! What would you like to know?",
+                "Hey! Feel free to ask me anything about Sahil's experience!"
+            ];
+            
+            const randomIcebreaker = icebreakers[Math.floor(Math.random() * icebreakers.length)];
+            
+            // Small delay to let window open
+            setTimeout(() => {
+                this.addTranscriptMessage('assistant', randomIcebreaker);
+                this.speak(randomIcebreaker);
+            }, 500);
         }
     }
 
@@ -295,6 +317,17 @@ class VoiceCall {
         utterance.rate = 1.0;
         utterance.pitch = 1.0;
         utterance.volume = 1.0;
+        utterance.lang = 'en-US'; // American English
+        
+        // Try to use an American English voice if available
+        const voices = this.synthesis.getVoices();
+        const americanVoice = voices.find(voice => 
+            voice.lang === 'en-US' && voice.name.includes('Google US English')
+        ) || voices.find(voice => voice.lang === 'en-US');
+        
+        if (americanVoice) {
+            utterance.voice = americanVoice;
+        }
         
         utterance.onstart = () => {
             this.isSpeaking = true;
