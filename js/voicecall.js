@@ -444,7 +444,8 @@ class VoiceCall {
                 body: JSON.stringify({
                     question: transcript,
                     session_id: this.sessionId,
-                    conversation_history: this.conversationHistory
+                    conversation_history: this.conversationHistory,
+                    source: 'voice'
                 })
             });
             

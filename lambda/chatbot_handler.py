@@ -177,7 +177,7 @@ TOOLS = {
 # GEMINI AGENT WITH NEW SDK
 # ==========================================
 
-def process_with_genai(question: str, history: List[Dict], api_key: str) -> str:
+def process_with_genai(question: str, history: List[Dict], api_key: str, is_voice: bool = False) -> str:
     """
     Process question using new Google GenAI SDK with automatic tool calling
     Includes conversation history for context (last 3 Q&A pairs)
@@ -209,6 +209,16 @@ For meeting requests - IMPORTANT:
 - Confirm all details before calling book_meeting()
 - Never book without a valid email and real name
 - If user provides fake-looking info ("test", "admin"), politely ask for real details"""
+
+        if is_voice:
+            system_instruction += """
+
+VOICE MODE ACTIVATED:
+The user is speaking to you. Your response will be converted to speech.
+- Keep responses concise and conversational (under 2-3 sentences if possible).
+- Do NOT use markdown formatting like bold (**text**) or lists as they don't sound good.
+- Do NOT say "I cannot speak" or "I am a text model". You ARE speaking.
+- Be friendly and engaging."""
         
         # Define tools as function declarations for Gemini
         # The SDK will automatically convert Python functions to the right format
@@ -304,6 +314,8 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         question = body.get('question', '')
         history = body.get('history', [])  # Last 3 Q&A pairs from frontend
         session_id = body.get('sessionId', 'unknown')
+        source = body.get('source', 'text')
+        is_voice = (source == 'voice')
         
         if not question:
             return {
@@ -386,7 +398,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         
         # Process with GenAI agent (with conversation history)
-        answer = process_with_genai(question, history, api_key)
+        answer = process_with_genai(question, history, api_key, is_voice=is_voice)
         
         # Log response to CloudWatch (truncated for cost control)
         print(json.dumps({

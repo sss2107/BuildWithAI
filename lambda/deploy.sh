@@ -22,7 +22,7 @@ NC='\033[0m' # No Color
 echo -e "${BLUE}Step 1: Installing dependencies for Linux x86_64...${NC}"
 # Install only necessary dependencies (boto3/botocore already in Lambda runtime)
 # Only install google-genai and its required dependencies
-pip3 install google-genai pydantic -t package/ --platform manylinux2014_x86_64 --only-binary=:all: --upgrade
+pip3 install google-genai pydantic pytz -t package/ --platform manylinux2014_x86_64 --only-binary=:all: --upgrade
 
 # Remove AWS SDK packages (already in Lambda runtime) to reduce size
 rm -rf package/boto3* package/botocore* package/s3transfer* package/jmespath*
