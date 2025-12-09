@@ -5,7 +5,26 @@
 class VoiceCall {
     constructor() {
         this.isOpen = false;
+        this.isListening = false;
+        this.isSpeaking = false;
+        this.apiEndpoint = 'https://4ctco04k53.execute-api.us-east-1.amazonaws.com/Prod/chat';
+        this.sessionId = this.getOrCreateSessionId();
+        this.conversationHistory = [];
+        
+        // Speech recognition setup
+        this.recognition = null;
+        this.synthesis = window.speechSynthesis;
+        
         this.init();
+    }
+    
+    getOrCreateSessionId() {
+        let sessionId = localStorage.getItem('voicecall_session_id');
+        if (!sessionId) {
+            sessionId = `voice_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            localStorage.setItem('voicecall_session_id', sessionId);
+        }
+        return sessionId;
     }
 
     init() {
@@ -20,6 +39,37 @@ class VoiceCall {
     setup() {
         this.createVoiceCallHTML();
         this.attachEventListeners();
+        this.setupSpeechRecognition();
+    }
+    
+    setupSpeechRecognition() {
+        // Check browser support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            console.error('Speech recognition not supported');
+            return;
+        }
+        
+        this.recognition = new SpeechRecognition();
+        this.recognition.continuous = false;
+        this.recognition.interimResults = false;
+        this.recognition.lang = 'en-US';
+        
+        this.recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            this.handleVoiceInput(transcript);
+        };
+        
+        this.recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            this.updateStatus('Sorry, I didn\'t catch that. Please try again.');
+            this.stopListening();
+        };
+        
+        this.recognition.onend = () => {
+            this.isListening = false;
+            this.updateMicButton();
+        };
     }
 
     createVoiceCallHTML() {
@@ -39,7 +89,7 @@ class VoiceCall {
                         </div>
                         <div class="voicecall-info">
                             <h3>Voice Assistant</h3>
-                            <p>Talk with Sahil's AI</p>
+                            <p id="voiceStatus">Press the mic to talk</p>
                         </div>
                     </div>
                     <button class="voicecall-close" id="voiceCallClose" aria-label="Close voice call">
@@ -49,29 +99,15 @@ class VoiceCall {
 
                 <!-- Content Area -->
                 <div class="voicecall-content">
-                    <div class="voicecall-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h4>Voice Conversations Coming Soon! 🎙️</h4>
-                    <p>Soon, you'll be able to speak to Sahil's AI assistant.</p>
-                    
-                    <div class="voicecall-features">
-                        <p>What's coming:</p>
-                        <div class="voicecall-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Natural voice conversations</span>
-                        </div>
-                        <div class="voicecall-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Real-time AI responses</span>
-                        </div>
-                        <div class="voicecall-feature">
-                            <i class="fas fa-check-circle"></i>
-                            <span>Ask about experience & projects</span>
-                        </div>
+                    <div class="voicecall-transcript" id="voiceTranscript">
+                        <!-- Conversation will appear here -->
                     </div>
                     
-                    <span class="voicecall-coming-soon-badge">🚀 COMING SOON</span>
+                    <div class="voicecall-controls">
+                        <button class="voicecall-mic-button" id="voiceMicButton" aria-label="Toggle microphone">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -85,10 +121,14 @@ class VoiceCall {
         const voiceCallClose = document.getElementById('voiceCallClose');
         const voiceCallWindow = document.getElementById('voiceCallWindow');
         const voiceCallContent = document.querySelector('.voicecall-content');
+        const voiceMicButton = document.getElementById('voiceMicButton');
 
         // Toggle voice call window
         voiceCallButton.addEventListener('click', () => this.toggleVoiceCall());
         voiceCallClose.addEventListener('click', () => this.closeVoiceCall());
+        
+        // Microphone button
+        voiceMicButton.addEventListener('click', () => this.toggleListening());
 
         // Prevent scroll propagation to parent page
         if (voiceCallContent) {
@@ -130,6 +170,155 @@ class VoiceCall {
         const voiceCallWindow = document.getElementById('voiceCallWindow');
         voiceCallWindow.classList.remove('active');
         this.isOpen = false;
+        this.stopListening();
+        this.stopSpeaking();
+    }
+    
+    toggleListening() {
+        if (this.isListening) {
+            this.stopListening();
+        } else {
+            this.startListening();
+        }
+    }
+    
+    startListening() {
+        if (!this.recognition) {
+            this.updateStatus('Voice not supported in this browser');
+            return;
+        }
+        
+        this.stopSpeaking(); // Stop any ongoing speech
+        this.isListening = true;
+        this.updateMicButton();
+        this.updateStatus('Listening...');
+        this.recognition.start();
+    }
+    
+    stopListening() {
+        if (this.recognition && this.isListening) {
+            this.recognition.stop();
+        }
+        this.isListening = false;
+        this.updateMicButton();
+        this.updateStatus('Press the mic to talk');
+    }
+    
+    updateMicButton() {
+        const button = document.getElementById('voiceMicButton');
+        if (!button) return;
+        
+        if (this.isListening) {
+            button.classList.add('listening');
+        } else {
+            button.classList.remove('listening');
+        }
+    }
+    
+    updateStatus(message) {
+        const status = document.getElementById('voiceStatus');
+        if (status) {
+            status.textContent = message;
+        }
+    }
+    
+    addTranscriptMessage(role, text) {
+        const transcript = document.getElementById('voiceTranscript');
+        if (!transcript) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `voice-message voice-message-${role}`;
+        messageDiv.innerHTML = `
+            <div class="voice-message-bubble">
+                <strong>${role === 'user' ? 'You' : 'Assistant'}:</strong>
+                <p>${text}</p>
+            </div>
+        `;
+        
+        transcript.appendChild(messageDiv);
+        transcript.scrollTop = transcript.scrollHeight;
+    }
+    
+    async handleVoiceInput(transcript) {
+        this.stopListening();
+        this.addTranscriptMessage('user', transcript);
+        this.updateStatus('Processing...');
+        
+        try {
+            const response = await fetch(this.apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    question: transcript,
+                    session_id: this.sessionId,
+                    conversation_history: this.conversationHistory
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.answer) {
+                this.conversationHistory.push({
+                    role: 'user',
+                    content: transcript
+                });
+                this.conversationHistory.push({
+                    role: 'assistant',
+                    content: data.answer
+                });
+                
+                // Keep history limited
+                if (this.conversationHistory.length > 10) {
+                    this.conversationHistory = this.conversationHistory.slice(-10);
+                }
+                
+                this.addTranscriptMessage('assistant', data.answer);
+                this.speak(data.answer);
+            } else {
+                throw new Error(data.error || 'No response');
+            }
+        } catch (error) {
+            console.error('Voice call error:', error);
+            const errorMsg = 'Sorry, I encountered an issue. Please try again.';
+            this.addTranscriptMessage('assistant', errorMsg);
+            this.speak(errorMsg);
+        }
+    }
+    
+    speak(text) {
+        // Stop any ongoing speech
+        this.stopSpeaking();
+        
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1.0;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+        
+        utterance.onstart = () => {
+            this.isSpeaking = true;
+            this.updateStatus('Speaking...');
+        };
+        
+        utterance.onend = () => {
+            this.isSpeaking = false;
+            this.updateStatus('Press the mic to talk');
+        };
+        
+        utterance.onerror = () => {
+            this.isSpeaking = false;
+            this.updateStatus('Press the mic to talk');
+        };
+        
+        this.synthesis.speak(utterance);
+    }
+    
+    stopSpeaking() {
+        if (this.synthesis.speaking) {
+            this.synthesis.cancel();
+        }
+        this.isSpeaking = false;
     }
 }
 

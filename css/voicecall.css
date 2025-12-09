@@ -222,6 +222,103 @@
     margin-top: 10px;
 }
 
+/* Voice Transcript Styles */
+.voicecall-transcript {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+
+.voice-message {
+    margin-bottom: 15px;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.voice-message-bubble {
+    background: #2a2a2a;
+    padding: 12px 16px;
+    border-radius: 12px;
+    max-width: 85%;
+}
+
+.voice-message-user .voice-message-bubble {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    margin-left: auto;
+}
+
+.voice-message-assistant .voice-message-bubble {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.voice-message-bubble strong {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.85em;
+    opacity: 0.8;
+}
+
+.voice-message-bubble p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Voice Controls */
+.voicecall-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    border-top: 1px solid #2a2a2a;
+}
+
+.voicecall-mic-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.voicecall-mic-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.voicecall-mic-button.listening {
+    background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+    animation: pulse-listening 1s ease-in-out infinite;
+}
+
+@keyframes pulse-listening {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(220, 53, 69, 0.6);
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .voicecall-button {
