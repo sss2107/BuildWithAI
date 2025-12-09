@@ -27,11 +27,11 @@ pip3 install google-genai pydantic pytz -t package/ --platform manylinux2014_x86
 # Remove AWS SDK packages (already in Lambda runtime) to reduce size
 rm -rf package/boto3* package/botocore* package/s3transfer* package/jmespath*
 
-# Remove unnecessary HTTP/network packages (Lambda provides these)
-rm -rf package/urllib3* package/requests* package/certifi* package/charset_normalizer* package/idna*
+# DO NOT remove HTTP/network packages - google-genai needs them!
+# rm -rf package/urllib3* package/requests* package/certifi* package/charset_normalizer* package/idna*
 
-# Remove image processing packages (not needed for chatbot)
-rm -rf package/PIL* package/pillow* package/websockets*
+# DO NOT remove websockets - google-genai might need them for streaming
+# rm -rf package/PIL* package/pillow* package/websockets*
 
 echo -e "${BLUE}Step 2: Copying Lambda handler and content files...${NC}"
 cp chatbot_handler.py package/
