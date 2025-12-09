@@ -237,6 +237,7 @@ class VoiceCall {
     }
     
     toggleListening() {
+        console.log('Toggle listening clicked, current state:', this.isListening);
         if (this.isListening) {
             this.stopListening();
         } else {
@@ -274,7 +275,15 @@ class VoiceCall {
         this.isListening = true;
         this.updateMicButton();
         this.updateStatus('Listening...');
-        this.recognition.start();
+        
+        try {
+            this.recognition.start();
+            console.log('Recognition started');
+        } catch (error) {
+            console.error('Recognition start error:', error);
+            this.isListening = false;
+            this.updateMicButton();
+        }
     }
     
     stopListening() {
@@ -288,18 +297,29 @@ class VoiceCall {
     
     updateMicButton() {
         const button = document.getElementById('voiceMicButton');
-        if (!button) return;
+        if (!button) {
+            console.error('Mic button not found!');
+            return;
+        }
         
         const icon = button.querySelector('i');
+        if (!icon) {
+            console.error('Mic icon not found!');
+            return;
+        }
+        
+        console.log('Updating mic button, isListening:', this.isListening);
         
         if (this.isListening) {
             button.classList.remove('muted');
             button.classList.add('listening');
             icon.className = 'fas fa-microphone';
+            console.log('Mic set to LISTENING (yellow, unmuted)');
         } else {
             button.classList.add('muted');
             button.classList.remove('listening');
             icon.className = 'fas fa-microphone-slash';
+            console.log('Mic set to MUTED (red, muted)');
         }
     }
     
