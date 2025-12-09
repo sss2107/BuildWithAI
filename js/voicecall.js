@@ -211,8 +211,20 @@ class VoiceCall {
             // Longer delay to ensure window is open and voices are loaded
             setTimeout(() => {
                 this.addTranscriptMessage('assistant', randomIcebreaker);
-                this.speak(randomIcebreaker);
-            }, 800);
+                
+                // Wait for voices to be fully loaded
+                const speakWhenReady = () => {
+                    const voices = this.synthesis.getVoices();
+                    if (voices.length > 0) {
+                        console.log('Voices ready, speaking icebreaker');
+                        this.speak(randomIcebreaker);
+                    } else {
+                        console.log('Waiting for voices...');
+                        setTimeout(speakWhenReady, 200);
+                    }
+                };
+                speakWhenReady();
+            }, 1000);
         }
     }
 
@@ -365,6 +377,7 @@ class VoiceCall {
     
     speak(text) {
         console.log('Attempting to speak:', text);
+        console.log('Volume check:', this.synthesis.speaking, 'Paused:', this.synthesis.paused);
         
         // Stop any ongoing speech
         this.stopSpeaking();
@@ -373,6 +386,12 @@ class VoiceCall {
         if (this.synthesis.speaking) {
             console.log('Already speaking, cancelling...');
             this.synthesis.cancel();
+        }
+        
+        // Resume if paused (some browsers pause by default)
+        if (this.synthesis.paused) {
+            console.log('Synthesis was paused, resuming...');
+            this.synthesis.resume();
         }
         
         const utterance = new SpeechSynthesisUtterance(text);
@@ -386,16 +405,18 @@ class VoiceCall {
         console.log('Available voices:', voices.length);
         
         const americanVoice = voices.find(voice => 
-            voice.lang === 'en-US' && (voice.name.includes('Google') || voice.name.includes('Samantha'))
-        ) || voices.find(voice => voice.lang === 'en-US') || voices[0];
+            voice.lang === 'en-US' && (voice.name.includes('Google') || voice.name.includes('Samantha') || voice.name.includes('Microsoft'))
+        ) || voices.find(voice => voice.lang.startsWith('en-US')) || voices.find(voice => voice.lang.startsWith('en')) || voices[0];
         
         if (americanVoice) {
             utterance.voice = americanVoice;
-            console.log('Using voice:', americanVoice.name);
+            console.log('Using voice:', americanVoice.name, 'Lang:', americanVoice.lang);
+        } else {
+            console.warn('No suitable voice found, using default');
         }
         
         utterance.onstart = () => {
-            console.log('Speech started');
+            console.log('✅ Speech started successfully');
             this.isSpeaking = true;
             this.updateStatus('Speaking...');
         };
@@ -407,16 +428,22 @@ class VoiceCall {
         };
         
         utterance.onerror = (event) => {
-            console.error('Speech error:', event);
+            console.error('❌ Speech error:', event.error, event);
             this.isSpeaking = false;
             this.updateStatus('Muted - Click mic to talk');
         };
         
-        // Small delay to ensure synthesis is ready
+        // Immediate speak without delay
+        console.log('📢 Calling synthesis.speak()...');
+        this.synthesis.speak(utterance);
+        
+        // Check if it actually started
         setTimeout(() => {
-            this.synthesis.speak(utterance);
-            console.log('Speech queued');
-        }, 100);
+            if (!this.synthesis.speaking) {
+                console.error('⚠️ Speech did not start! Browser may be blocking autoplay.');
+                console.log('Try clicking the mic button first to enable audio.');
+            }
+        }, 200);
     }
     
     stopSpeaking() {
