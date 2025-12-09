@@ -7,6 +7,10 @@ import json
 import os
 from typing import Dict, Any, List
 from google import genai
+from calendar_integration import (
+    get_available_slots,
+    book_meeting
+)
 
 # Content file paths (will be included in Lambda package)
 CONTENT_DIR = "/var/task/content"
@@ -40,7 +44,7 @@ def check_rate_limit(session_id: str) -> tuple[bool, str]:
     ]
     
     if len(daily_request_count) >= MAX_REQUESTS_PER_DAY:
-        return False, f"Daily limit exceeded ({MAX_REQUESTS_PER_DAY} requests/day). Try again tomorrow."
+        return False, "[ERR_LIMIT_DAILY] Daily usage limit reached. Please try again tomorrow."
     
     # Check per-session limit (20 requests per session)
     if session_id in rate_limit_cache:
@@ -54,7 +58,7 @@ def check_rate_limit(session_id: str) -> tuple[bool, str]:
     session_requests = rate_limit_cache[session_id]
     
     if len(session_requests) >= MAX_REQUESTS_PER_SESSION:
-        return False, f"Session limit exceeded ({MAX_REQUESTS_PER_SESSION} questions per session). Please start a new session."
+        return False, "[ERR_LIMIT_SESSION] Too many questions in this session. Please refresh the page to start a new conversation."
     
     # Add current request to both counters
     rate_limit_cache[session_id].append(current_time)
@@ -69,21 +73,21 @@ def validate_input(question: str, history: List[Dict]) -> tuple[bool, str]:
     """
     # Check question length
     if len(question) > MAX_QUESTION_LENGTH:
-        return False, f"Question too long (max {MAX_QUESTION_LENGTH} characters)"
+        return False, f"[ERR_INPUT_LENGTH] Question is too long. Please keep it under {MAX_QUESTION_LENGTH} characters."
     
     # Check history length
     if len(history) > MAX_HISTORY_LENGTH:
-        return False, f"History too long (max {MAX_HISTORY_LENGTH} messages)"
+        return False, "[ERR_HISTORY_LENGTH] Conversation history is too long. Please refresh the page."
     
     # Check each history message length
     for msg in history:
         content = msg.get('content', '')
         if len(content) > MAX_MESSAGE_LENGTH:
-            return False, f"History message too long (max {MAX_MESSAGE_LENGTH} characters)"
+            return False, "[ERR_MESSAGE_LENGTH] Previous message is too long. Please refresh the page."
     
     # Check for suspicious patterns
     if question.count('A') > 100 or question.count('a') > 100:
-        return False, "Suspicious input pattern detected"
+        return False, "[ERR_SUSPICIOUS_INPUT] Invalid input detected. Please rephrase your question."
     
     return True, ""
 
@@ -165,6 +169,8 @@ TOOLS = {
     "get_education": get_education,
     "get_skills": get_skills,
     "get_extracurriculars": get_extracurriculars,
+    "get_available_slots": get_available_slots,
+    "book_meeting": book_meeting,
 }
 
 # ==========================================
@@ -191,7 +197,17 @@ When answering:
 3. Be friendly and professional
 4. Synthesize information naturally from multiple tools if needed
 5. Speak ON BEHALF of Sahil using first person when appropriate
-6. Use conversation history for context on follow-up questions"""
+6. Use conversation history for context on follow-up questions
+7. Help users book meetings with Sahil using the calendar tools
+
+For meeting requests - IMPORTANT:
+- First, show available slots using get_available_slots()
+- MUST collect: full name AND email address before booking
+- Ask for BOTH name and email explicitly: "To book a meeting, I need your full name and email address"
+- Verify email looks valid (has @ and domain)
+- Confirm all details before calling book_meeting()
+- Never book without a valid email and real name
+- If user provides fake-looking info ("test", "admin"), politely ask for real details"""
         
         # Configure with automatic function calling
         config = types.GenerateContentConfig(
@@ -201,7 +217,9 @@ When answering:
                 get_experience,
                 get_education,
                 get_skills,
-                get_extracurriculars
+                get_extracurriculars,
+                get_available_slots,
+                book_meeting
             ],
             system_instruction=system_instruction,
         )
@@ -238,15 +256,17 @@ When answering:
         import traceback
         traceback.print_exc()
         
-        # Professional error messages (hide technical details)
+        # Professional error messages with unique identifiers
         if "403" in error_msg or "PERMISSION_DENIED" in error_msg or "API key" in error_msg:
-            return "⚠️ AI service temporarily unavailable due to authentication refresh. Our infrastructure team has been notified. Please try again in a few moments."
+            return "[ERR_AUTH_403] Sorry, I'm having trouble connecting right now. Please try again in a moment."
         elif "429" in error_msg or "quota" in error_msg.lower() or "rate limit" in error_msg.lower():
-            return "⚙️ Please retry your question in 10-15 seconds."
+            return "[ERR_QUOTA_429] I'm getting too many requests. Please wait 10-15 seconds and try again."
         elif "timeout" in error_msg.lower():
-            return "🔄 Backend timeout - Lambda cold start detected. Warming up infrastructure, please resubmit your query."
+            return "[ERR_TIMEOUT_504] The request timed out. Please try your question again."
+        elif "network" in error_msg.lower() or "connection" in error_msg.lower():
+            return "[ERR_NETWORK_502] Network connection issue. Please check your connection and retry."
         else:
-            return "🔧 Temporary infrastructure issue. Please try again later."
+            return "[ERR_GENERAL_500] Something went wrong on my end. Please try again."
 
 # ==========================================
 # LAMBDA HANDLER
@@ -278,7 +298,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'Access-Control-Allow-Headers': 'Content-Type',
                     'Access-Control-Allow-Methods': 'POST, OPTIONS'
                 },
-                'body': json.dumps({'error': 'Question is required'})
+                'body': json.dumps({'error': '[ERR_NO_QUESTION] Please enter a question.'})
             }
         
         # SECURITY: Rate limiting (20/session, 100/day)
@@ -346,7 +366,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     'Access-Control-Allow-Headers': 'Content-Type',
                     'Access-Control-Allow-Methods': 'POST, OPTIONS'
                 },
-                'body': json.dumps({'error': 'API key not configured'})
+                'body': json.dumps({'error': '[ERR_CONFIG_500] Configuration error. Please contact the administrator.'})
             }
         
         # Process with GenAI agent (with conversation history)
@@ -392,8 +412,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'Access-Control-Allow-Methods': 'POST, OPTIONS'
             },
             'body': json.dumps({
-                'error': 'Internal server error',
-                'message': str(e)
+                'error': '[ERR_INTERNAL_500] An error occurred. Please try again.'
             })
         }
 

@@ -291,9 +291,27 @@ def book_meeting(user_email: str, slot_index: int, user_name: str = "") -> str:
         user_name: User's name (optional, defaults to email username)
     """
     try:
-        # Validate email
+        # Validate email format
         if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', user_email):
-            return "Please provide a valid email address."
+            return "❌ Please provide a valid email address (e.g., name@company.com)"
+        
+        # Block disposable/spam email domains
+        spam_domains = [
+            'tempmail', 'throwaway', '10minutemail', 'guerrillamail', 'mailinator',
+            'trashmail', 'fakeinbox', 'temp-mail', 'yopmail', 'maildrop', 'getnada',
+            'sharklasers', 'guerrillamail', 'spam4', 'grr.la', 'mailnesia'
+        ]
+        email_domain = user_email.split('@')[1].lower()
+        if any(spam in email_domain for spam in spam_domains):
+            return "❌ Please use a valid business or personal email address. Disposable email addresses are not accepted."
+        
+        # Require a name for accountability (minimum 10 chars for full name)
+        if not user_name or len(user_name.strip()) < 10:
+            return "❌ Please provide your full name (first and last name, minimum 10 characters)."
+        
+        # Block suspicious patterns
+        if user_name.lower() in ['test', 'fake', 'spam', 'admin', 'none', 'na', 'n/a']:
+            return "❌ Please provide your real name."
         
         # Get slots
         slots = get_available_slots(days_ahead=14)
@@ -306,15 +324,13 @@ def book_meeting(user_email: str, slot_index: int, user_name: str = "") -> str:
         
         # Book it
         selected = slots[slot_index - 1]
-        # Use email username if user_name not provided
-        final_user_name = user_name if user_name else None
-        result = create_booking(user_email, selected['datetime'], final_user_name)
+        result = create_booking(user_email, selected['datetime'], user_name.strip())
         
         if result['success']:
-            return f"✅ Meeting booked!\n\n📅 {result['start_time']}\n📧 Confirmation sent to {result['attendee_email']}\n\nYou'll receive an email with details. Sahil will send a Google Meet link before the meeting. Looking forward to it!"
+            return f"✅ Meeting booked successfully!\n\n📅 {result['start_time']}\n👤 {user_name}\n📧 Confirmation sent to {result['attendee_email']}\n\nYou'll receive a confirmation email shortly. Sahil will send a Google Meet link before the meeting. Looking forward to connecting!"
         else:
-            return f"Couldn't book meeting: {result.get('error', 'Unknown error')}"
+            return f"❌ Couldn't book meeting: {result.get('error', 'Unknown error')}"
     
     except Exception as e:
         print(f"Error in book_meeting: {str(e)}")
-        return "Error booking meeting. Contact Sahil at experiments.datas@gmail.com"
+        return "❌ Error booking meeting. Please contact Sahil directly at experiments.datas@gmail.com"
