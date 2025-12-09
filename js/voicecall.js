@@ -83,19 +83,35 @@ class VoiceCall {
         this.recognition.continuous = false;
         this.recognition.interimResults = false;
         this.recognition.lang = 'en-US'; // American English
+        this.recognitionActive = false; // Track if recognition is running
+        
+        this.recognition.onstart = () => {
+            console.log('🎤 Recognition actually started');
+            this.recognitionActive = true;
+        };
         
         this.recognition.onresult = (event) => {
             const transcript = event.results[0][0].transcript;
+            console.log('🎤 Heard:', transcript);
             this.handleVoiceInput(transcript);
         };
         
         this.recognition.onerror = (event) => {
-            console.error('Speech recognition error:', event.error);
-            this.updateStatus('Sorry, I didn\'t catch that. Please try again.');
+            console.error('🎤 Recognition error:', event.error);
+            this.recognitionActive = false;
+            if (event.error === 'not-allowed') {
+                this.updateStatus('Microphone access denied. Please allow microphone.');
+            } else if (event.error === 'no-speech') {
+                this.updateStatus('No speech detected. Click mic to try again.');
+            } else {
+                this.updateStatus('Error: ' + event.error + '. Click mic to try again.');
+            }
             this.stopListening();
         };
         
         this.recognition.onend = () => {
+            console.log('🎤 Recognition ended');
+            this.recognitionActive = false;
             this.isListening = false;
             this.updateMicButton();
         };
@@ -274,26 +290,41 @@ class VoiceCall {
             return;
         }
         
+        // If already listening, abort and restart
+        if (this.recognitionActive) {
+            console.log('🎤 Aborting existing recognition');
+            this.recognition.abort();
+            this.recognitionActive = false;
+        }
+        
         this.stopSpeaking(); // Stop any ongoing speech
         this.isListening = true;
         this.updateMicButton();
         this.updateStatus('Listening...');
         
         try {
+            console.log('🎤 Starting recognition...');
             this.recognition.start();
-            console.log('Recognition started');
         } catch (error) {
-            console.error('Recognition start error:', error);
+            console.error('🎤 Recognition start error:', error);
             this.isListening = false;
+            this.recognitionActive = false;
             this.updateMicButton();
+            this.updateStatus('Error starting microphone: ' + error.message);
         }
     }
     
     stopListening() {
-        if (this.recognition && this.isListening) {
-            this.recognition.stop();
+        if (this.recognition && this.recognitionActive) {
+            console.log('🎤 Stopping recognition');
+            try {
+                this.recognition.stop();
+            } catch (error) {
+                console.error('🎤 Error stopping recognition:', error);
+            }
         }
         this.isListening = false;
+        this.recognitionActive = false;
         this.updateMicButton();
         this.updateStatus('Muted - Click mic to talk');
     }
