@@ -19,6 +19,12 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Load environment variables from .env if it exists
+if [ -f .env ]; then
+    echo -e "${BLUE}Loading environment variables from .env...${NC}"
+    export $(grep -v '^#' .env | xargs)
+fi
+
 echo -e "${BLUE}Step 1: Installing dependencies for Linux x86_64...${NC}"
 # Install only necessary dependencies (boto3/botocore already in Lambda runtime)
 # Only install google-genai and its required dependencies
@@ -102,6 +108,9 @@ if aws lambda get-function --function-name $FUNCTION_NAME --region $REGION 2>/de
         --function-name $FUNCTION_NAME \
         --zip-file fileb://lambda_function.zip \
         --region $REGION
+    
+    echo "Waiting for function update to complete..."
+    aws lambda wait function-updated --function-name $FUNCTION_NAME --region $REGION
     
     echo "Updating environment variables..."
     aws lambda update-function-configuration \

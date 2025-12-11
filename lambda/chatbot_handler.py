@@ -269,7 +269,7 @@ The user is speaking to you. Your response will be converted to speech.
         
         # Generate response with automatic function calling enabled
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-1.5-flash",
             contents=contents,
             config=config,
         )
@@ -440,7 +440,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'Access-Control-Allow-Methods': 'POST, OPTIONS'
             },
             'body': json.dumps({
-                'error': '[ERR_INTERNAL_500] An error occurred. Please try again.'
+                'error': 'The API key has been exhausted for today. Try again tomorrow! '
             })
         }
 
