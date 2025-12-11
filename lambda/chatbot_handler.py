@@ -7,10 +7,10 @@ import json
 import os
 from typing import Dict, Any, List
 from google import genai
-from calendar_integration import (
-    get_available_meeting_slots,
-    book_meeting
-)
+# from calendar_integration import (
+#     get_available_meeting_slots,
+#     book_meeting
+# )
 
 # Content file paths (will be included in Lambda package)
 CONTENT_DIR = "/var/task/content"
@@ -21,8 +21,8 @@ MAX_HISTORY_LENGTH = 6      # Max messages in history (3 Q&A pairs)
 MAX_MESSAGE_LENGTH = 2000   # Max characters per history message
 
 # Rate limiting - STRICT
-MAX_REQUESTS_PER_SESSION = 20   # Max 20 questions per session
-MAX_REQUESTS_PER_DAY = 100      # Max 100 total requests per day (all sessions)
+MAX_REQUESTS_PER_SESSION = 40   # Max 40 questions per session
+MAX_REQUESTS_PER_DAY = 200      # Max 200 total requests per day (all sessions)
 
 # Simple in-memory rate limiting
 rate_limit_cache = {}       # {session_id: [timestamps]}
@@ -169,8 +169,8 @@ TOOLS = {
     "get_education": get_education,
     "get_skills": get_skills,
     "get_extracurriculars": get_extracurriculars,
-    "get_available_meeting_slots": get_available_meeting_slots,
-    "book_meeting": book_meeting,
+    # "get_available_meeting_slots": get_available_meeting_slots,
+    # "book_meeting": book_meeting,
 }
 
 # ==========================================
@@ -229,8 +229,8 @@ The user is speaking to you. Your response will be converted to speech.
             get_education,
             get_skills,
             get_extracurriculars,
-            get_available_meeting_slots,
-            book_meeting
+            # get_available_meeting_slots,
+            # book_meeting
         ]
         
         # Debug: Print tool names
@@ -269,12 +269,47 @@ The user is speaking to you. Your response will be converted to speech.
         
         # Generate response with automatic function calling enabled
         response = client.models.generate_content(
-            model="gemini-1.5-flash",
+            model="gemini-2.5-flash",
             contents=contents,
             config=config,
         )
         
-        return response.text
+        text_response = response.text
+        
+        # If voice mode is active, generate audio for the response
+        if is_voice and text_response and not text_response.startswith("[ERR"):
+            try:
+                # Generate audio using Gemini 2.5 Flash TTS
+                audio_response = client.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=text_response,
+                    config=types.GenerateContentConfig(
+                        response_modalities=["AUDIO"],
+                        speech_config=types.SpeechConfig(
+                            voice_config=types.VoiceConfig(
+                                prebuilt_voice_config=types.PrebuiltVoiceConfig(
+                                    voice_name='Kore',
+                                )
+                            )
+                        ),
+                    )
+                )
+                
+                # Extract audio data
+                if audio_response.candidates and audio_response.candidates[0].content.parts:
+                    for part in audio_response.candidates[0].content.parts:
+                        if part.inline_data and part.inline_data.data:
+                            import base64
+                            # The data is already bytes, we need to base64 encode it for JSON transport
+                            # Note: inline_data.data is bytes
+                            audio_b64 = base64.b64encode(part.inline_data.data).decode('utf-8')
+                            return {"text": text_response, "audio": audio_b64}
+            except Exception as e:
+                print(f"TTS Generation Error: {str(e)}")
+                # Fallback to just text if TTS fails
+                pass
+                
+        return text_response
         
     except Exception as e:
         error_msg = str(e)
@@ -286,7 +321,7 @@ The user is speaking to you. Your response will be converted to speech.
         if "403" in error_msg or "PERMISSION_DENIED" in error_msg or "API key" in error_msg:
             return "[ERR_AUTH_403] Sorry, I'm having trouble connecting right now. Please try again in a moment."
         elif "429" in error_msg or "quota" in error_msg.lower() or "rate limit" in error_msg.lower():
-            return "[ERR_QUOTA_429] I'm getting too many requests. Please wait 10-15 seconds and try again."
+            return "[ERR_QUOTA_429] Daily free tier quota has been reached. Please try again tomorrow."
         elif "timeout" in error_msg.lower():
             return "[ERR_TIMEOUT_504] The request timed out. Please try your question again."
         elif "network" in error_msg.lower() or "connection" in error_msg.lower():
@@ -398,16 +433,35 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             }
         
         # Process with GenAI agent (with conversation history)
-        answer = process_with_genai(question, history, api_key, is_voice=is_voice)
+        result = process_with_genai(question, history, api_key, is_voice=is_voice)
+        
+        # Handle both simple text response and dictionary response (text + audio)
+        if isinstance(result, dict):
+            answer = result.get('text', '')
+            audio_data = result.get('audio', None)
+        else:
+            answer = result
+            audio_data = None
         
         # Log response to CloudWatch (truncated for cost control)
         print(json.dumps({
             'event_type': 'bot_response',
             'session_id': session_id,
             'answer_length': len(answer),
+            'has_audio': audio_data is not None,
             'question_preview': question[:100],  # Only first 100 chars
             'timestamp': time.time()
         }))
+        
+        response_body = {
+            'answer': answer,
+            'question': question,
+            'model': 'gemini-2.5-flash',
+            'agent': 'google-genai-sdk'
+        }
+        
+        if audio_data:
+            response_body['audio'] = audio_data
         
         # Return response
         return {
@@ -418,12 +472,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS'
             },
-            'body': json.dumps({
-                'answer': answer,
-                'question': question,
-                'model': 'gemini-2.5-flash',
-                'agent': 'google-genai-sdk'
-            })
+            'body': json.dumps(response_body)
         }
         
     except Exception as e:

@@ -255,9 +255,23 @@ class VoiceCall {
         
         if (this.isOpen) {
             voiceCallWindow.classList.add('active');
+            // Unlock audio immediately on user interaction
+            this.unlockAudio();
             this.playIcebreaker();
         } else {
             voiceCallWindow.classList.remove('active');
+            this.stopSpeaking();
+            this.stopListening();
+        }
+    }
+    
+    unlockAudio() {
+        // Play a silent sound to unlock audio context on mobile/browsers
+        if (this.synthesis) {
+            const utterance = new SpeechSynthesisUtterance('');
+            utterance.volume = 0;
+            this.synthesis.speak(utterance);
+            this.synthesis.cancel();
         }
     }
     
@@ -276,7 +290,7 @@ class VoiceCall {
             
             console.log('Playing icebreaker:', randomIcebreaker);
             
-            // Longer delay to ensure window is open and voices are loaded
+            // Reduced delay to prevent browser autoplay blocking
             setTimeout(() => {
                 this.addTranscriptMessage('assistant', randomIcebreaker);
                 
@@ -288,11 +302,11 @@ class VoiceCall {
                         this.speak(randomIcebreaker);
                     } else {
                         console.log('Waiting for voices...');
-                        setTimeout(speakWhenReady, 200);
+                        setTimeout(speakWhenReady, 100);
                     }
                 };
                 speakWhenReady();
-            }, 1000);
+            }, 300);
         }
     }
 
@@ -443,8 +457,8 @@ class VoiceCall {
                 },
                 body: JSON.stringify({
                     question: transcript,
-                    session_id: this.sessionId,
-                    conversation_history: this.conversationHistory,
+                    sessionId: this.sessionId,
+                    history: this.conversationHistory,
                     source: 'voice'
                 })
             });
@@ -467,7 +481,12 @@ class VoiceCall {
                 }
                 
                 this.addTranscriptMessage('assistant', data.answer);
-                this.speak(data.answer);
+                
+                if (data.audio) {
+                    this.playAudio(data.audio);
+                } else {
+                    this.speak(data.answer);
+                }
             } else {
                 throw new Error(data.error || 'No response');
             }
@@ -476,6 +495,38 @@ class VoiceCall {
             const errorMsg = 'Sorry, I encountered an issue. Please try again.';
             this.addTranscriptMessage('assistant', errorMsg);
             this.speak(errorMsg);
+        }
+    }
+    
+    playAudio(base64Audio) {
+        try {
+            const audioStr = "data:audio/wav;base64," + base64Audio;
+            const audio = new Audio(audioStr);
+            
+            this.stopSpeaking();
+            this.isSpeaking = true;
+            this.updateStatus('Speaking...');
+            
+            audio.onended = () => {
+                console.log('Audio playback ended');
+                this.isSpeaking = false;
+                this.updateStatus('Muted - Click mic to talk');
+            };
+            
+            audio.onerror = (e) => {
+                console.error('Audio playback error:', e);
+                this.isSpeaking = false;
+                this.updateStatus('Error playing audio');
+            };
+            
+            audio.play().catch(e => {
+                console.error('Audio play failed:', e);
+                this.isSpeaking = false;
+            });
+            
+        } catch (e) {
+            console.error('Error setting up audio:', e);
+            this.isSpeaking = false;
         }
     }
     

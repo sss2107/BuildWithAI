@@ -28,7 +28,7 @@ fi
 echo -e "${BLUE}Step 1: Installing dependencies for Linux x86_64...${NC}"
 # Install only necessary dependencies (boto3/botocore already in Lambda runtime)
 # Only install google-genai and its required dependencies
-pip3 install google-genai pydantic pytz -t package/ --platform manylinux2014_x86_64 --only-binary=:all: --upgrade
+pip3 install google-genai pydantic pytz -t package/ --platform manylinux2014_x86_64 --python-version 3.11 --only-binary=:all: --upgrade
 
 # Remove AWS SDK packages (already in Lambda runtime) to reduce size
 rm -rf package/boto3* package/botocore* package/s3transfer* package/jmespath*
@@ -115,7 +115,7 @@ if aws lambda get-function --function-name $FUNCTION_NAME --region $REGION 2>/de
     echo "Updating environment variables..."
     aws lambda update-function-configuration \
         --function-name $FUNCTION_NAME \
-        --environment "Variables={LOG_LEVEL=INFO,GEMINI_API_KEY=AIzaSyAl_G4d74NhGbkRplXTYAqtSxIEN4Qfwkk}" \
+        --environment "Variables={LOG_LEVEL=INFO,GEMINI_API_KEY=$GEMINI_API_KEY}" \
         --region $REGION
 else
     echo "Creating new function..."
@@ -127,7 +127,7 @@ else
         --zip-file fileb://lambda_function.zip \
         --timeout 30 \
         --memory-size 512 \
-        --environment "Variables={LOG_LEVEL=INFO,GEMINI_API_KEY=AIzaSyAl_G4d74NhGbkRplXTYAqtSxIEN4Qfwkk}" \
+        --environment "Variables={LOG_LEVEL=INFO,GEMINI_API_KEY=$GEMINI_API_KEY}" \
         --region $REGION
 fi
 
