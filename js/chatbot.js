@@ -188,8 +188,10 @@ class Chatbot {
         
         if (this.isOpen) {
             chatbotWindow.classList.add('active');
+            document.body.classList.add('chatbot-open');
         } else {
             chatbotWindow.classList.remove('active');
+            document.body.classList.remove('chatbot-open');
         }
     }
 
@@ -197,6 +199,7 @@ class Chatbot {
         const chatbotWindow = document.getElementById('chatbotWindow');
         
         chatbotWindow.classList.remove('active');
+        document.body.classList.remove('chatbot-open');
         this.isOpen = false;
     }
     

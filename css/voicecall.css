@@ -331,10 +331,15 @@
 @media (max-width: 768px) {
     .voicecall-button {
         bottom: 100px;
-        right: 20px;
+        left: 20px;
+        right: auto;
         width: 55px;
         height: 55px;
         font-size: 22px;
+    }
+
+    body.chatbot-open .voicecall-button {
+        display: none !important;
     }
 
     .voicecall-window {
