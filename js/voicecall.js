@@ -586,13 +586,17 @@ class VoiceCall {
         const voices = this.synthesis.getVoices();
         console.log('Available voices:', voices.length);
         
-        // Get language prefix (e.g., 'en' from 'en-US')
+        // Try to find Liam first (high-quality American male on macOS/iOS/Chrome)
+        // then fall back to other American English male voices
         const langPrefix = this.currentLanguage.split('-')[0];
         
-        // Try to find best voice for current language
-        const selectedVoice = voices.find(voice => 
-            voice.lang === this.currentLanguage && (voice.name.includes('Google') || voice.name.includes('Microsoft'))
-        ) || voices.find(voice => voice.lang === this.currentLanguage)
+        const selectedVoice = voices.find(v => v.name === 'Liam')
+          || voices.find(v => v.name.includes('Liam'))
+          || voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('male'))
+          || voices.find(voice => 
+              voice.lang === this.currentLanguage && (voice.name.includes('Google') || voice.name.includes('Microsoft'))
+            )
+          || voices.find(voice => voice.lang === this.currentLanguage)
           || voices.find(voice => voice.lang.startsWith(langPrefix))
           || voices[0];
         
