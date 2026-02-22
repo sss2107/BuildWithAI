@@ -500,9 +500,13 @@ class VoiceCall {
                 this.addTranscriptMessage('assistant', data.answer);
                 
                 this._lastSpokenText = data.answer;
-                if (data.audio) {
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                if (data.audio && !isMobile) {
+                    // Desktop: use Kokoro TTS audio from Lambda
                     this.playAudio(data.audio, data.audio_format);
                 } else {
+                    // Mobile: use browser TTS (Liam on iOS, Guy/Mark on Android)
+                    // Sounds better than Kokoro default female voice on mobile
                     this.speak(data.answer);
                 }
             } else {
