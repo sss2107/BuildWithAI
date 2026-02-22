@@ -586,19 +586,29 @@ class VoiceCall {
         const voices = this.synthesis.getVoices();
         console.log('Available voices:', voices.length);
         
-        // Try to find Liam first (high-quality American male on macOS/iOS/Chrome)
-        // then fall back to other American English male voices
+        // Voice priority: best available American male across all platforms
+        // macOS/iOS: Liam (best), Aaron, Fred
+        // Windows:   Microsoft Guy, Microsoft Mark, Microsoft David
+        // Android/Chrome: Google US English
         const langPrefix = this.currentLanguage.split('-')[0];
-        
-        const selectedVoice = voices.find(v => v.name === 'Liam')
-          || voices.find(v => v.name.includes('Liam'))
-          || voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('male'))
-          || voices.find(voice => 
-              voice.lang === this.currentLanguage && (voice.name.includes('Google') || voice.name.includes('Microsoft'))
-            )
-          || voices.find(voice => voice.lang === this.currentLanguage)
-          || voices.find(voice => voice.lang.startsWith(langPrefix))
-          || voices[0];
+
+        const selectedVoice =
+          // macOS/iOS premium male
+          voices.find(v => v.name === 'Liam') ||
+          voices.find(v => v.name === 'Aaron') ||
+          voices.find(v => v.name === 'Fred') ||
+          // Windows male
+          voices.find(v => v.name === 'Microsoft Guy Online (Natural) - English (United States)') ||
+          voices.find(v => v.name.includes('Microsoft Guy')) ||
+          voices.find(v => v.name.includes('Microsoft Mark')) ||
+          voices.find(v => v.name.includes('Microsoft David')) ||
+          // Android / Chrome
+          voices.find(v => v.name === 'Google US English') ||
+          // Generic en-US male fallback
+          voices.find(v => v.lang === 'en-US' && v.name.toLowerCase().includes('male')) ||
+          voices.find(v => v.lang === 'en-US') ||
+          voices.find(v => v.lang.startsWith(langPrefix)) ||
+          voices[0];
         
         if (selectedVoice) {
             utterance.voice = selectedVoice;
@@ -606,8 +616,7 @@ class VoiceCall {
             console.log('🔊 Using voice:', selectedVoice.name, '| Lang:', selectedVoice.lang);
         } else {
             console.log('⚠️ No suitable voice found for', this.currentLanguage, ', using default');
-        }
-        
+        }        
         utterance.onstart = () => {
             console.log('✅ Speech started successfully');
             this.isSpeaking = true;
