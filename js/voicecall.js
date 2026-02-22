@@ -191,7 +191,7 @@ class VoiceCall {
                         <div class="voicecall-info">
                             <h3>Voice Assistant</h3>
                             <p id="voiceStatus">Muted - Click mic to talk</p>
-                            <span class="voicecall-powered-by">Powered by Qwen2.5-Omni</span>
+                            <span class="voicecall-powered-by">Powered by Kokoro-82M</span>
                         </div>
                     </div>
                     <button class="voicecall-close" id="voiceCallClose" aria-label="Close voice call">
