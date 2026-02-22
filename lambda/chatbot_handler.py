@@ -444,6 +444,7 @@ The user is speaking to you. Your response will be converted to speech.
                     audio_bytes = hf_client.text_to_speech(
                         text_response,
                         model="hexgrad/Kokoro-82M",
+                        voice="am_adam",
                     )
                     # Detect audio format from magic bytes
                     if audio_bytes[:4] == b'fLaC':
