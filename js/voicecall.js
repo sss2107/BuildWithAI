@@ -118,13 +118,20 @@ class VoiceCall {
         this.recognition.onerror = (event) => {
             console.error('🎤 Recognition error:', event.error);
             this.recognitionActive = false;
+            
+            let errorMsg = 'Error: ' + event.error;
+            
             if (event.error === 'not-allowed') {
-                this.updateStatus('Microphone access denied. Please allow microphone.');
+                errorMsg = 'Microphone access denied. Please check your browser settings.';
+                // Show explicit alert for iOS users who might miss the status text
+                alert('Microphone access was denied. Please go to Settings > Chrome > Allow Microphone Access.');
             } else if (event.error === 'no-speech') {
-                this.updateStatus('No speech detected. Click mic to try again.');
-            } else {
-                this.updateStatus('Error: ' + event.error + '. Click mic to try again.');
+                errorMsg = 'No speech detected. Click mic to try again.';
+            } else if (event.error === 'service-not-allowed') {
+                errorMsg = 'Voice recognition not allowed by browser.';
             }
+            
+            this.updateStatus(errorMsg);
             this.stopListening();
         };
         
@@ -184,6 +191,7 @@ class VoiceCall {
                         <div class="voicecall-info">
                             <h3>Voice Assistant</h3>
                             <p id="voiceStatus">Muted - Click mic to talk</p>
+                            <span class="voicecall-powered-by">Powered by Qwen2.5-Omni</span>
                         </div>
                     </div>
                     <button class="voicecall-close" id="voiceCallClose" aria-label="Close voice call">
@@ -330,7 +338,16 @@ class VoiceCall {
     
     playUnmuteSound() {
         // Play a short beep sound when unmuting (like Teams)
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+
+        const audioContext = new AudioContext();
+        
+        // iOS fix: Resume context if suspended
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
         
@@ -482,8 +499,9 @@ class VoiceCall {
                 
                 this.addTranscriptMessage('assistant', data.answer);
                 
+                this._lastSpokenText = data.answer;
                 if (data.audio) {
-                    this.playAudio(data.audio);
+                    this.playAudio(data.audio, data.audio_format);
                 } else {
                     this.speak(data.answer);
                 }
@@ -498,30 +516,39 @@ class VoiceCall {
         }
     }
     
-    playAudio(base64Audio) {
+    playAudio(base64Audio, audioFormat) {
         try {
-            const audioStr = "data:audio/wav;base64," + base64Audio;
+            const mime = audioFormat ? `audio/${audioFormat}` : 'audio/wav';
+            const audioStr = `data:${mime};base64,` + base64Audio;
             const audio = new Audio(audioStr);
             
             this.stopSpeaking();
+            this.currentAudio = audio;
             this.isSpeaking = true;
             this.updateStatus('Speaking...');
             
             audio.onended = () => {
                 console.log('Audio playback ended');
                 this.isSpeaking = false;
+                this.currentAudio = null;
                 this.updateStatus('Muted - Click mic to talk');
             };
             
             audio.onerror = (e) => {
                 console.error('Audio playback error:', e);
                 this.isSpeaking = false;
-                this.updateStatus('Error playing audio');
+                this.currentAudio = null;
+                // Fallback to browser speech synthesis
+                console.log('Falling back to browser TTS');
+                this.speak(this._lastSpokenText || '');
             };
             
             audio.play().catch(e => {
                 console.error('Audio play failed:', e);
                 this.isSpeaking = false;
+                this.currentAudio = null;
+                // Fallback to browser speech synthesis
+                this.speak(this._lastSpokenText || '');
             });
             
         } catch (e) {
@@ -627,6 +654,11 @@ class VoiceCall {
     stopSpeaking() {
         if (this.synthesis.speaking) {
             this.synthesis.cancel();
+        }
+        if (this.currentAudio) {
+            this.currentAudio.pause();
+            this.currentAudio.currentTime = 0;
+            this.currentAudio = null;
         }
         this.isSpeaking = false;
     }

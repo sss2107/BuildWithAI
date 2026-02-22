@@ -27,6 +27,18 @@ Temporary Items
 .vscode/
 *.code-workspace
 
+# Secrets & credentials (NEVER commit these)
+.env
+*.env
+.env.*
+secrets.json
+*.key
+samconfig.toml
+
+# Lambda build artifacts
+lambda/lambda_function.zip
+lambda/package/
+
 # Python
 __pycache__/
 *.py[cod]

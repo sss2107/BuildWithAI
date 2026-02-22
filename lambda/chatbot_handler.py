@@ -5,6 +5,9 @@ Uses Google GenAI SDK with Gemini and tool-based routing
 
 import json
 import os
+import math
+import base64
+import requests
 from typing import Dict, Any, List
 from google import genai
 # from calendar_integration import (
@@ -21,12 +24,134 @@ MAX_HISTORY_LENGTH = 6      # Max messages in history (3 Q&A pairs)
 MAX_MESSAGE_LENGTH = 2000   # Max characters per history message
 
 # Rate limiting - STRICT
-MAX_REQUESTS_PER_SESSION = 40   # Max 40 questions per session
+MAX_REQUESTS_PER_SESSION = 30   # Max 40 questions per session
 MAX_REQUESTS_PER_DAY = 200      # Max 200 total requests per day (all sessions)
 
 # Simple in-memory rate limiting
 rate_limit_cache = {}       # {session_id: [timestamps]}
 daily_request_count = []    # [timestamps] for all requests today
+
+# ==========================================
+# SEMANTIC CACHING (Persistent via DynamoDB)
+# ==========================================
+import boto3
+import hashlib
+from decimal import Decimal
+
+# Initialize DynamoDB
+dynamodb = boto3.resource('dynamodb')
+CACHE_TABLE_NAME = "SahilResumeChatbotCache"
+cache_table = dynamodb.Table(CACHE_TABLE_NAME)
+
+# Global In-Memory Cache (Populated from DynamoDB on Cold Start)
+SEMANTIC_CACHE: List[Dict[str, Any]] = []
+
+def load_global_cache():
+    """Load all cached items from DynamoDB to local memory on cold start"""
+    global SEMANTIC_CACHE
+    try:
+        print("Loading semantic cache from DynamoDB...")
+        # Scan the table (efficient for small datasets < 1000 items)
+        response = cache_table.scan()
+        items = response.get('Items', [])
+        
+        # Handle pagination if needed
+        while 'LastEvaluatedKey' in response:
+            response = cache_table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+            items.extend(response.get('Items', []))
+            
+        # Convert DynamoDB items to local format
+        loaded_cache = []
+        for item in items:
+            # DynamoDB Decimals -> Floats
+            embedding = [float(x) for x in item.get('Embedding', [])]
+            if embedding:
+                loaded_cache.append({
+                    'embedding': embedding,
+                    'response': item.get('Response'),
+                    'question': item.get('Question')
+                })
+        
+        SEMANTIC_CACHE = loaded_cache
+        print(f"✅ Loaded {len(SEMANTIC_CACHE)} items into global semantic cache.")
+    except Exception as e:
+        print(f"⚠️ Error loading global cache (might be first run): {e}")
+        SEMANTIC_CACHE = []
+
+# Load cache immediately when Lambda container starts
+load_global_cache()
+
+def save_to_global_cache(question: str, embedding: List[float], response: str):
+    """Save new item to DynamoDB and local cache"""
+    try:
+        # 1. Update local cache immediately
+        SEMANTIC_CACHE.append({
+            'embedding': embedding,
+            'response': response,
+            'question': question
+        })
+        
+        # 2. Persist to DynamoDB
+        # Convert floats to Decimal for DynamoDB
+        embedding_decimal = [Decimal(str(x)) for x in embedding]
+        q_hash = hashlib.sha256(question.encode()).hexdigest()
+        
+        cache_table.put_item(Item={
+            'QuestionHash': q_hash,
+            'Question': question,
+            'Response': response,
+            'Embedding': embedding_decimal
+        })
+        print(f"💾 Saved to global cache: '{question[:30]}...'")
+    except Exception as e:
+        print(f"⚠️ Error saving to global cache: {e}")
+
+def cosine_similarity(v1: List[float], v2: List[float]) -> float:
+    """Calculate cosine similarity between two vectors"""
+    if not v1 or not v2: return 0.0
+    dot_product = sum(a * b for a, b in zip(v1, v2))
+    magnitude1 = math.sqrt(sum(a * a for a in v1))
+    magnitude2 = math.sqrt(sum(b * b for b in v2))
+    if magnitude1 == 0 or magnitude2 == 0:
+        return 0.0
+    return dot_product / (magnitude1 * magnitude2)
+
+def get_embedding(text: str, client: genai.Client) -> List[float]:
+    """Generate embedding for text using Gemini REST API v1 directly (SDK uses v1beta which lacks this model)"""
+    try:
+        api_key = os.environ.get("GEMINI_API_KEY", "")
+        resp = requests.post(
+            "https://generativelanguage.googleapis.com/v1/models/text-embedding-004:embedContent",
+            headers={"x-goog-api-key": api_key, "Content-Type": "application/json"},
+            json={"model": "models/text-embedding-004", "content": {"parts": [{"text": text}]}},
+            timeout=10,
+        )
+        resp.raise_for_status()
+        return resp.json().get("embedding", {}).get("values", [])
+    except Exception as e:
+        print(f"⚠️ Embedding generation failed: {e}")
+        return []
+
+def find_cached_response(query_embedding: List[float], threshold: float = 0.90) -> str | None:
+    """Find a semantically similar response in the cache"""
+    if not query_embedding: return None
+    
+    best_score = -1.0
+    best_response = None
+    best_question = None
+    
+    for entry in SEMANTIC_CACHE:
+        score = cosine_similarity(query_embedding, entry['embedding'])
+        if score > best_score:
+            best_score = score
+            best_response = entry['response']
+            best_question = entry['question']
+            
+    if best_score >= threshold:
+        print(f"⚡ Semantic Cache HIT! Score: {best_score:.4f} (Matched: '{best_question}')")
+        return best_response
+    
+    return None
 
 def check_rate_limit(session_id: str) -> tuple[bool, str]:
     """
@@ -44,7 +169,7 @@ def check_rate_limit(session_id: str) -> tuple[bool, str]:
     ]
     
     if len(daily_request_count) >= MAX_REQUESTS_PER_DAY:
-        return False, "[ERR_LIMIT_DAILY] Daily usage limit reached. Please try again tomorrow."
+        return False, "[ERR_INTERNAL_LIMIT_DAILY] Daily usage limit reached. Please try again tomorrow."
     
     # Check per-session limit (20 requests per session)
     if session_id in rate_limit_cache:
@@ -187,9 +312,23 @@ def process_with_genai(question: str, history: List[Dict], api_key: str, is_voic
         
         # Initialize client
         client = genai.Client(api_key=api_key)
+
+        # ---------------------------------------------------------
+        # 1. SEMANTIC CACHE CHECK
+        # ---------------------------------------------------------
+        # Only check cache if history is short (context-free questions)
+        # or if we want to be aggressive with caching.
+        # For now, we check for all queries to maximize free tier usage.
+        query_embedding = get_embedding(question, client)
+        cached_response = find_cached_response(query_embedding)
         
-        # System instruction
-        system_instruction = """You are Sahil Sharma's AI assistant. Answer questions about Sahil professionally and conversationally.
+        if cached_response:
+            text_response = cached_response
+            # If voice mode, we still need to generate audio below
+            # but we skipped the expensive LLM generation step!
+        else:
+            # System instruction
+            system_instruction = """You are Sahil Sharma's AI assistant. Answer questions about Sahil professionally and conversationally.
 
 When answering:
 1. Use the provided tools to get accurate information
@@ -201,17 +340,16 @@ When answering:
 7. Help users book meetings with Sahil using the calendar tools
 
 For meeting requests - IMPORTANT:
-- First, ALWAYS check availability using get_available_meeting_slots()
+- First, ALWAYS ask for persons email and check if it looks like valid email
 - Present the numbered list of slots to the user exactly as returned
 - MUST collect: full name AND email address before booking
 - Ask for BOTH name and email explicitly: "To book a meeting, I need your full name and email address"
 - Verify email looks valid (has @ and domain)
-- Confirm all details before calling book_meeting()
 - Never book without a valid email and real name
 - If user provides fake-looking info ("test", "admin"), politely ask for real details"""
 
-        if is_voice:
-            system_instruction += """
+            if is_voice:
+                system_instruction += """
 
 VOICE MODE ACTIVATED:
 The user is speaking to you. Your response will be converted to speech.
@@ -219,98 +357,112 @@ The user is speaking to you. Your response will be converted to speech.
 - Do NOT use markdown formatting like bold (**text**) or lists as they don't sound good.
 - Do NOT say "I cannot speak" or "I am a text model". You ARE speaking.
 - Be friendly and engaging."""
-        
-        # Define tools as function declarations for Gemini
-        # The SDK will automatically convert Python functions to the right format
-        tools = [
-            get_introduction,
-            get_ai_projects,
-            get_experience,
-            get_education,
-            get_skills,
-            get_extracurriculars,
-            # get_available_meeting_slots,
-            # book_meeting
-        ]
-        
-        # Debug: Print tool names
-        print(f"🔧 Tools configured: {[f.__name__ for f in tools]}")
-        
-        # Configure tool config to enable automatic function calling
-        tool_config = types.ToolConfig(
-            function_calling_config=types.FunctionCallingConfig(
-                mode=types.FunctionCallingConfigMode.AUTO
-            )
-        )
-        
-        # Configure with automatic function calling
-        config = types.GenerateContentConfig(
-            tools=tools,
-            tool_config=tool_config,
-            system_instruction=system_instruction,
-        )
-        
-        # Build conversation contents with history
-        contents = []
-        
-        # Add conversation history (last 3 Q&A pairs = 6 messages)
-        for msg in history:
-            role = 'user' if msg.get('role') == 'user' else 'model'
-            contents.append(types.Content(
-                role=role,
-                parts=[types.Part(text=msg.get('content', ''))]
-            ))
-        
-        # Add current question
-        contents.append(types.Content(
-            role='user',
-            parts=[types.Part(text=question)]
-        ))
-        
-        # Generate response with automatic function calling enabled
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=contents,
-            config=config,
-        )
-        
-        text_response = response.text
-        
-        # If voice mode is active, generate audio for the response
-        if is_voice and text_response and not text_response.startswith("[ERR"):
-            try:
-                # Generate audio using Gemini 2.5 Flash TTS
-                audio_response = client.models.generate_content(
-                    model="gemini-2.5-flash",
-                    contents=text_response,
-                    config=types.GenerateContentConfig(
-                        response_modalities=["AUDIO"],
-                        speech_config=types.SpeechConfig(
-                            voice_config=types.VoiceConfig(
-                                prebuilt_voice_config=types.PrebuiltVoiceConfig(
-                                    voice_name='Kore',
-                                )
-                            )
-                        ),
-                    )
+            
+            # Define tools as function declarations for Gemini
+            # The SDK will automatically convert Python functions to the right format
+            tools = [
+                get_introduction,
+                get_ai_projects,
+                get_experience,
+                get_education,
+                get_skills,
+                get_extracurriculars,
+                # get_available_meeting_slots,
+                # book_meeting
+            ]
+            
+            # Debug: Print tool names
+            print(f"🔧 Tools configured: {[f.__name__ for f in tools]}")
+            
+            # Configure tool config to enable automatic function calling
+            tool_config = types.ToolConfig(
+                function_calling_config=types.FunctionCallingConfig(
+                    mode=types.FunctionCallingConfigMode.AUTO
                 )
-                
-                # Extract audio data
-                if audio_response.candidates and audio_response.candidates[0].content.parts:
-                    for part in audio_response.candidates[0].content.parts:
-                        if part.inline_data and part.inline_data.data:
-                            import base64
-                            # The data is already bytes, we need to base64 encode it for JSON transport
-                            # Note: inline_data.data is bytes
-                            audio_b64 = base64.b64encode(part.inline_data.data).decode('utf-8')
-                            return {"text": text_response, "audio": audio_b64}
-            except Exception as e:
-                print(f"TTS Generation Error: {str(e)}")
-                # Fallback to just text if TTS fails
-                pass
-                
-        return text_response
-        
+            )
+            
+            # Configure with automatic function calling
+            config = types.GenerateContentConfig(
+                tools=tools,
+                tool_config=tool_config,
+                system_instruction=system_instruction,
+            )
+            
+            # Build conversation contents with history
+            contents = []
+            
+            # Add conversation history (last 3 Q&A pairs = 6 messages)
+            for msg in history:
+                role = 'user' if msg.get('role') == 'user' else 'model'
+                contents.append(types.Content(
+                    role=role,
+                    parts=[types.Part(text=msg.get('content', ''))]
+                ))
+            
+            # Add current question
+            contents.append(types.Content(
+                role='user',
+                parts=[types.Part(text=question)]
+            ))
+            
+            # Select model based on mode to optimize quota usage
+            # Use gemini-2.5-flash for both text and voice for best quality
+            text_model = "gemini-2.5-flash"
+            print(f"🤖 Using model: {text_model}")
+
+            # Generate response with automatic function calling enabled
+            response = client.models.generate_content(
+                model=text_model,
+                contents=contents,
+                config=config,
+            )
+            
+            text_response = response.text
+
+            # ---------------------------------------------------------
+            # 2. UPDATE SEMANTIC CACHE
+            # ---------------------------------------------------------
+            # Store the new response if it's valid and we have an embedding
+            if query_embedding and text_response and not text_response.startswith("[ERR"):
+                # Use the new persistent save function
+                save_to_global_cache(question, query_embedding, text_response)
+            
+            # If voice mode is active, generate audio for the response
+            if is_voice and text_response and not text_response.startswith("[ERR"):
+                try:
+                    # Generate audio using Kokoro-82M via HuggingFace SDK (Replicate provider)
+                    # (Replaced Gemini 2.5 Flash TTS - see gemini_tts_backup.py)
+                    from huggingface_hub import InferenceClient as HFInferenceClient
+                    hf_token = os.environ.get("HF_TOKEN", "")
+                    if not hf_token:
+                        raise ValueError("HF_TOKEN environment variable not set")
+
+                    hf_client = HFInferenceClient(
+                        provider="replicate",
+                        api_key=hf_token,
+                    )
+                    audio_bytes = hf_client.text_to_speech(
+                        text_response,
+                        model="hexgrad/Kokoro-82M",
+                    )
+                    # Detect audio format from magic bytes
+                    if audio_bytes[:4] == b'fLaC':
+                        audio_fmt = "flac"
+                    elif audio_bytes[:4] == b'OggS':
+                        audio_fmt = "ogg"
+                    elif audio_bytes[:3] in (b'ID3', b'\xff\xfb', b'\xff\xfa', b'\xff\xf3'):
+                        audio_fmt = "mpeg"
+                    else:
+                        audio_fmt = "wav"
+                    audio_b64 = base64.b64encode(audio_bytes).decode("utf-8")
+                    return {"text": text_response, "audio": audio_b64, "audio_format": audio_fmt}
+                except Exception as e:
+                    print(f"Kokoro TTS Error: {str(e)}")
+                    # Fallback to just text - frontend will use browser speech synthesis
+                    pass
+                    
+            return text_response
+            
     except Exception as e:
         error_msg = str(e)
         print(f"GenAI Error: {error_msg}")
@@ -327,7 +479,8 @@ The user is speaking to you. Your response will be converted to speech.
         elif "network" in error_msg.lower() or "connection" in error_msg.lower():
             return "[ERR_NETWORK_502] Network connection issue. Please check your connection and retry."
         else:
-            return "[ERR_GENERAL_500] Something went wrong on my end. Please try again."
+            # Include the actual error message for debugging
+            return f"[ERR_GENERAL_500] Something went wrong on my end: {error_msg}"
 
 # ==========================================
 # LAMBDA HANDLER
@@ -439,9 +592,11 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if isinstance(result, dict):
             answer = result.get('text', '')
             audio_data = result.get('audio', None)
+            audio_format = result.get('audio_format', 'wav')
         else:
             answer = result
             audio_data = None
+            audio_format = None
         
         # Log response to CloudWatch (truncated for cost control)
         print(json.dumps({
@@ -462,6 +617,7 @@ def lambda_handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         if audio_data:
             response_body['audio'] = audio_data
+            response_body['audio_format'] = audio_format
         
         # Return response
         return {

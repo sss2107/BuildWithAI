@@ -28,7 +28,7 @@ fi
 echo -e "${BLUE}Step 1: Installing dependencies for Linux x86_64...${NC}"
 # Install only necessary dependencies (boto3/botocore already in Lambda runtime)
 # Only install google-genai and its required dependencies
-pip3 install google-genai pydantic pytz -t package/ --platform manylinux2014_x86_64 --python-version 3.11 --only-binary=:all: --upgrade
+pip3 install google-genai pytz -t package/ --platform manylinux2014_x86_64 --python-version 3.11 --only-binary=:all: --upgrade
 
 # Remove AWS SDK packages (already in Lambda runtime) to reduce size
 rm -rf package/boto3* package/botocore* package/s3transfer* package/jmespath*
@@ -94,6 +94,22 @@ EOF
     
     echo "Waiting for role to be available..."
     sleep 10
+fi
+
+echo -e "${BLUE}Step 4.5: Creating DynamoDB Cache Table (if not exists)...${NC}"
+TABLE_NAME="SahilResumeChatbotCache"
+if aws dynamodb describe-table --table-name $TABLE_NAME 2>/dev/null; then
+    echo "Table $TABLE_NAME already exists"
+else
+    echo "Creating table $TABLE_NAME..."
+    aws dynamodb create-table \
+        --table-name $TABLE_NAME \
+        --attribute-definitions AttributeName=QuestionHash,AttributeType=S \
+        --key-schema AttributeName=QuestionHash,KeyType=HASH \
+        --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+    
+    echo "Waiting for table to be active..."
+    aws dynamodb wait table-exists --table-name $TABLE_NAME
 fi
 
 # Get role ARN
