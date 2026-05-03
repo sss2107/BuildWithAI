@@ -1,864 +1,107 @@
-# 🚀 BuildWithAI - Personal Portfolio Website
+# BuildWithAI
 
-A modern, professional portfolio website showcasing AI and Data Science expertise with a stunning dark reddish theme. Built with pure HTML, CSS, and JavaScript - no frameworks needed!
+A personal AI portfolio website for Sahil Sharma. The site presents applied AI projects, professional experience, education, skills, talks, and extracurricular work through a static frontend, with optional serverless chatbot components for resume and portfolio Q&A.
 
-[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://yourusername.github.io/BuildWithAI)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![GitHub Pages](https://img.shields.io/badge/deployed-GitHub%20Pages-blue)](https://pages.github.com/)
+## Highlights
 
-## ✨ Features
+- Responsive single-page portfolio
+- AI and data science project showcase
+- Editable content files for profile sections
+- Vanilla JavaScript navigation and interactions
+- Chatbot and voice-call frontend modules
+- AWS Lambda backend examples for RAG-style portfolio Q&A
+- GitHub Pages friendly static deployment
 
-- 🎨 **Modern Dark Reddish Theme**: Eye-catching color scheme with crimson accents
-- 📱 **Fully Responsive**: Works seamlessly on desktop, tablet, and mobile devices
-- ⚡ **Smooth Animations**: Scroll-based animations and smooth transitions
-- 🧭 **Interactive Navigation**: Fixed header with active section highlighting
-- 📝 **Dynamic Content Loading**: Content loaded from `.txt` files for easy updates without touching code
-- 📊 **Google Analytics Integration**: Track visitors, page views, and user engagement
-- 🎯 **Six Main Sections**:
-  - 👋 Introduction with professional photo
-  - 🤖 AI Projects and Applied Research (10 production projects)
-  - 🎓 Education (NUS Master's & Bachelor's)
-  - 💼 Experience (7 professional positions)
-  - 🛠️ Skills (40+ technologies categorized by expertise)
-  - 🏆 Extra Curriculars (Awards, conference talks, leadership)
+## Tech Stack
 
-## 🎬 Live Demo
+Frontend:
 
-**[View Live Website →](https://yourusername.github.io/BuildWithAI)**
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Font Awesome
+- Google Fonts
 
-## 📸 Screenshots
+Backend / optional chatbot pieces:
 
-<div align="center">
-  <img src="assets/images/screenshot-hero.png" alt="Hero Section" width="800px">
-  <p><i>Hero section with dark reddish theme</i></p>
-</div>
+- AWS Lambda
+- AWS SAM
+- API Gateway
+- Python
+- Resume data preparation scripts
 
-## 📁 Project Structure
+## Repository Structure
 
-```
-BuildWithAI/
-├── index.html              # Main HTML file
-├── css/
-│   └── style.css          # Dark reddish theme styles (~1500 lines)
-├── js/
-│   ├── main.js            # Interactive features & animations
-│   └── content-loader.js  # Dynamic content loading system
-├── content/               # Editable content files
-│   ├── Introduction.txt
-│   ├── AI_Projects.txt
-│   ├── Education.txt
-│   ├── Experience.txt
-│   ├── Skills.txt
-│   └── ExtraCurriculars.txt
-├── assets/
-│   └── images/
-│       └── profile.jpg    # Profile photo
-├── docs/                  # Documentation
-│   ├── CONTENT_EDITING_GUIDE.txt
-│   ├── CONTENT_SYSTEM_SUMMARY.txt
-│   └── QUICK_START.txt
-├── requirements.txt       # Python requirements (empty for static site)
-└── PROJECT_REQUIREMENTS.txt  # Original project requirements
+```text
+.
+├── index.html              # Main portfolio page
+├── css/                    # Site, chatbot, and voice-call styles
+├── js/                     # Main UI, content loader, chatbot, voice-call logic
+├── content/                # Editable portfolio content
+├── assets/images/          # Profile and site images
+├── lambda/                 # Optional serverless chatbot backend
+├── GITHUB_PAGES_DEPLOYMENT.md
+├── CONTENT_EDITING_GUIDE.txt
+└── QUICK_START.txt
 ```
 
-## 🎨 Design Specifications
+## Run Locally
 
-### Color Palette
-- Primary Dark: #1a0000
-- Secondary Dark: #2d0a0a
-- Accent Red: #dc143c
-- Accent Red Hover: #ff4444
-- Text Primary: #f5f5f5
-- Text Secondary: #a0a0a0
+Because the site loads content with the Fetch API, run it through a local HTTP server instead of opening `index.html` directly:
 
-### Typography
-- Primary Font: Inter (headings)
-- Secondary Font: Poppins (body text)
-
-## 🛠️ Technologies Used
-
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+)
-- **Icons**: Font Awesome 6.4.0
-- **Fonts**: Google Fonts (Inter, Poppins)
-- **Animations**: AOS (Animate On Scroll) library
-- **Analytics**: Google Analytics 4 (GA4)
-- **Deployment**: GitHub Pages
-- **Version Control**: Git
-
-## 🎓 Tech Stack Deep Dive (For CS Students)
-
-### HTML5 Structure
-
-**Semantic HTML5 Elements:**
-- `<header>`, `<nav>`, `<section>`, `<footer>` for proper document structure
-- `<article>` for project cards (better SEO and accessibility)
-- `data-*` attributes for JavaScript hooks and animation triggers
-
-**Key Concepts You'll Learn:**
-- **Single Page Application (SPA)**: All content on one page with smooth scroll navigation
-- **Accessibility**: Proper ARIA labels, semantic tags, keyboard navigation support
-- **SEO Optimization**: Meta tags, Open Graph tags for social media sharing
-- **Progressive Enhancement**: Works without JavaScript, enhanced with it
-
-**Example Structure:**
-```html
-<section id="projects" class="section">
-  <div class="container">
-    <div class="projects-grid">
-      <!-- Dynamically populated by JavaScript -->
-    </div>
-  </div>
-</section>
-```
-
-### CSS3 Styling
-
-**Modern CSS Techniques Used:**
-
-1. **CSS Custom Properties (CSS Variables)**
-   ```css
-   :root {
-     --primary-dark: #1a0000;
-     --accent-red: #dc143c;
-     --transition-speed: 0.3s;
-   }
-   ```
-   Why? Easy theme customization, consistent values across 1500+ lines of CSS
-
-2. **CSS Grid Layout**
-   ```css
-   .projects-grid {
-     display: grid;
-     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-     gap: 2rem;
-   }
-   ```
-   Why? Responsive grid that automatically adjusts columns based on screen width
-
-3. **Flexbox**
-   ```css
-   .project-card {
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-   }
-   ```
-   Why? Perfect for card layouts with consistent spacing
-
-4. **CSS Transitions & Transforms**
-   ```css
-   .project-card {
-     transition: transform 0.3s ease, box-shadow 0.3s ease;
-   }
-   .project-card:hover {
-     transform: translateY(-10px);
-     box-shadow: 0 15px 40px rgba(220, 20, 60, 0.3);
-   }
-   ```
-   Why? Smooth hover effects without JavaScript
-
-5. **Media Queries (Responsive Design)**
-   ```css
-   @media (max-width: 768px) {
-     .projects-grid {
-       grid-template-columns: 1fr;
-     }
-   }
-   ```
-   Why? Mobile-first approach, works on all screen sizes
-
-6. **CSS Animations with @keyframes**
-   ```css
-   @keyframes fadeInUp {
-     from {
-       opacity: 0;
-       transform: translateY(30px);
-     }
-     to {
-       opacity: 1;
-       transform: translateY(0);
-     }
-   }
-   ```
-   Why? Smooth entrance animations for better UX
-
-**CSS Architecture:**
-- BEM-like naming convention: `.project-card__title`, `.project-card__badge`
-- Component-based styling: Each section is self-contained
-- Mobile-first approach: Base styles for mobile, enhanced for desktop
-- Total: ~1500 lines of organized CSS
-
-### JavaScript (ES6+)
-
-**Modern JavaScript Features Used:**
-
-1. **ES6 Modules Pattern**
-   ```javascript
-   // content-loader.js
-   class ContentLoader {
-     constructor() {
-       this.init();
-     }
-     
-     init() {
-       // Initialize when DOM is ready
-       if (document.readyState === 'loading') {
-         document.addEventListener('DOMContentLoaded', () => this.loadAllContent());
-       } else {
-         this.loadAllContent();
-       }
-     }
-   }
-   ```
-   Why? Organized code, avoids global namespace pollution
-
-2. **Async/Await with Fetch API**
-   ```javascript
-   async loadContentFile(filename) {
-     try {
-       const response = await fetch(`content/${filename}`);
-       if (!response.ok) throw new Error(`Failed to load ${filename}`);
-       const text = await response.text();
-       return this.parseContent(text);
-     } catch (error) {
-       console.error(`Error loading ${filename}:`, error);
-       return null;
-     }
-   }
-   ```
-   Why? Clean asynchronous code, better than callback hell or `.then()` chains
-
-3. **Template Literals**
-   ```javascript
-   const projectHTML = `
-     <article class="project-card" data-aos="fade-up">
-       <h3>${content[`PROJECT_${i}_TITLE`]}</h3>
-       <p>${content[`PROJECT_${i}_DESCRIPTION`]}</p>
-     </article>
-   `;
-   ```
-   Why? Multi-line strings, easy variable interpolation, generates HTML dynamically
-
-4. **Regular Expressions**
-   ```javascript
-   parseContent(text) {
-     const lines = text.split('\n');
-     const content = {};
-     let currentKey = null;
-     
-     lines.forEach(line => {
-       if (line.match(/^\[.+\]$/)) {
-         currentKey = line.slice(1, -1);
-         content[currentKey] = '';
-       } else if (currentKey) {
-         content[currentKey] += line + '\n';
-       }
-     });
-     
-     return content;
-   }
-   ```
-   Why? Parse custom `[LABEL]` format efficiently
-
-5. **DOM Manipulation**
-   ```javascript
-   const projectsGrid = document.querySelector('.projects-grid');
-   projectsGrid.innerHTML = projectsHTML;
-   AOS.refresh(); // Reinitialize animations
-   ```
-   Why? Dynamic content updates without page reload
-
-6. **Intersection Observer API**
-   ```javascript
-   // Used by AOS library internally for scroll animations
-   const observer = new IntersectionObserver((entries) => {
-     entries.forEach(entry => {
-       if (entry.isIntersecting) {
-         entry.target.classList.add('animate');
-       }
-     });
-   });
-   ```
-   Why? Efficient scroll-based animations, better performance than scroll events
-
-7. **Event Listeners**
-   ```javascript
-   // Smooth scroll navigation
-   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-     anchor.addEventListener('click', function(e) {
-       e.preventDefault();
-       const target = document.querySelector(this.getAttribute('href'));
-       target.scrollIntoView({ behavior: 'smooth' });
-     });
-   });
-   ```
-   Why? Interactive UI without page reloads
-
-**JavaScript Architecture:**
-- **content-loader.js** (~230 lines): Handles dynamic content loading
-- **main.js**: Navigation, scroll effects, mobile menu, active section highlighting
-- No frameworks (React/Vue/Angular) - pure Vanilla JS
-- No build tools (Webpack/Vite) - runs directly in browser
-- Total: ~500 lines of JavaScript
-
-**Key Algorithms:**
-- Content parser: O(n) line-by-line parsing
-- Project card generation: O(n) where n = number of projects
-- Scroll position tracking: O(1) using Intersection Observer
-
-### Why No Framework?
-
-**Advantages of Vanilla JS for this project:**
-- ✅ Zero build time - edit and refresh
-- ✅ No dependencies to manage or update
-- ✅ Faster page load (no framework overhead)
-- ✅ Learn core JavaScript concepts deeply
-- ✅ Perfect for static portfolios (GitHub Pages)
-
-**When you'd need a framework:**
-- ❌ Complex state management (Redux/Vuex)
-- ❌ Hundreds of interactive components
-- ❌ Real-time data updates
-- ❌ Large team collaboration
-
-### Browser APIs Used
-
-1. **Fetch API**: Load `.txt` files asynchronously
-2. **DOM API**: Query selectors, element manipulation, event handling
-3. **History API**: Smooth scroll without changing URL
-4. **Intersection Observer**: Scroll-triggered animations (via AOS)
-5. **Local Storage**: (Could be added) Save user preferences
-
-### Performance Optimizations
-
-- **Lazy Loading**: AOS animates elements only when scrolled into view
-- **CSS Containment**: Sections isolated for better rendering performance
-- **Minimal HTTP Requests**: All CSS in one file, all JS in two files
-- **No jQuery**: Modern browsers don't need it, saves 30KB+
-- **Debounced Scroll**: Scroll events throttled for performance
-
-### Learning Path for 2nd Year CS Students
-
-**If you're learning web dev, study this codebase in this order:**
-
-1. **HTML Structure** (Day 1)
-   - How sections are organized
-   - Semantic HTML5 elements
-   - Data attributes for JavaScript hooks
-
-2. **CSS Basics** (Day 2-3)
-   - CSS Variables for theming
-   - Flexbox for layouts
-   - Basic transitions
-
-3. **CSS Advanced** (Day 4-5)
-   - CSS Grid for responsive layouts
-   - Media queries for mobile
-   - Keyframe animations
-
-4. **JavaScript Basics** (Day 6-7)
-   - DOM manipulation
-   - Event listeners
-   - Smooth scroll implementation
-
-5. **JavaScript Advanced** (Day 8-10)
-   - Async/Await and Fetch API
-   - Template literals for HTML generation
-   - Content parsing with regex
-   - Class-based architecture
-
-6. **Integration** (Day 11-12)
-   - How HTML/CSS/JS work together
-   - Debugging with Chrome DevTools
-   - Performance optimization
-
-**Recommended Next Steps:**
-- Add dark/light mode toggle (CSS variables make this easy!)
-- Convert other sections to dynamic loading
-- Add form validation for contact section
-- Implement search/filter for projects
-- Add unit tests with Jest
-- Set up CI/CD pipeline
-
-## 🎯 Key Highlights
-
-### Technical Implementation
-- ✅ Pure HTML/CSS/JS - No frameworks or build tools needed
-- ✅ **Dynamic content loading** from `.txt` files using Fetch API
-- ✅ Modular content system with [LABEL] format parsing
-- ✅ **Google Analytics 4** integration for visitor tracking
-- ✅ Smooth scroll navigation with active section highlighting
-- ✅ Mobile-first responsive design
-- ✅ CSS Grid & Flexbox layouts
-- ✅ Intersection Observer API for scroll animations
-- ✅ AOS (Animate On Scroll) library integration with dynamic content
-- ✅ Optimized performance (<3s load time)
-
-### Content Highlights
-- 🤖 **10 AI/ML Production Projects**: Including AMS automation agent, agentic chatbots, RAG systems, and local LLM agents
-- 🏆 **Multiple Awards**: CEO Award, Best Research Paper, Hackathon Winner
-- 🎤 **5+ Conference Talks**: AWS User Group, Asia Tech Summit, Google Developer Expert sessions
-- 💼 **7 Professional Positions**: Singapore Airlines, Munich Re, X0PA AI, EY, KPMG, PayU
-- 🎓 **Google Developer Expert** in Generative AI
-- 📊 **40+ Technologies**: PyTorch, TensorFlow, Langchain, AWS, and more
-
-## 🚀 Quick Start
-
-### Option 1: View on GitHub Pages (After Deployment)
-Simply visit: `https://yourusername.github.io/BuildWithAI`
-
-### Option 2: Local Development
-
-**Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/BuildWithAI.git
+git clone https://github.com/sss2107/BuildWithAI.git
 cd BuildWithAI
-```
-
-**Run locally using Python:**
-```bash
 python3 -m http.server 8000
 ```
-Then open: http://localhost:8000
 
-**Or simply open the HTML file:**
-```bash
-open index.html  # macOS
-start index.html # Windows
-xdg-open index.html # Linux
+Then open:
+
+```text
+http://localhost:8000
 ```
 
-## 🌐 Deploy to GitHub Pages
+## Updating Portfolio Content
 
-### Step-by-Step Deployment Guide
+Most profile text lives in the `content/` directory. Edit the relevant `.txt` file, keep the existing `[LABEL]` format, and refresh the local site.
 
-1. **Create a new GitHub repository:**
-   - Go to https://github.com/new
-   - Repository name: `BuildWithAI` (or your preferred name)
-   - Select "Public"
-   - Do NOT initialize with README (we already have one)
-   - Click "Create repository"
+Common files:
 
-2. **Push your code to GitHub:**
-   ```bash
-   cd /Users/sahil_sharma/Downloads/BuildWithAI
-   git init
-   git add .
-   git commit -m "Initial commit: Portfolio website"
-   git branch -M main
-   git remote add origin https://github.com/yourusername/BuildWithAI.git
-   git push -u origin main
-   ```
+- `content/Introduction.txt`
+- `content/AI_Projects.txt`
+- `content/Education.txt`
+- `content/Experience.txt`
+- `content/Skills.txt`
+- `content/ExtraCurriculars.txt`
 
-3. **Enable GitHub Pages:**
-   - Go to your repository on GitHub
-   - Click "Settings" tab
-   - Scroll to "Pages" section (left sidebar)
-   - Under "Source", select "main" branch
-   - Click "Save"
-   - Your site will be published at: `https://yourusername.github.io/BuildWithAI`
+For detailed editing guidance, see [CONTENT_EDITING_GUIDE.txt](CONTENT_EDITING_GUIDE.txt).
 
-4. **Wait for deployment:**
-   - GitHub Pages typically takes 1-2 minutes to deploy
-   - You'll see a green checkmark when ready
-   - Visit your live site!
+## Optional Chatbot Backend
 
-5. **Optional: Add custom domain:**
-   - In the "Pages" settings, add your custom domain: `buildwithai.com`
-   - Update your DNS settings:
-     ```
-     Type: CNAME
-     Name: www
-     Value: yourusername.github.io
-     ```
+The `lambda/` directory contains serverless backend assets for a resume RAG chatbot. See [lambda/README.md](lambda/README.md) for deployment details using AWS Lambda, API Gateway, and SAM.
 
-## 📝 Dynamic Content Loading System
+## Deploying With GitHub Pages
 
-This website features a **powerful dynamic content loading system** that separates content from code. Instead of hardcoding text in HTML, content is loaded from `.txt` files, making updates incredibly easy!
+1. Push changes to the `main` branch.
+2. Open the repository settings on GitHub.
+3. Enable GitHub Pages from the `main` branch.
+4. Wait for GitHub Pages to publish the site.
 
-### 🎯 Why Dynamic Loading?
+See [GITHUB_PAGES_DEPLOYMENT.md](GITHUB_PAGES_DEPLOYMENT.md) for the fuller deployment guide.
 
-- ✅ **No Code Editing Required**: Update content without touching HTML/CSS/JS
-- ✅ **Version Control Friendly**: Text files are easy to track in Git
-- ✅ **Maintainability**: Non-technical users can edit content safely
-- ✅ **Consistency**: Standardized format across all sections
-- ✅ **Quick Updates**: Edit → Commit → Push → Auto-deploy in 2 minutes
+## Customization
 
-### 📂 Sections Using Dynamic Loading
+- Update colors, spacing, and responsive styles in `css/style.css`
+- Update profile content in `content/`
+- Replace profile imagery in `assets/images/`
+- Configure chatbot endpoints in `js/chatbot.js`
+- Configure voice-call interactions in `js/voicecall.js`
 
-Currently, these sections dynamically load content from `.txt` files:
-- ✅ **Introduction** - Hero section (title, subtitle, descriptions, highlights)
-- ✅ **AI Projects** - All 9 projects with full details
+## Contact
 
-*Note: Education, Experience, Skills, and Extra Curriculars sections are still hardcoded in HTML but can be converted to dynamic loading if needed.*
+- GitHub: [sss2107](https://github.com/sss2107)
+- LinkedIn: [Sahil Sharma](https://www.linkedin.com/in/sahil-sharma-13540375/)
 
-### 📋 Content File Format
+## License
 
-Content files use a simple `[LABEL]` format. Here's an example:
-
-**content/Introduction.txt**
-```txt
-[TITLE]
-Hi, I'm Sahil Sharma
-
-[SUBTITLE]
-AI & GenAI Specialist
-
-[DESCRIPTION_PARAGRAPH_1]
-I'm a Senior Data Scientist at Singapore Airlines...
-
-[DESCRIPTION_PARAGRAPH_2]
-With a proven track record in deploying AI solutions...
-
-[LOCATION]
-Singapore
-
-[HIGHLIGHTS]
-Google Developer Expert (GDE) in AI/ML
-Senior Data Scientist at Singapore Airlines
-7+ Years in AI/ML Engineering
-Master's in Data Science from NUS
-40+ Technologies Mastered
-```
-
-**content/AI_Projects.txt**
-```txt
-[PROJECT_1_TITLE]
-Curie - HR Policy Chatbot (Agentic Framework)
-
-[PROJECT_1_ORG]
-Singapore Airlines | 2022 - Present
-
-[PROJECT_1_DESCRIPTION]
-Designed and developed Curie, an employee-facing HR chatbot...
-
-[PROJECT_1_ACHIEVEMENTS]
-Intelligent policy routing across 7+ HR domains
-Reduced HR query response time by 80%
-24/7 automated policy assistance for employees
-
-[PROJECT_1_TECH]
-Langgraph, OpenAI, AWS, Agent Framework, RAG
-
-[PROJECT_1_BADGE]
-Production
-
-[PROJECT_2_TITLE]
-...
-```
-
-### 🔧 How to Update Content
-
-**Step 1: Edit the `.txt` file**
-```bash
-# Open the file you want to edit
-nano content/Introduction.txt
-# or
-nano content/AI_Projects.txt
-
-# Make your changes following the [LABEL] format
-# Save and exit
-```
-
-**Step 2: Commit your changes**
-```bash
-git add content/
-git commit -m "Update introduction section"
-```
-
-**Step 3: Push to GitHub**
-```bash
-git push origin main
-```
-
-**Step 4: Wait for auto-deployment**
-- GitHub Pages will automatically rebuild your site in 1-2 minutes
-- Visit https://yourusername.github.io/BuildWithAI to see your changes live!
-
-### 🚨 Important: Local Development Requirements
-
-**You MUST use an HTTP server for local testing** due to browser CORS restrictions on the `fetch()` API:
-
-```bash
-# Start a local server (choose one)
-python3 -m http.server 8001      # Python 3
-python -m SimpleHTTPServer 8001  # Python 2
-
-# Then open in browser
-open http://localhost:8001
-```
-
-❌ **Don't use**: `file:///path/to/index.html` - Dynamic loading will fail!  
-✅ **Use**: `http://localhost:8001` - Dynamic loading works perfectly!
-
-### 🛠️ Technical Details
-
-The dynamic loading system is powered by `js/content-loader.js`:
-
-- **parseContent()**: Parses `[LABEL]\nvalue` format into JavaScript objects
-- **loadContentFile()**: Fetches content files via Fetch API
-- **loadIntroduction()**: Updates hero section with dynamic content
-- **loadProjects()**: Generates all 9 project cards dynamically
-- **AOS.refresh()**: Reinitializes animations after DOM updates
-- **Inline styles**: Ensures visibility of dynamically loaded content
-
-### 🐛 Troubleshooting Dynamic Content
-
-**Problem**: Content not loading locally  
-**Solution**: Make sure you're using `http://localhost:8001`, not `file://`
-
-**Problem**: Content loads but not visible  
-**Solution**: Already fixed! The system includes `AOS.refresh()` and inline visibility styles
-
-**Problem**: New content not showing on live site  
-**Solution**: Wait 2 minutes for GitHub Pages to rebuild, clear browser cache (Ctrl+Shift+R)
-
-**Problem**: Console shows "Failed to load content"  
-**Solution**: Check that `.txt` files exist in `content/` folder with correct filenames
-
-### 📊 Content File Reference
-
-| File | Section | Status |
-|------|---------|--------|
-| `content/Introduction.txt` | Hero/Intro | ✅ Dynamic |
-| `content/AI_Projects.txt` | Projects Grid | ✅ Dynamic |
-| `content/Education.txt` | Education Timeline | ⚪ Hardcoded |
-| `content/Experience.txt` | Work Experience | ⚪ Hardcoded |
-| `content/Skills.txt` | Skills Grid | ⚪ Hardcoded |
-| `content/ExtraCurriculars.txt` | Awards/Talks | ⚪ Hardcoded |
-
-## 📊 Google Analytics Integration
-
-This portfolio includes **Google Analytics 4 (GA4)** tracking to monitor visitor engagement and site performance.
-
-### 🎯 What's Being Tracked
-
-The GA4 integration automatically tracks:
-- 👥 **Visitor Count**: Total and unique visitors
-- 🌍 **Geographic Data**: Countries, cities, and regions
-- 📱 **Device Information**: Desktop, mobile, tablet breakdown
-- 🌐 **Browser & OS**: Chrome, Safari, Firefox usage
-- ⏱️ **Session Duration**: Time spent on site
-- 📄 **Page Views**: Which sections get the most attention
-- 🔗 **Traffic Sources**: Direct, referrals, social media
-- 📈 **Real-time Data**: Live visitor tracking
-- 📊 **User Flow**: How visitors navigate through sections
-- 🖱️ **Enhanced Measurement**: Scrolls, clicks, file downloads (auto-enabled)
-
-### 📱 Accessing Your Analytics Dashboard
-
-1. Go to: **https://analytics.google.com/**
-2. Select your property: "BuildWithAI Portfolio"
-3. Navigate through:
-   - **Reports → Realtime**: See live visitors
-   - **Reports → Engagement**: Pages and events
-   - **Reports → User Acquisition**: Traffic sources
-   - **Reports → Demographics**: Location and device data
-
-### 🔧 Current Configuration
-
-**Tracking ID**: `G-G96WZXEYC4`  
-**Location**: Added to `<head>` section in `index.html`  
-**Enhanced Measurement**: ✅ Enabled (auto-tracks scrolls, clicks, searches)
-
-### 🛠️ Updating Your Tracking ID
-
-If you want to use a different GA4 property:
-
-1. Get your new tracking ID from Google Analytics
-2. Edit `index.html`:
-   ```html
-   <!-- Find this line -->
-   gtag('config', 'G-G96WZXEYC4');
-   
-   <!-- Replace with your new ID -->
-   gtag('config', 'G-YOUR-NEW-ID');
-   ```
-3. Commit and push changes
-
-### 📈 Data Availability
-
-- **First data**: Appears within 24-48 hours of deployment
-- **Real-time reports**: Available immediately after first visit
-- **Historical data**: Retained indefinitely (free tier)
-
-### 🔒 Privacy Compliance
-
-- Google Analytics 4 is GDPR/CCPA compliant
-- No personally identifiable information (PII) is collected
-- IP addresses are anonymized by default in GA4
-- Users can opt-out via browser extensions
-
-### 💡 Pro Tips
-
-- **Download the GA4 mobile app** for on-the-go analytics
-- **Set up custom events** to track specific button clicks
-- **Create conversion goals** to track resume downloads or contact clicks
-- **Weekly email reports** available in GA4 settings
-- **Share dashboard** with recruiters to show portfolio reach
-
-
-
-## 🎨 Customization
-
-### Update Content - The Easy Way! 📝
-
-**For sections with dynamic loading (Introduction, AI Projects):**
-```bash
-# Simply edit the .txt files
-nano content/Introduction.txt
-nano content/AI_Projects.txt
-
-# Commit and push
-git add content/
-git commit -m "Update content"
-git push origin main
-
-# GitHub Pages auto-deploys in 1-2 minutes!
-```
-
-**For other sections (Education, Experience, Skills, Extra Curriculars):**
-```bash
-# Edit the main HTML file
-nano index.html
-```
-
-See the **📝 Dynamic Content Loading System** section above for detailed instructions.
-
-### Change Colors
-
-Edit CSS variables in `css/style.css`:
-```css
-:root {
-    --primary-dark: #1a0000;    /* Main background */
-    --secondary-dark: #2d0a0a;  /* Card backgrounds */
-    --accent-red: #dc143c;      /* Primary accent */
-    --accent-hover: #ff4444;    /* Hover effects */
-    /* ... customize all colors */
-}
-```
-
-### Add/Remove Sections
-
-1. Add HTML section in `index.html`
-2. Add navigation link in header
-3. Style in `css/style.css`
-4. Update JavaScript navigation in `js/main.js`
-
-## 📱 Browser Compatibility
-
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## 📝 Content Management
-
-This website uses a unique content management system where text content is stored in separate `.txt` files for easy editing without touching HTML/CSS/JS.
-
-### Content Files:
-- `content/Introduction.txt` - Hero section text
-- `content/AI_Projects.txt` - All project descriptions
-- `content/Education.txt` - Education history
-- `content/Experience.txt` - Work experience
-- `content/Skills.txt` - Technical skills
-- `content/ExtraCurriculars.txt` - Awards, talks, leadership
-
-### Format Example:
-```txt
-[TITLE]
-Hi, I'm Sahil Sharma
-
-[SUBTITLE]
-Senior Data Scientist | AI & GenAI Specialist
-
-[DESCRIPTION_1]
-I'm a Senior Data Scientist at Singapore Airlines...
-```
-
-See `docs/CONTENT_EDITING_GUIDE.txt` for complete editing instructions.
-
-## 📱 Browser Compatibility
-
-✅ Chrome (Recommended)  
-✅ Firefox  
-✅ Safari  
-✅ Edge  
-✅ Mobile browsers (iOS Safari, Chrome Mobile)
-
-*Note: Dynamic content loading requires modern browsers with Fetch API support (all browsers since 2015)*
-
-## 🚀 Performance
-
-- ⚡ Page Load: < 3 seconds
-- 📊 Lighthouse Score: 90+
-- ♿ WCAG 2.1 AA Accessibility
-- 📱 Mobile-First Responsive Design
-
-## 🤝 Contributing
-
-This is a personal portfolio, but suggestions are welcome!
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📧 Contact
-
-**Sahil Sharma**  
-Senior Data Scientist | AI & GenAI Specialist | Google Developer Expert
-
-- 📧 Email: sahil21@u.nus.edu
-- 📱 Phone: +65 93952564
-- 💼 LinkedIn: [linkedin.com/in/sahil-sharma-13540375](https://www.linkedin.com/in/sahil-sharma-13540375/)
-- 🐙 GitHub: [github.com/sss2107](https://github.com/sss2107)
-- 📍 Location: Singapore
-
-## 📄 License
-
-© 2025 Sahil Sharma. All rights reserved.
-
----
-
-<div align="center">
-  <p>Built with ❤️ and passion for AI innovation</p>
-  <p>⭐ Star this repo if you found it helpful!</p>
-</div>
-
-````
-
-## 🐛 Troubleshooting
-
-### Images Not Loading
-- Check file paths are correct
-- Ensure images are in `assets/images/` folder
-- Verify image file extensions match HTML references
-
-### Styles Not Applied
-- Clear browser cache (Ctrl+Shift+R / Cmd+Shift+R)
-- Check CSS file path in HTML
-- Verify CSS syntax (no errors in dev tools)
-
-### JavaScript Not Working
-- Open browser console (F12) to check for errors
-- Ensure `main.js` is loaded
-- Check for JavaScript syntax errors
-
-## 📧 Contact
-
-**Sahil Sharma**
-- Email: sahil21@u.nus.edu
-- Phone: +65 93952564
-- LinkedIn: https://www.linkedin.com/in/sahil-sharma-13540375/
-- Location: Singapore
-
-## 📄 License
-
-© 2025 Sahil Sharma. All rights reserved.
-
----
-
-Built with ❤️ and passion for AI innovation
+Copyright 2025 Sahil Sharma. All rights reserved.
