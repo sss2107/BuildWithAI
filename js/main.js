@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initMobileMenu();
     initAnimations();
     initScrollTopButton();
+    initIntroParallax();
 });
 
 // ==========================================
@@ -238,15 +239,26 @@ function typingEffect() {
 // ==========================================
 // PARALLAX EFFECT (Subtle)
 // ==========================================
-window.addEventListener('scroll', function() {
-    const scrolled = window.pageYOffset;
+function initIntroParallax() {
     const parallaxElements = document.querySelectorAll('.intro-image');
-    
-    parallaxElements.forEach(element => {
-        const speed = 0.5;
-        element.style.transform = `translateY(${scrolled * speed}px)`;
-    });
-});
+    // Match the CSS breakpoint where the image and introduction stack vertically.
+    const desktopLayout = window.matchMedia('(min-width: 1025px)');
+
+    const updateParallax = () => {
+        parallaxElements.forEach(element => {
+            if (desktopLayout.matches) {
+                element.style.transform = `translateY(${window.pageYOffset * 0.5}px)`;
+            } else {
+                // Clear desktop offsets on resize/orientation change as well as scroll.
+                element.style.removeProperty('transform');
+            }
+        });
+    };
+
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    desktopLayout.addEventListener('change', updateParallax);
+    updateParallax();
+}
 
 // ==========================================
 // THEME TOGGLE (Optional - Future Enhancement)
